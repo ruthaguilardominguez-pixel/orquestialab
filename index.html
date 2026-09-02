@@ -1,3 +1,5 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Orquestialab</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -197,10 +199,10 @@ section { padding: 6.5rem 0; }
     0%, 100% { transform: translate(-50%,-50%) scale(1); }
     50%       { transform: translate(-50%,-50%) scale(1.045); }
   }
-  .hero-body { animation: fadeUp .85s ease both; }
+  .hero-body { animation: fadeUp .85s ease; }
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(14px); }
-    to   { opacity: 1; transform: none; }
+    from { transform: translateY(14px); }
+    to   { transform: none; }
   }
 }
 .hero-body { position: relative; z-index: 1; }
@@ -297,15 +299,13 @@ section { padding: 6.5rem 0; }
   background: var(--grafito);
   border-bottom: 1px solid var(--bord-dk);
   display: flex; align-items: center; justify-content: center;
-  padding: 1.5rem 2rem;
-  min-height: 280px;
-  position: relative; overflow: hidden;
+  min-height: 320px;
+  overflow: hidden;
 }
-.sol-visual canvas {
-  display: block;
-  max-width: 100%; height: auto;
-  border-radius: 4px;
-}
+.sol-visual img { display: block; width: 100%; height: auto; }
+.sol-visual-pair { display: flex; width: 100%; height: 340px; }
+.sol-visual-pair img { flex: 1; min-width: 0; height: 100%; width: auto; object-fit: contain; object-position: center center; }
+.sol-placeholder { padding: 3rem; color: rgba(255,255,255,.2); font-family: var(--mono); font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; }
 .sol-body {
   padding: 2rem;
   display: flex; gap: 2.5rem;
@@ -412,6 +412,40 @@ section { padding: 6.5rem 0; }
 .disc-cta-block { text-align: center; padding-top: .5rem; }
 .disc-cta-label { font-size: .82rem; color: var(--mid); margin-bottom: 1.4rem; }
 
+/* ── EQUIPO ──────────────────────────────────────────── */
+#equipo { border-top: 1px solid var(--bord-dk); background: #1E1F23; color: #FFFFFF; }
+.equipo-inner { max-width: 680px; margin: 0 auto; text-align: center; }
+.equipo-h {
+  font-size: clamp(1.4rem, 3.2vw, 2rem);
+  font-weight: 400; letter-spacing: -.015em;
+  margin-bottom: .6rem; text-wrap: balance;
+}
+.equipo-sub { font-size: .88rem; color: var(--mid-lt); line-height: 1.7; margin-bottom: 3.5rem; }
+.equipo-grid {
+  display: flex; justify-content: center; gap: 4rem; flex-wrap: wrap;
+}
+.founder {
+  display: flex; flex-direction: column; align-items: center; gap: 1.1rem;
+}
+.founder-photo {
+  width: 160px; height: 160px;
+  border-radius: 50%; overflow: hidden;
+  border: 1px solid rgba(255,255,255,.08);
+  flex-shrink: 0;
+}
+.founder-photo img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center top;
+  display: block;
+  filter: grayscale(100%);
+}
+.founder-ring { border-radius: 50%; box-shadow: 0 0 0 3px #808080; display: inline-flex; flex-shrink: 0; }
+.founder-name { font-size: 1rem; font-weight: 600; letter-spacing: -.01em; }
+.founder-role {
+  font-family: var(--mono); font-size: .6rem; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--mid-lt); margin-top: .15rem;
+}
+
 /* ── CONTACTO ────────────────────────────────────────── */
 #contacto { background: #1E1F23; color: #FFFFFF; border-top: 1px solid var(--bord-dk); text-align: center; }
 .contacto-inner { max-width: 540px; margin: 0 auto; }
@@ -421,6 +455,63 @@ section { padding: 6.5rem 0; }
   text-wrap: balance; margin-bottom: .9rem;
 }
 .contacto-sub { font-size: .9rem; color: var(--mid-lt); line-height: 1.7; margin-bottom: 2.2rem; }
+
+/* ── MODAL LEAD ──────────────────────────────────────── */
+.modal-backdrop {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(0,0,0,.75);
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.5rem;
+  opacity: 0; pointer-events: none;
+  transition: opacity .2s ease;
+}
+.modal-backdrop.open { opacity: 1; pointer-events: auto; }
+.modal-box {
+  background: #27282E;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 14px;
+  padding: 2.4rem 2.4rem 2rem;
+  width: 100%; max-width: 460px;
+  position: relative;
+  transform: translateY(14px);
+  transition: transform .2s ease;
+}
+.modal-backdrop.open .modal-box { transform: none; }
+.modal-close {
+  position: absolute; top: 1rem; right: 1.2rem;
+  background: none; border: none; cursor: pointer;
+  color: var(--mid); font-size: 1.5rem; line-height: 1; padding: .2rem .4rem;
+}
+.modal-close:hover { color: var(--white); }
+.modal-title { font-size: 1.35rem; font-weight: 500; letter-spacing: -.015em; margin-bottom: .35rem; }
+.modal-sub { font-size: .84rem; color: var(--mid-lt); margin-bottom: 1.7rem; line-height: 1.6; }
+.modal-field { margin-bottom: 1rem; }
+.modal-field label {
+  display: block; font-size: .72rem; color: var(--mid-lt);
+  margin-bottom: .38rem; letter-spacing: .06em; text-transform: uppercase;
+}
+.modal-field input {
+  width: 100%; background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 8px; color: var(--white);
+  font-family: var(--sans); font-size: .9rem;
+  padding: .7rem 1rem; outline: none; box-sizing: border-box;
+  transition: border-color .15s;
+}
+.modal-field input:focus { border-color: rgba(255,255,255,.32); background: rgba(255,255,255,.09); }
+.modal-field input::placeholder { color: rgba(255,255,255,.22); }
+.modal-submit {
+  width: 100%; margin-top: .6rem;
+  background: var(--white); color: var(--grafito);
+  border: none; border-radius: 8px;
+  font-family: var(--sans); font-size: .92rem; font-weight: 500;
+  padding: .88rem; cursor: pointer; transition: background .15s;
+}
+.modal-submit:hover { background: var(--gris); }
+.modal-submit:disabled { opacity: .55; cursor: not-allowed; }
+.modal-msg { margin-top: .9rem; font-size: .84rem; text-align: center; min-height: 1.2em; }
+.modal-msg.ok { color: #4ade80; }
+.modal-msg.err { color: #f87171; }
 
 /* ── FOOTER ──────────────────────────────────────────── */
 footer {
@@ -433,10 +524,12 @@ footer {
 .footer-r { font-family: var(--mono); font-size: .56rem; letter-spacing: .1em; text-transform: uppercase; color: var(--mid); }
 
 /* ── SCROLL REVEAL ───────────────────────────────────── */
-.reveal { opacity: 0; transform: translateY(10px); transition: opacity .5s ease, transform .5s ease; }
-.reveal.in { opacity: 1; transform: none; }
+/* Content always visible; JS adds .hidden before observing for motion-safe fade-in */
+.reveal { transition: opacity .5s ease, transform .5s ease; }
+.js-ready .reveal { opacity: 0; transform: translateY(10px); }
+.js-ready .reveal.in { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
-  .reveal, .reveal.in { transition: none; }
+  .js-ready .reveal, .js-ready .reveal.in { opacity: 1; transform: none; transition: none; }
 }
 
 /* ── RESPONSIVE ──────────────────────────────────────── */
@@ -469,10 +562,115 @@ footer {
   .logo--hero .logo-ia      { font-size: clamp(1.25rem, 8vw, 2.1rem); }
   .logo--hero .logo-lab     { font-size: clamp(.52rem, 3.3vw, .9rem); }
 }
+
+/* ── MOBILE ENHANCEMENTS ─────────────────────────────── */
+@media (max-width: 900px) {
+  /* Sol tabs: más compactos en horizontal */
+  .sol-tab { padding: .8rem 1rem; }
+  .sol-tab-ia { margin-bottom: 0; }
+  /* Sol body: padding reducido */
+  .sol-body { padding: 1.4rem 1.5rem; }
+  .sol-body-right { min-width: 0; width: 100%; }
+}
+
+@media (max-width: 600px) {
+  /* Secciones: más compactas */
+  section { padding: 3.5rem 0; }
+  .wrap { padding: 0 1.1rem; }
+  .nav { padding: .85rem 1.1rem; }
+  .nav-btn { font-size: .68rem; padding: .44rem 1rem; }
+
+  /* Sol tabs: scroll horizontal en lugar de wrap */
+  .sol-tablist {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .sol-tablist::-webkit-scrollbar { display: none; }
+  .sol-tab {
+    flex: 0 0 140px;
+    border-right: 1px solid var(--bord-dk);
+    border-bottom: none;
+  }
+  .sol-tab:last-child { border-right: none; }
+  .sol-tab.active { box-shadow: inset 0 2px 0 var(--gris); }
+  .sol-tab-sub { display: none; }
+  .sol-body { padding: 1.25rem; gap: 1.25rem; }
+  .sol-pname { font-size: .95rem; }
+  .sol-body-left, .sol-body-right { width: 100%; }
+
+  /* Discovery: tabla con scroll horizontal */
+  .disc-matrix {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
+  .disc-matrix th, .disc-matrix td { white-space: normal; }
+  .disc-matrix td:first-child { white-space: nowrap; }
+  .disc-quote { padding: 1rem 1.2rem; margin-bottom: 2.5rem; }
+  .disc-split { gap: 2rem; }
+
+  /* Modal: slide desde abajo, scroll si es muy largo */
+  .modal-backdrop {
+    align-items: flex-end;
+    padding: 0;
+  }
+  .modal-box {
+    border-radius: 18px 18px 0 0;
+    max-height: 88dvh;
+    overflow-y: auto;
+    padding: 1.6rem 1.25rem 2.5rem;
+    transform: translateY(40px);
+  }
+  .modal-backdrop.open .modal-box { transform: translateY(0); }
+  .modal-field input { font-size: 1rem; } /* Evita zoom en iOS */
+}
+
+@media (max-width: 600px) {
+  .equipo-grid { gap: 1.8rem; flex-wrap: nowrap; }
+  .founder-photo { width: 128px; height: 128px; }
+}
+@media (max-width: 390px) {
+  .sol-tab { flex: 0 0 118px; padding: .7rem .75rem; }
+  .modal-box { padding: 1.4rem 1.1rem 2.5rem; }
+  .equipo-grid { gap: 1.2rem; }
+  .founder-photo { width: 110px; height: 110px; }
+}
 </style>
 
 <!-- Dark page ground — inline style cannot be overridden by any external CSS -->
 <div aria-hidden="true" style="position:fixed;inset:0;z-index:-1;background:#1E1F23;pointer-events:none;"></div>
+
+<!-- LEAD MODAL -->
+<div class="modal-backdrop" id="leadModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-box">
+    <button class="modal-close" id="modalCloseBtn" aria-label="Cerrar">×</button>
+    <h2 class="modal-title" id="modalTitle">Agenda tu Discovery</h2>
+    <p class="modal-sub">Cuéntanos un poco sobre tu empresa y te contactamos en menos de 24 horas.</p>
+    <form id="leadForm" novalidate>
+      <div class="modal-field">
+        <label for="lNombre">Nombre completo</label>
+        <input id="lNombre" name="nombre" type="text" placeholder="Tu nombre" required>
+      </div>
+      <div class="modal-field">
+        <label for="lEmpresa">Empresa</label>
+        <input id="lEmpresa" name="empresa" type="text" placeholder="Nombre de tu empresa" required>
+      </div>
+      <div class="modal-field">
+        <label for="lTel">Teléfono</label>
+        <input id="lTel" name="telefono" type="tel" placeholder="+52 000 000 0000" required>
+      </div>
+      <div class="modal-field">
+        <label for="lEmail">Correo electrónico</label>
+        <input id="lEmail" name="correo" type="email" placeholder="correo@empresa.com" required>
+      </div>
+      <button class="modal-submit" type="submit" id="leadSubmit">Enviar solicitud</button>
+      <p class="modal-msg" id="leadMsg"></p>
+    </form>
+  </div>
+</div>
 
 <!-- NAV -->
 <nav class="nav">
@@ -481,7 +679,7 @@ footer {
     <span class="logo-ia">IA</span>
     <span class="logo-lab">Lab</span>
   </a>
-  <a class="nav-btn" href="#contacto">Hablar con nosotros</a>
+  <button class="nav-btn" onclick="openLeadModal()">Hablar con nosotros</button>
 </nav>
 
 <!-- HERO -->
@@ -497,7 +695,7 @@ footer {
       <p class="hero-tagline">Sistemas inteligentes<br>para operar negocios.</p>
       <p class="hero-desc">Analizamos cómo funciona tu empresa, diseñamos sus procesos, los digitalizamos, automatizamos y conectamos toda la información en un solo lugar.</p>
       <div class="hero-actions">
-        <a class="btn btn-w" href="#contacto">Hablar con nosotros</a>
+        <button class="btn btn-w" onclick="openLeadModal()">Hablar con nosotros</button>
         <a class="btn btn-outline" href="#soluciones">Ver soluciones</a>
       </div>
       <div class="hero-kicker">
@@ -598,8 +796,8 @@ footer {
 
       <!-- Panel -->
       <div class="sol-panel">
-        <div class="sol-visual">
-          <canvas id="sol-canvas" width="560" height="260"></canvas>
+        <div class="sol-visual" id="sol-visual">
+          <div id="sol-visual-content" style="width:100%;"></div>
         </div>
         <div class="sol-body" id="sol-body">
           <div class="sol-body-left">
@@ -701,7 +899,49 @@ footer {
 
     <div class="disc-cta-block reveal">
       <p class="disc-cta-label">Una sesión de 90–120 minutos. El mapa claro de cómo transformar tu operación.</p>
-      <a class="btn btn-g" href="mailto:hola@orquestialab.com">Agenda tu Discovery</a>
+      <button class="btn btn-g" onclick="openLeadModal('discovery')">Agenda tu Discovery</button>
+    </div>
+  </div>
+</section>
+
+<!-- EQUIPO FUNDADOR -->
+<section id="equipo">
+  <div class="wrap">
+    <div class="equipo-inner reveal">
+      <span class="eyebrow">Equipo fundador</span>
+      <h2 class="equipo-h">Las personas detrás de Orquestialab.</h2>
+      <p class="equipo-sub">Fundadores con experiencia operando negocios reales — construimos las herramientas que nos hubiera gustado tener.</p>
+      <div class="equipo-grid">
+        <div class="founder reveal">
+          <div class="founder-photo">
+            <img src="/images/ruth.jpg" alt="Ruth Aguilar">
+          </div>
+          <div>
+            <div class="founder-name">Ruth Aguilar</div>
+            <div class="founder-role">Co-Founder</div>
+          </div>
+        </div>
+        <div class="founder reveal">
+          <div class="founder-photo">
+            <img src="/images/hector.jpg" alt="Héctor Cepeda">
+          </div>
+          <div>
+            <div class="founder-name">Héctor Cepeda</div>
+            <div class="founder-role">Co-Founder</div>
+          </div>
+        </div>
+        <div class="founder reveal">
+          <div class="founder-ring">
+            <div class="founder-photo">
+              <img src="/images/cmo.jpg" alt="CMO">
+            </div>
+          </div>
+          <div>
+            <div class="founder-name">Gandalf</div>
+            <div class="founder-role">CMO</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -713,7 +953,7 @@ footer {
       <span class="eyebrow" style="color:var(--mid-lt)">Empecemos</span>
       <h2 class="contacto-h">¿Listo para transformar la operación de tu negocio?</h2>
       <p class="contacto-sub">Cuéntanos cómo funciona tu empresa. Nosotros diseñamos el sistema que necesita para funcionar mejor.</p>
-      <a class="btn btn-w" href="mailto:hola@orquestialab.com">Hablar con nosotros</a>
+      <button class="btn btn-w" onclick="openLeadModal()">Hablar con nosotros</button>
     </div>
   </div>
 </section>
@@ -733,39 +973,20 @@ footer {
 (function () {
   const els = Array.from(document.querySelectorAll('.reveal'));
   const showAll = () => els.forEach(el => el.classList.add('in'));
-  // Reduced-motion: show immediately with no animation
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { showAll(); return; }
-  // IntersectionObserver for elements entering viewport
+  // Only hide elements if IntersectionObserver is available
+  if (!window.IntersectionObserver) { return; }
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
+  // All checks passed: enable the hide-then-reveal pattern
+  document.documentElement.classList.add('js-ready');
   try {
     const io = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
     }, { threshold: 0, rootMargin: '0px 0px 60px 0px' });
     els.forEach(el => io.observe(el));
-  } catch(e) { showAll(); return; }
-  // Hard fallback: show everything after 400ms regardless
-  setTimeout(showAll, 400);
+  } catch(e) { document.documentElement.classList.remove('js-ready'); return; }
+  // Hard fallback: show everything after 600ms regardless
+  setTimeout(showAll, 600);
 })();
-
-/* ─── canvas utilities ─── */
-const G = '#1E1F23', Gs = '#27282E';
-const A = 'rgba(255,255,255,'; // rgba prefix — use A+'.06)' etc.
-const dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-function rrect(c, x, y, w, h, r, fill, stroke, sw) {
-  c.beginPath();
-  c.moveTo(x+r, y); c.lineTo(x+w-r, y); c.arcTo(x+w,y, x+w,y+r, r);
-  c.lineTo(x+w, y+h-r); c.arcTo(x+w,y+h, x+w-r,y+h, r);
-  c.lineTo(x+r, y+h); c.arcTo(x,y+h, x,y+h-r, r);
-  c.lineTo(x, y+r); c.arcTo(x,y, x+r,y, r);
-  c.closePath();
-  if (fill) { c.fillStyle = fill; c.fill(); }
-  if (stroke) { c.strokeStyle = stroke; c.lineWidth = sw||1; c.stroke(); }
-}
-function txt(c, s, x, y, sz, color, weight, mono) {
-  c.fillStyle = color;
-  c.font = `${weight||'normal'} ${sz}px "${mono ? 'Space Mono' : 'Space Grotesk'}", sans-serif`;
-  c.fillText(s, x, y);
-}
 
 /* ─── product data ─── */
 const PRODUCTS = [
@@ -773,322 +994,71 @@ const PRODUCTS = [
     name: 'Orquestia Dashboards & App',
     desc: 'Dashboard central con métricas en tiempo real de todos tus negocios. PWA + app iOS nativa con alertas push inteligentes y visión multi-operación.',
     feats: ['Visión multi-negocio en tiempo real','Alertas push automáticas a tu iPhone','Integración con sistemas de caja y POS','Control por roles: admin, gerente, análisis'],
-    draw: drawDashboard
+    img: '/images/dashboard.png'
   },
   {
     name: 'Cimiento',
     desc: 'Plataforma de gestión de obra para arquitectos y constructoras. Alternativa a PlanRadar, diseñada para el mercado mexicano.',
     feats: ['Reportes de obra generados con IA → PDF','Punch list de incidencias con fotos','Planos anotados con pins y notas','Multi-empresa: organizaciones, usuarios, roles'],
-    draw: drawCimiento
+    img: '/images/cimiento.png'
   },
   {
     name: 'Orquestia Golf',
     desc: 'App de gestión para campos de golf. Reservas, torneos, membresías y experiencia del jugador integradas en una sola plataforma.',
     feats: ['Reservas de cancha en tiempo real','Gestión de torneos y marcadores','Administración de membresías y cuotas','App móvil para jugadores y operadores'],
-    draw: drawGolf
+    img: '/images/golf.jpg'
   },
   {
     name: 'Orquestia Financiero',
     desc: 'Automatización financiera vía WhatsApp. Registra movimientos, categoriza y genera reportes sin captura manual, directo a tus hojas de cálculo.',
     feats: ['Registro de movimientos desde WhatsApp','Integración directa con Google Sheets','Categorización inteligente de transacciones','Reportes por período, cuenta y categoría'],
-    draw: drawFinanciero
+    img: '/images/financiero.png'
   },
   {
     name: 'Orquestialab CX',
     desc: 'Plataforma de experiencia de cliente para restaurantes y cafeterías. Surveys, dashboards y bots WhatsApp para entender y actuar sobre la voz del cliente.',
     feats: ['Surveys digitales post-visita automáticos','Dashboard de métricas CX en tiempo real','Bot WhatsApp de atención y seguimiento','Alertas cuando la satisfacción cae'],
-    draw: drawCX
+    img: '/images/cx.png'
   }
 ];
 
-/* ─── canvas draw functions ─── */
-
-function drawDashboard(c, W, H) {
-  c.clearRect(0, 0, W, H);
-  // iPhone — centered left
-  const pw = 130, ph = 236, px = W/2 - pw - 60, py = (H-ph)/2;
-  // phone shell
-  rrect(c, px, py, pw, ph, 18, A+'.06)', A+'.18)', 1.5);
-  // screen bg
-  rrect(c, px+4, py+8, pw-8, ph-16, 14, A+'.04)');
-  // notch
-  rrect(c, px+pw/2-22, py+10, 44, 6, 3, A+'.1)');
-  // header area
-  txt(c, 'NEGRITO', px+12, py+36, 8.5, A+'.5)', '600', true);
-  txt(c, '▲ Todo normal', px+72, py+36, 7, '#4ade80');
-  // metric cards
-  const metrics = [
-    {l:'Ventas hoy', v:'$45,200', c2:'#4ade80'},
-    {l:'Clientes',   v:'127',    c2:A+'.75)'},
-    {l:'Eficiencia', v:'94%',    c2:'#60a5fa'},
-  ];
-  metrics.forEach((m, i) => {
-    const cy = py + 46 + i * 54;
-    rrect(c, px+8, cy, pw-16, 46, 6, A+'.07)');
-    txt(c, m.l.toUpperCase(), px+14, cy+14, 6.5, A+'.35)', '400', true);
-    txt(c, m.v, px+14, cy+34, 15, m.c2, '600');
-  });
-  // mini bar chart
-  const chartY = py + 212, bw = 9, gap = 5;
-  const vals = [0.5, 0.7, 0.6, 0.9, 0.75, 0.85, 0.65];
-  vals.forEach((v, i) => {
-    const bh = 18 * v, bx = px + 10 + i*(bw+gap);
-    rrect(c, bx, chartY - bh, bw, bh, 2, i===3 ? '#E5E7EB' : A+'.18)');
-  });
-
-  // push notification — right of phone
-  const nx = px + pw + 20, ny = py + 16, nw = W > 400 ? 200 : 170, nh = 70;
-  rrect(c, nx, ny, nw, nh, 8, A+'.07)', A+'.12)');
-  // icon
-  c.fillStyle = '#fcd34d'; c.font = '14px sans-serif'; c.fillText('⚠', nx+12, ny+22);
-  txt(c, 'Apertura tardía', nx+30, ny+20, 10, A+'.85)', '600');
-  txt(c, 'Negrito · hace 2 min', nx+30, ny+34, 8, A+'.45)');
-  txt(c, 'Orquestia', nx+30, ny+48, 8, A+'.3)');
-  // dash panel hint
-  rrect(c, nx, ny+82, nw, 80, 8, A+'.05)', A+'.1)');
-  txt(c, 'DASHBOARD', nx+10, ny+98, 7, A+'.3)', '400', true);
-  // bars
-  const db = [0.4,0.6,0.8,0.5,0.7];
-  db.forEach((v,i) => {
-    const bh2 = 40*v, bx2 = nx+10 + i*((nw-20)/5);
-    rrect(c, bx2, ny+148-bh2, (nw-20)/5-3, bh2, 2, i===2?'#E5E7EB':A+'.15)');
-  });
-  txt(c, 'Furia  Barbería  Inmuebles', nx+10, ny+158, 6, A+'.25)');
-}
-
-function drawCimiento(c, W, H) {
-  c.clearRect(0, 0, W, H);
-  // app frame
-  const fw = Math.min(500, W-40), fh = H-30, fx = (W-fw)/2, fy = 15;
-  rrect(c, fx, fy, fw, fh, 10, A+'.04)', A+'.1)');
-  // header
-  rrect(c, fx, fy, fw, 36, 10, A+'.08)');
-  rrect(c, fx, fy+26, fw, 10, 0, A+'.08)');
-  txt(c, 'CIMIENTO', fx+14, fy+22, 10, A+'.6)', '600', true);
-  txt(c, 'Residencial Los Pinos · Fase 2', fx+14, fy+50, 9.5, A+'.85)', '600');
-  // progress bar
-  txt(c, 'AVANCE DE OBRA', fx+14, fy+68, 7, A+'.35)', '400', true);
-  rrect(c, fx+14, fy+73, fw-28, 8, 4, A+'.1)');
-  rrect(c, fx+14, fy+73, (fw-28)*0.67, 8, 4, '#4ade80');
-  txt(c, '67%', fx+fw-40, fy+81, 8, '#4ade80', '600', true);
-  // punch list
-  txt(c, 'PUNCH LIST', fx+14, fy+100, 7, A+'.35)', '400', true);
-  const items = [
-    {t:'Pintura exterior fachada',         s:'✓', c:'#4ade80'},
-    {t:'Instalación eléctrica dormit. 3',  s:'⚠', c:'#fcd34d'},
-    {t:'Acabado baño principal',           s:'✗', c:'#f87171'},
-    {t:'Impermeabilización terraza',       s:'⚠', c:'#fcd34d'},
-  ];
-  items.forEach((item, i) => {
-    const iy = fy+114 + i*26;
-    rrect(c, fx+14, iy, fw-28, 22, 4, A+'.05)');
-    c.fillStyle = item.c; c.font = '10px sans-serif'; c.fillText(item.s, fx+22, iy+15);
-    txt(c, item.t, fx+40, iy+15, 9, A+'.75)');
-  });
-  // plano hint + PDF badge
-  const prx = fx + fw - 120, pry = fy + 100;
-  rrect(c, prx, pry, 108, 80, 6, A+'.06)', A+'.08)');
-  txt(c, 'PLANO NIVEL 2', prx+8, pry+16, 6, A+'.3)', '400', true);
-  // dots on plan
-  [[30,40],[55,30],[80,55],[45,60]].forEach(([dx,dy]) => {
-    c.beginPath(); c.arc(prx+dx, pry+dy, 4, 0, Math.PI*2);
-    c.fillStyle = ['#fcd34d','#4ade80','#f87171','#60a5fa'][[30,55,80,45].indexOf(dx)];
-    c.fill();
-  });
-  // PDF badge
-  rrect(c, fx+14, fy+fh-34, 130, 22, 4, 'rgba(74,222,128,.12)', 'rgba(74,222,128,.3)');
-  c.fillStyle = '#4ade80'; c.font = '10px sans-serif'; c.fillText('📄', fx+20, fy+fh-16);
-  txt(c, 'Reporte IA generado', fx+36, fy+fh-16, 8.5, '#4ade80', '600');
-}
-
-function drawGolf(c, W, H) {
-  c.clearRect(0, 0, W, H);
-  const fw = Math.min(500, W-40), fh = H-30, fx = (W-fw)/2, fy = 15;
-  rrect(c, fx, fy, fw, fh, 10, A+'.04)', A+'.1)');
-  // header
-  rrect(c, fx, fy, fw, 36, 10, A+'.08)');
-  rrect(c, fx, fy+26, fw, 10, 0, A+'.08)');
-  txt(c, 'CLUB REAL DE GOLF', fx+14, fy+22, 9, A+'.5)', '400', true);
-  txt(c, 'Reservas · Hoy', fx+14, fy+50, 9.5, A+'.85)', '600');
-  // tee time grid
-  const cols = ['7:00','7:30','8:00','8:30','9:00','9:30'], rows = ['Cancha 1','Cancha 2','Cancha 3'];
-  const cw = (fw-60)/cols.length, rh = 26;
-  // col headers
-  cols.forEach((t,i) => txt(c, t, fx+52+i*cw+(cw-28)/2, fy+72, 7.5, A+'.35)', '400', true));
-  rows.forEach((r,ri) => {
-    txt(c, r, fx+14, fy+90+ri*rh+16, 8, A+'.45)');
-    cols.forEach((t,ci) => {
-      const bx = fx+52+ci*cw, by = fy+80+ri*rh;
-      const isBooked = (ri===0&&ci===1)||(ri===1&&ci===3)||(ri===2&&ci===0)||(ri===0&&ci===4);
-      const isSelected = ri===1&&ci===2;
-      rrect(c, bx+2, by+2, cw-4, rh-4, 3,
-        isSelected ? '#E5E7EB' : isBooked ? A+'.12)' : A+'.04)',
-        isSelected ? 'none' : A+'.08)');
-      if (isBooked && !isSelected) {
-        c.fillStyle='#4ade80'; c.font='8px sans-serif'; c.fillText('●',bx+cw/2-4,by+rh/2+4);
-      }
-      if (isSelected) {
-        txt(c, 'RESERVADO', bx+4, by+rh/2+4, 5.5, G, '700', true);
-      }
-    });
-  });
-  // booking card
-  const bcy = fy + 80 + rows.length*rh + 14;
-  rrect(c, fx+14, bcy, fw-28, 44, 6, A+'.07)');
-  txt(c, 'Cancha 2 · 8:00 AM · Eduardo M. · Hándicap 12', fx+22, bcy+18, 8.5, A+'.8)');
-  txt(c, 'RESERVA CONFIRMADA', fx+22, bcy+32, 7, '#4ade80', '600', true);
-  // scoreboard
-  const scy = bcy + 54;
-  if (scy + 30 < fy + fh - 10) {
-    rrect(c, fx+14, scy, fw-28, 30, 4, A+'.04)', A+'.08)');
-    txt(c, 'TORNEO MENSUAL · PARCIAL', fx+22, scy+12, 7, A+'.3)', '400', true);
-    ['E.M. −3','R.A. −1','J.L. +2'].forEach((s,i) => {
-      txt(c, s, fx+22+i*(fw/3-10), scy+25, 8, i===0?'#4ade80':A+'.6)', i===0?'600':'400');
-    });
-  }
-}
-
-function drawFinanciero(c, W, H) {
-  c.clearRect(0, 0, W, H);
-  const mid = W/2;
-  // WA panel
-  const wp = 16, wr = mid-40, wt = 16, wh = H-32, ww = wr-wp;
-  rrect(c, wp, wt, ww, wh, 10, A+'.04)', A+'.1)');
-  // WA header
-  rrect(c, wp, wt, ww, 32, 10, 'rgba(37,211,102,.2)');
-  rrect(c, wp, wt+22, ww, 10, 0, 'rgba(37,211,102,.2)');
-  c.fillStyle='#25D366'; c.font='10px sans-serif'; c.fillText('●', wp+10, wt+21);
-  txt(c, 'Grupo BI Finanzas', wp+24, wt+21, 9, A+'.8)', '600');
-  // chat bubbles
-  const msgs = [
-    {t:'Pagué $3,500 nómina\nCaja 2 [Furia]', own:true, time:'11:22'},
-    {t:'✓ Registrado\n24/08 · Egreso · Nómina', own:false, time:'11:22'},
-    {t:'Pagué $1,200\nelectricidad Negrito', own:true, time:'11:45'},
-    {t:'✓ Registrado\n24/08 · Egreso · Servicios', own:false, time:'11:45'},
-  ];
-  let my = wt + 44;
-  msgs.forEach(m => {
-    const lines = m.t.split('\n');
-    const bh = lines.length * 14 + 12;
-    const bw2 = ww - 24;
-    const bx2 = m.own ? wp + ww - bw2 - 8 : wp + 8;
-    rrect(c, bx2, my, bw2, bh, 6,
-      m.own ? 'rgba(37,211,102,.15)' : A+'.08)');
-    lines.forEach((l,li) => txt(c, l, bx2+8, my+14+li*14, 8, m.own?'#4ade80':A+'.7)'));
-    txt(c, m.time, bx2+bw2-26, my+bh-4, 6.5, A+'.25)');
-    my += bh + 8;
-  });
-
-  // arrow
-  txt(c, '→', mid-14, H/2+6, 20, A+'.25)');
-
-  // Sheets panel
-  const sp = mid+24, sw2 = W-sp-16;
-  rrect(c, sp, wt, sw2, wh, 10, A+'.04)', A+'.1)');
-  rrect(c, sp, wt, sw2, 28, 10, 'rgba(52,168,83,.18)');
-  rrect(c, sp, wt+18, sw2, 10, 0, 'rgba(52,168,83,.18)');
-  c.fillStyle='#34A853'; c.font='8px sans-serif'; c.fillText('▦', sp+10, wt+20);
-  txt(c, 'Movimientos Financieros', sp+22, wt+20, 8, A+'.75)', '600');
-  // sheet header row
-  const cols2 = ['Fecha','Tipo','Monto','Categoría'];
-  const colW = sw2/cols2.length;
-  cols2.forEach((col,i) => {
-    rrect(c, sp+i*colW, wt+30, colW, 18, 0, A+'.06)');
-    txt(c, col, sp+i*colW+4, wt+42, 7, A+'.35)', '600', true);
-  });
-  // data rows
-  const rows2 = [
-    ['24/08','Egreso','$3,500','Nómina'],
-    ['24/08','Egreso','$1,200','Servicios'],
-    ['23/08','Ingreso','$18,400','Ventas'],
-    ['23/08','Egreso','$2,100','Proveed.'],
-  ];
-  rows2.forEach((row,ri) => {
-    const ry = wt+50+ri*18;
-    const isNew = ri<2;
-    rrect(c, sp, ry, sw2, 18, 0, isNew?'rgba(74,222,128,.06)':A+(ri%2?'.04)':'.02)'));
-    row.forEach((cell,ci) => {
-      txt(c, cell, sp+ci*colW+4, ry+12, 7.5, isNew?(ci===2?'#4ade80':A+'.75)'):A+'.4)'));
-    });
-  });
-}
-
-function drawCX(c, W, H) {
-  c.clearRect(0, 0, W, H);
-  // survey card top
-  const sw = Math.min(440, W-40), sx = (W-sw)/2;
-  rrect(c, sx, 16, sw, 90, 8, A+'.06)', A+'.1)');
-  txt(c, '¿Cómo fue tu visita hoy?', sx+16, 36, 11, A+'.85)', '600');
-  txt(c, 'Ayúdanos a mejorar tu experiencia', sx+16, 52, 8.5, A+'.4)');
-  // stars
-  '★★★★☆'.split('').forEach((s,i) => {
-    c.fillStyle = i<4 ? '#fcd34d' : A+'.2)';
-    c.font = '20px sans-serif';
-    c.fillText(s, sx+16+i*26, 82);
-  });
-  txt(c, '"Muy buena, definitivamente volvería."', sx+150, 80, 8, A+'.35)');
-
-  // bar chart
-  const cy2 = 122, ch = H-cy2-20, bars2 = [4.3,4.5,4.1,4.6,4.2,4.4,4.2];
-  const bw2 = (sw-20)/bars2.length, maxV = 5;
-  txt(c, 'SATISFACCIÓN SEMANAL', sx+16, cy2-6, 7, A+'.3)', '400', true);
-  bars2.forEach((v,i) => {
-    const bh2 = (v/maxV)*(ch-20);
-    const bx2 = sx+10+i*bw2;
-    rrect(c, bx2, cy2+ch-20-bh2, bw2-4, bh2, 3, i===6?A+'.15)':A+'.1)');
-    rrect(c, bx2, cy2+ch-20-bh2, bw2-4, bh2, 3,
-      i===6 ? 'rgba(248,113,113,.4)' : i===3?'#E5E7EB':A+'.2)');
-    txt(c, v.toString(), bx2+(bw2-4)/2-6, cy2+ch-20-bh2-5, 7.5,
-      i===3?'#E5E7EB':A+'.35)', i===3?'600':'400');
-  });
-  const days = ['L','M','X','J','V','S','D'];
-  days.forEach((d,i)=>txt(c, d, sx+10+i*bw2+(bw2-4)/2-4, cy2+ch-4, 7.5, A+'.25)'));
-
-  // alert
-  const ay = cy2+ch+2;
-  if(ay+24 < H) {
-    rrect(c, sx+10, ay, sw-20, 22, 4, 'rgba(248,113,113,.08)', 'rgba(248,113,113,.2)');
-    c.fillStyle='#f87171'; c.font='9px sans-serif'; c.fillText('●', sx+18, ay+15);
-    txt(c, 'Satisfacción bajo 4.2 en sucursal norte · Acción requerida', sx+30, ay+15, 8, '#f87171');
-  }
-}
-
 /* ─── showcase interaction ─── */
-const canvas = document.getElementById('sol-canvas');
-const ctx = canvas.getContext('2d');
+const solVisualContent = document.getElementById('sol-visual-content');
 const body = document.getElementById('sol-body');
 const pname = document.getElementById('sol-pname');
 const pdesc = document.getElementById('sol-pdesc');
 const pfeats = document.getElementById('sol-pfeats');
 let currentIdx = 0;
 
-function resizeCanvas() {
-  const visual = canvas.parentElement;
-  const rect = visual.getBoundingClientRect();
-  const cw = Math.max(200, Math.floor(rect.width - 32));
-  const ch = Math.max(120, Math.floor(cw * 260 / 560));
-  canvas.style.width  = cw + 'px';
-  canvas.style.height = ch + 'px';
-  canvas.width  = cw * dpr;
-  canvas.height = ch * dpr;
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0); // reset + scale in one step
-  PRODUCTS[currentIdx].draw(ctx, cw, ch);
+function buildVisual(p) {
+  if (p.img) {
+    var style = p.imgStyle || '';
+    var wrap = p.imgWrap || '';
+    if (wrap) {
+      solVisualContent.innerHTML = '<div style="' + wrap + '"><img src="' + p.img + '" alt="' + p.name + '" style="' + style + '"></div>';
+    } else {
+      solVisualContent.innerHTML = '<img src="' + p.img + '" alt="' + p.name + '" style="' + style + '">';
+    }
+  } else if (p.imgs && p.imgs.length) {
+    solVisualContent.innerHTML = '<div class="sol-visual-pair">' +
+      p.imgs.map(function(src) { return '<img src="' + src + '" alt="' + p.name + '">'; }).join('') +
+      '</div>';
+  } else {
+    solVisualContent.innerHTML = '<div class="sol-placeholder">Preview próximamente</div>';
+  }
 }
 
 function setProduct(idx, animate) {
   currentIdx = idx;
   const p = PRODUCTS[idx];
 
-  // canvas
-  resizeCanvas();
+  // visual
+  buildVisual(p);
 
   // body content
   if (animate) {
     body.classList.add('out');
-    setTimeout(() => {
-      updateBody(p);
-      body.classList.remove('out');
-    }, 200);
+    setTimeout(() => { updateBody(p); body.classList.remove('out'); }, 200);
   } else {
     updateBody(p);
   }
@@ -1103,7 +1073,7 @@ function setProduct(idx, animate) {
 function updateBody(p) {
   pname.textContent = p.name;
   pdesc.textContent = p.desc;
-  pfeats.innerHTML = p.feats.map(f => `<li>${f}</li>`).join('');
+  pfeats.innerHTML = p.feats.map(f => '<li>' + f + '</li>').join('');
 }
 
 document.querySelectorAll('.sol-tab').forEach(btn => {
@@ -1113,11 +1083,69 @@ document.querySelectorAll('.sol-tab').forEach(btn => {
   });
 });
 
-// init — rAF ensures layout is painted and dimensions are non-zero
-window.addEventListener('load', () => requestAnimationFrame(() => setProduct(0, false)));
-window.addEventListener('resize', () => {
-  const visual = canvas.parentElement;
-  const rect = visual.getBoundingClientRect();
-  if (rect.width > 0) resizeCanvas();
+setProduct(0, false);
+
+/* ─── lead modal ─── */
+function openLeadModal(type) {
+  document.getElementById('modalTitle').textContent =
+    type === 'discovery' ? 'Agenda tu Discovery' : 'Hablar con nosotros';
+  var modal = document.getElementById('leadModal');
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  setTimeout(function() {
+    var first = modal.querySelector('input');
+    if (first) first.focus();
+  }, 150);
+}
+function closeLeadModal() {
+  document.getElementById('leadModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('modalCloseBtn').addEventListener('click', closeLeadModal);
+document.getElementById('leadModal').addEventListener('click', function(e) {
+  if (e.target === this) closeLeadModal();
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeLeadModal();
+});
+document.getElementById('leadForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  var form = this;
+  var btn = document.getElementById('leadSubmit');
+  var msg = document.getElementById('leadMsg');
+  if (!form.nombre.value || !form.empresa.value || !form.telefono.value || !form.correo.value) {
+    msg.className = 'modal-msg err';
+    msg.textContent = 'Por favor llena todos los campos.';
+    return;
+  }
+  btn.disabled = true;
+  btn.textContent = 'Enviando…';
+  msg.textContent = '';
+  var fd = new FormData();
+  fd.append('nombre', form.nombre.value);
+  fd.append('empresa', form.empresa.value);
+  fd.append('telefono', form.telefono.value);
+  fd.append('correo', form.correo.value);
+  fd.append('_subject', 'Nuevo lead Orquestialab — ' + form.empresa.value);
+  fd.append('_captcha', 'false');
+  fd.append('_template', 'table');
+  fetch('https://formsubmit.co/ajax/ruth.aguilar.dominguez@gmail.com', {
+    method: 'POST',
+    headers: { 'Accept': 'application/json' },
+    body: fd
+  })
+  .then(function(r) {
+    if (!r.ok) throw new Error(r.status);
+    msg.className = 'modal-msg ok';
+    msg.textContent = '¡Listo! Te contactamos en menos de 24 horas.';
+    form.reset();
+    btn.textContent = 'Enviado ✓';
+  })
+  .catch(function() {
+    msg.className = 'modal-msg err';
+    msg.textContent = 'Error al enviar. Intenta de nuevo.';
+    btn.disabled = false;
+    btn.textContent = 'Enviar solicitud';
+  });
 });
 </script>
