@@ -425,6 +425,61 @@
     .problem-card, .mod-card, .prio-card, .arch-step, .price-card, .pay-cell, .stat-hero, .stat-scale .cell, .panel, .kpi, .mod-detail, .dashboard, .callout, .dtable tbody td{background:#fff !important; border-color:#ccc !important; box-shadow:none !important;}
     .dashboard{border:1px solid #ccc !important;}
   }
+
+  /* ---------- intro video modal ---------- */
+  .intro-overlay{
+    position:fixed; inset:0; z-index:200;
+    background:rgba(11,13,14,0.94); backdrop-filter:blur(8px);
+    display:flex; align-items:center; justify-content:center;
+    padding:16px; padding-top:calc(16px + env(safe-area-inset-top,0px)); padding-bottom:calc(16px + env(safe-area-inset-bottom,0px));
+    opacity:1; transition:opacity .35s ease;
+  }
+  .intro-overlay.is-hiding{opacity:0; pointer-events:none;}
+  .intro-overlay[hidden]{display:none;}
+  body.intro-open{overflow:hidden;}
+  .intro-panel{
+    width:100%; max-width:960px;
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    overflow:hidden; box-shadow:0 30px 80px rgba(0,0,0,.6);
+    animation:introIn .45s cubic-bezier(.2,.8,.2,1) both;
+  }
+  @keyframes introIn{from{opacity:0; transform:translateY(18px) scale(.98);} to{opacity:1; transform:none;}}
+  .intro-head{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding:12px 16px; border-bottom:1px solid var(--border);
+  }
+  .intro-head .brand{font-size:13px;}
+  .intro-close{
+    background:transparent; border:1px solid var(--border); color:var(--muted);
+    width:34px; height:34px; border-radius:6px; font-size:18px; line-height:1; cursor:pointer;
+  }
+  .intro-close:hover{color:var(--ink); border-color:var(--lime-dim);}
+  .intro-video-wrap{position:relative; background:#000; aspect-ratio:16/9;}
+  .intro-video-wrap video{display:block; width:100%; height:100%; object-fit:cover;}
+  .intro-sound{
+    position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+    display:flex; align-items:center; gap:10px;
+    background:var(--lime); color:#0B0D0E; border:0; border-radius:999px;
+    padding:12px 20px; font-weight:800; font-size:14px; letter-spacing:.02em; cursor:pointer;
+    box-shadow:0 10px 30px rgba(0,0,0,.5);
+  }
+  .intro-sound[hidden]{display:none;}
+  .intro-foot{
+    display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    padding:14px 16px;
+  }
+  .intro-foot p{color:var(--muted); font-size:13px; margin:0;}
+  .intro-foot p strong{color:var(--ink);}
+  .intro-go{
+    background:var(--lime); color:#0B0D0E; border:0; border-radius:4px;
+    padding:11px 18px; font-weight:800; font-size:14px; letter-spacing:.02em; cursor:pointer; white-space:nowrap;
+  }
+  .intro-go:hover{background:#e6ff6a;}
+  @media(max-width:560px){
+    .intro-foot{flex-direction:column; align-items:stretch; text-align:center;}
+    .intro-go{width:100%;}
+  }
+  @media print{ .intro-overlay{display:none !important;} }
 </style>
 </head>
 <body>
@@ -1379,6 +1434,77 @@
     <span>Propuesta ejecutiva · Septiembre 2026</span>
   </div>
 </footer>
+
+
+<div class="intro-overlay" id="introOverlay" role="dialog" aria-modal="true" aria-label="Video de introducción">
+  <div class="intro-panel">
+    <div class="intro-head">
+      <div class="brand">
+        <span>ORQUEST<span class="mark">IA</span>LAB</span>
+        <span class="x">×</span>
+        <span class="client">GRUPO CONINTE</span>
+      </div>
+      <button class="intro-close" id="introClose" type="button" aria-label="Cerrar">×</button>
+    </div>
+    <div class="intro-video-wrap">
+      <video id="introVideo" src="/coninte/intro.mp4" poster="/coninte/intro-poster.jpg" playsinline preload="auto" controls></video>
+      <button class="intro-sound" id="introSound" type="button" hidden>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+        Activar sonido
+      </button>
+    </div>
+    <div class="intro-foot">
+      <p><strong>Antes de leer la propuesta:</strong> 40 segundos sobre lo que Coninte puede llegar a ser.</p>
+      <button class="intro-go" id="introGo" type="button">Ver la propuesta →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var ov=document.getElementById('introOverlay');
+  var v=document.getElementById('introVideo');
+  var snd=document.getElementById('introSound');
+  var closeBtns=[document.getElementById('introClose'),document.getElementById('introGo')];
+  var KEY='coninteIntroSeen';
+  var seen=false;
+  try{ seen=sessionStorage.getItem(KEY)==='1'; }catch(e){}
+  if(seen || location.hash==='#sinvideo'){ ov.hidden=true; return; }
+
+  document.body.classList.add('intro-open');
+
+  function close(){
+    if(ov.hidden) return;
+    try{ v.pause(); }catch(e){}
+    ov.classList.add('is-hiding');
+    document.body.classList.remove('intro-open');
+    try{ sessionStorage.setItem(KEY,'1'); }catch(e){}
+    setTimeout(function(){ ov.hidden=true; },380);
+  }
+  closeBtns.forEach(function(b){ b.addEventListener('click',close); });
+  ov.addEventListener('click',function(e){ if(e.target===ov) close(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') close(); });
+  v.addEventListener('ended',function(){ setTimeout(close,700); });
+
+  // Autoplay: intenta con sonido; si el navegador lo bloquea, arranca en silencio y ofrece activar sonido.
+  v.muted=false;
+  var p=v.play();
+  if(p && p.catch){
+    p.catch(function(){
+      v.muted=true;
+      var p2=v.play();
+      if(p2 && p2.catch){ p2.catch(function(){}); }
+      snd.hidden=false;
+    });
+  }
+  snd.addEventListener('click',function(){
+    v.muted=false; v.currentTime=0;
+    var p3=v.play(); if(p3 && p3.catch){ p3.catch(function(){}); }
+    snd.hidden=true;
+  });
+  v.addEventListener('volumechange',function(){ if(!v.muted) snd.hidden=true; });
+})();
+</script>
 
 </body>
 </html>
