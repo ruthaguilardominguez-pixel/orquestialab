@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Transformation Blueprint — OrquestiaLab × Grupo Coninte</title>
+<meta name="description" content="Propuesta ejecutiva: arquitectura digital para una operación conectada, automatizada e inteligente. OrquestiaLab x Grupo Coninte.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%230B0D0E%22/><rect x=%2222%22 y=%2230%22 width=%2256%22 height=%2240%22 fill=%22%23D7FF3D%22/></svg>">
+<style>
+  :root{
+    --bg:#0B0D0E;
+    --bg-alt:#101315;
+    --panel:#15181B;
+    --panel-2:#1B1F22;
+    --border:#26292C;
+    --lime:#D7FF3D;
+    --lime-dim:#a9c72f;
+    --ink:#F3F4F1;
+    --muted:#9AA0A0;
+    --muted-2:#6F7576;
+    --red:#FF6B5E;
+    --amber:#FFC24B;
+    --green:#6FE39A;
+    --paper:#F2F1EA;
+    --paper-ink:#15181B;
+    --serif:'Georgia', serif;
+    --sans:-apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Helvetica, Arial, sans-serif;
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  img{max-width:100%;}
+  a{color:inherit;}
+
+  .wrap{max-width:1120px; margin:0 auto; padding-inline:24px;}
+
+  /* ---------- grid texture bg ---------- */
+  .grid-bg{
+    position:relative;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+  .plus{
+    position:absolute; width:14px; height:14px; color:var(--lime); opacity:.55; pointer-events:none;
+  }
+  .plus::before,.plus::after{content:""; position:absolute; background:currentColor;}
+  .plus::before{ width:14px; height:2px; top:6px; left:0;}
+  .plus::after{ width:2px; height:14px; top:0; left:6px;}
+  .corner{
+    position:absolute; width:26px; height:26px; border-left:2px solid var(--lime-dim); border-bottom:2px solid var(--lime-dim); opacity:.5;
+  }
+
+  /* ---------- top nav ---------- */
+  .topnav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(11,13,14,0.86); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .topnav-inner{
+    max-width:1120px; margin:0 auto; padding:14px 24px;
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+  }
+  .brand{display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.02em; font-size:15px; white-space:nowrap;}
+  .brand .mark{background:var(--lime); color:#0B0D0E; padding:1px 6px; border-radius:2px; font-weight:900;}
+  .brand .x{color:var(--muted-2); font-weight:600; font-size:13px;}
+  .brand .client{color:var(--muted); font-weight:700; font-size:13px; letter-spacing:.04em;}
+  .navlinks{display:flex; gap:22px; font-size:13px; color:var(--muted);}
+  .navlinks a{text-decoration:none; transition:color .15s;}
+  .navlinks a:hover{color:var(--lime);}
+  .navlinks{display:none;}
+  @media(min-width:820px){ .navlinks{display:flex;} }
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative; padding:96px 0 84px; overflow:hidden;
+  }
+  .hero .tag{
+    display:inline-flex; align-items:center; gap:8px;
+    color:var(--lime); font-size:12px; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+    border:1px solid rgba(215,255,61,0.35); padding:6px 12px; border-radius:999px; margin-bottom:28px;
+  }
+  .hero .tag .dot{width:6px; height:6px; border-radius:50%; background:var(--lime);}
+  .hero h1{
+    font-size:clamp(34px, 6vw, 66px); font-weight:900; letter-spacing:-0.02em; line-height:1.03; text-transform:uppercase;
+    max-width:820px;
+  }
+  .hero h1 .accent{color:var(--lime);}
+  .hero p.lede{
+    margin-top:22px; color:var(--muted); font-size:17px; max-width:560px;
+  }
+  .hero .meta-row{
+    margin-top:44px; display:flex; flex-wrap:wrap; gap:32px; padding-top:28px; border-top:1px solid var(--border);
+  }
+  .hero .meta-row div{font-size:12px; color:var(--muted-2); text-transform:uppercase; letter-spacing:.08em;}
+  .hero .meta-row strong{display:block; color:var(--ink); font-size:14px; text-transform:none; letter-spacing:0; margin-top:4px; font-weight:700;}
+
+  /* ---------- section shell ---------- */
+  section{position:relative; padding:88px 0;}
+  section.light{background:var(--paper); color:var(--paper-ink);}
+  section.light .eyebrow{color:#6b6f5c;}
+  section.light .muted{color:#5c5f52;}
+  .eyebrow{
+    display:flex; align-items:center; gap:10px;
+    font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:var(--lime); margin-bottom:16px;
+  }
+  .eyebrow .num{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:22px; height:22px; border:1px solid currentColor; border-radius:3px; font-size:11px;
+  }
+  h2.h{
+    font-size:clamp(26px, 3.6vw, 40px); font-weight:900; letter-spacing:-0.01em; line-height:1.08; max-width:760px;
+  }
+  .lead{color:var(--muted); font-size:16.5px; max-width:660px; margin-top:16px;}
+  section.light .lead{color:#565948;}
+  .muted{color:var(--muted);}
+
+  /* ---------- problem list ---------- */
+  .problem-grid{
+    margin-top:48px; display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1px;
+    background:var(--border); border:1px solid var(--border);
+  }
+  .problem-card{background:var(--bg-alt); padding:26px 24px;}
+  .problem-card .k{color:var(--lime); font-size:12px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; margin-bottom:10px; display:block;}
+  .problem-card p{font-size:14.5px; color:var(--muted); line-height:1.6;}
+  .problem-card p strong{color:var(--ink);}
+
+  /* ---------- tesis quote ---------- */
+  .tesis{
+    background:var(--bg); position:relative; padding:100px 0;
+  }
+  .tesis blockquote{
+    font-size:clamp(22px,3.4vw,36px); font-weight:800; line-height:1.28; letter-spacing:-0.01em; max-width:860px;
+    border-left:3px solid var(--lime); padding-left:28px;
+  }
+  .tesis blockquote .hl{color:var(--lime);}
+  .tesis .support{margin-top:36px; color:var(--muted); max-width:640px; padding-left:31px; font-size:15px;}
+
+  .causeflow{
+    margin-top:56px; display:flex; flex-wrap:wrap; align-items:stretch; gap:14px;
+  }
+  .causeflow .root{
+    background:var(--lime); color:#0B0D0E; font-weight:900; font-size:14px; padding:18px 22px; border-radius:8px;
+    display:flex; align-items:center; max-width:220px;
+  }
+  .causeflow .arrow{align-self:center; color:var(--lime-dim); font-size:20px; font-weight:900;}
+  .causeflow .effects{display:flex; flex-wrap:wrap; gap:10px; flex:1;}
+  .causeflow .effect{
+    background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:12px 16px; font-size:13px; color:var(--muted); font-weight:600;
+  }
+
+  /* ---------- economia 1% ---------- */
+  .stat-hero{
+    background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:40px; margin-top:44px; text-align:center;
+  }
+  .stat-hero .pct{font-size:15px; color:var(--muted); text-transform:uppercase; letter-spacing:.12em; font-weight:700;}
+  .stat-hero .of{font-size:16px; color:var(--muted); margin-top:14px;}
+  .stat-hero .amount{font-size:clamp(38px,7vw,64px); font-weight:900; color:var(--lime); margin-top:10px; letter-spacing:-0.02em;}
+  .stat-hero .note{font-size:13px; color:var(--muted-2); margin-top:14px;}
+
+  .stat-scale{
+    margin-top:20px; display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:10px; overflow:hidden;
+  }
+  .stat-scale .cell{background:var(--bg-alt); padding:22px 14px; text-align:center;}
+  .stat-scale .cell .p{font-size:13px; color:var(--muted); font-weight:700;}
+  .stat-scale .cell .v{font-size:clamp(16px,2.4vw,22px); font-weight:900; margin-top:8px; color:var(--ink);}
+  .disclaimer{margin-top:22px; font-size:12.5px; color:var(--muted-2); max-width:640px;}
+
+  /* ---------- prioridades ---------- */
+  .prio-grid{margin-top:48px; display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px;}
+  .prio-card{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:30px 26px;
+    transition:transform .18s, border-color .18s;
+  }
+  .prio-card:hover{transform:translateY(-3px); border-color:var(--lime-dim);}
+  .prio-card .n{font-size:34px; font-weight:900; color:var(--lime); line-height:1;}
+  .prio-card h3{margin-top:16px; font-size:17px; font-weight:800; letter-spacing:.01em;}
+  .prio-card p{margin-top:10px; font-size:14px; color:var(--muted);}
+
+  /* ---------- arquitectura ---------- */
+  .arch-flow{margin-top:52px; display:flex; flex-wrap:wrap; gap:10px; align-items:center;}
+  .arch-step{
+    flex:1; min-width:140px; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:20px 16px; text-align:left;
+    border-top:3px solid var(--lime);
+  }
+  .arch-step .idx{font-size:11px; color:var(--lime); font-weight:800; letter-spacing:.08em;}
+  .arch-step h4{font-size:14px; font-weight:800; margin-top:8px;}
+  .arch-step p{font-size:12.5px; color:var(--muted); margin-top:6px;}
+  .arch-arrow{color:var(--muted-2); font-size:18px; font-weight:900; padding:0 2px;}
+  .arch-transversal{
+    margin-top:14px; text-align:center; background:var(--panel-2); border:1px dashed var(--border); border-radius:10px; padding:14px; font-size:12.5px; color:var(--muted); letter-spacing:.04em; text-transform:uppercase; font-weight:700;
+  }
+  @media(max-width:780px){ .arch-arrow{display:none;} }
+
+  /* ================= DASHBOARD MOCKUP ================= */
+  .dash-wrap{margin-top:56px; position:relative;}
+  .dash-glow{
+    position:absolute; inset:-40px; background:radial-gradient(60% 60% at 50% 40%, rgba(215,255,61,0.10), transparent 70%); z-index:0; pointer-events:none;
+  }
+  .dashboard{
+    position:relative; z-index:1;
+    background:#0F1214; border:1px solid #262B2E; border-radius:14px; overflow:hidden;
+    box-shadow:0 40px 90px -30px rgba(0,0,0,0.7);
+    display:grid; grid-template-columns:190px 1fr;
+  }
+  @media(max-width:760px){ .dashboard{grid-template-columns:1fr;} .dash-side{display:none;} }
+  .dash-side{
+    background:#0B0D0E; border-right:1px solid #21252A; padding:18px 14px; display:flex; flex-direction:column; gap:2px;
+  }
+  .dash-brand{display:flex; align-items:center; gap:6px; font-size:11px; font-weight:900; letter-spacing:.02em; padding:6px 6px 16px;}
+  .dash-brand .mk{background:var(--lime); color:#0B0D0E; padding:1px 5px; border-radius:2px;}
+  .dash-nav-item{
+    display:flex; align-items:center; gap:10px; font-size:12px; color:#8B9192; padding:9px 10px; border-radius:7px; font-weight:600;
+  }
+  .dash-nav-item .ic{width:14px; height:14px; border-radius:3px; background:#2A2F32; flex-shrink:0;}
+  .dash-nav-item.active{background:#1C2A12; color:var(--lime);}
+  .dash-nav-item.active .ic{background:var(--lime);}
+  .dash-side-foot{margin-top:auto; padding-top:16px; border-top:1px solid #21252A; font-size:10px; color:#565b5c; line-height:1.5;}
+  .dash-side-foot b{color:#9AA0A0; display:block; font-size:10.5px;}
+
+  .dash-main{padding:20px 22px 26px; min-width:0;}
+  .dash-topbar{display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:20px;}
+  .dash-title{font-size:16px; font-weight:800;}
+  .dash-title .live{display:inline-flex; align-items:center; gap:6px; font-size:10.5px; color:var(--green); font-weight:700; margin-left:10px; text-transform:uppercase; letter-spacing:.06em;}
+  .dash-title .live .d{width:6px; height:6px; border-radius:50%; background:var(--green); box-shadow:0 0 0 3px rgba(111,227,154,0.18);}
+  .dash-user{display:flex; align-items:center; gap:10px; font-size:11px; color:#8B9192;}
+  .dash-user .av{width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#D7FF3D,#7fae12); color:#0B0D0E; font-weight:900; font-size:11px; display:flex; align-items:center; justify-content:center;}
+
+  .kpi-row{display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin-bottom:16px;}
+  @media(max-width:900px){ .kpi-row{grid-template-columns:repeat(2,1fr);} }
+  @media(max-width:480px){ .kpi-row{grid-template-columns:1fr 1fr;} }
+  .kpi{background:#151A1C; border:1px solid #232830; border-radius:10px; padding:13px 14px;}
+  .kpi .lbl{font-size:9.5px; color:#7B8182; text-transform:uppercase; letter-spacing:.06em; font-weight:700;}
+  .kpi .val{font-size:15px; font-weight:800; margin-top:6px; color:#F3F4F1;}
+  .kpi .sub{font-size:10px; margin-top:5px; font-weight:700;}
+  .kpi .sub.up{color:var(--green);}
+  .kpi .sub.warn{color:var(--red);}
+  .kpi.warnborder{border-color:rgba(255,107,94,0.4);}
+
+  .chart-row{display:grid; grid-template-columns:1.3fr 1fr; gap:12px; margin-bottom:16px;}
+  @media(max-width:820px){ .chart-row{grid-template-columns:1fr;} }
+  .panel{background:#151A1C; border:1px solid #232830; border-radius:10px; padding:16px;}
+  .panel-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;}
+  .panel-head h5{font-size:12px; font-weight:800; color:#DEE0DA;}
+  .legend{display:flex; gap:12px; font-size:9.5px; color:#8B9192;}
+  .legend span{display:inline-flex; align-items:center; gap:5px;}
+  .legend i{width:7px; height:7px; border-radius:2px; display:inline-block;}
+
+  .bars{display:flex; align-items:flex-end; gap:8px; height:120px; padding-top:6px;}
+  .bars .col{flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; height:100%; justify-content:flex-end;}
+  .bars .stackbar{width:100%; max-width:16px; border-radius:2px 2px 0 0; background:linear-gradient(180deg,#8fe6b8,#4fbf85);}
+  .bars .lbl{font-size:8.5px; color:#6b7071; margin-top:2px;}
+
+  .grp-bars{display:flex; align-items:flex-end; gap:14px; height:120px; padding-top:6px;}
+  .grp-bars .grp{flex:1; display:flex; align-items:flex-end; gap:4px; justify-content:center; height:100%;}
+  .grp-bars .bar{width:12px; border-radius:2px 2px 0 0;}
+  .grp-bars .bar.teo{background:#4A5054;}
+  .grp-bars .bar.real{background:var(--lime);}
+  .grp-bars .cat{text-align:center; flex:1;}
+  .grp-cats{display:flex; gap:14px; margin-top:6px;}
+  .grp-cats span{flex:1; text-align:center; font-size:8px; color:#6b7071;}
+
+  .bottom-row{display:grid; grid-template-columns:1.5fr 1fr; gap:12px;}
+  @media(max-width:820px){ .bottom-row{grid-template-columns:1fr;} }
+  .alerts-table{width:100%; border-collapse:collapse; font-size:10.5px;}
+  .alerts-table th{text-align:left; color:#6b7071; font-weight:700; font-size:9px; text-transform:uppercase; letter-spacing:.05em; padding:0 6px 8px;}
+  .alerts-table td{padding:7px 6px; border-top:1px solid #20252a; color:#C9CCC6;}
+  .pill{display:inline-block; padding:2px 8px; border-radius:999px; font-size:9px; font-weight:800;}
+  .pill.alta{background:rgba(255,107,94,0.15); color:var(--red);}
+  .pill.media{background:rgba(255,194,75,0.15); color:var(--amber);}
+
+  .donut-wrap{display:flex; flex-direction:column; align-items:center; text-align:center;}
+  .donut{
+    width:104px; height:104px; border-radius:50%;
+    background:conic-gradient(var(--lime) 0% 72%, #262B2E 72% 100%);
+    display:flex; align-items:center; justify-content:center; margin-bottom:10px; position:relative;
+  }
+  .donut::before{content:""; position:absolute; width:76px; height:76px; border-radius:50%; background:#151A1C;}
+  .donut .pct{position:relative; font-size:19px; font-weight:900;}
+  .donut-cap{font-size:10px; color:#8B9192; font-weight:700;}
+  .donut-sub{font-size:9.5px; color:#6b7071; margin-top:10px; line-height:1.6;}
+  .donut-sub b{color:#C9CCC6;}
+
+  .insight-box{
+    margin-top:12px; background:linear-gradient(135deg, rgba(215,255,61,0.10), rgba(215,255,61,0.02)); border:1px solid rgba(215,255,61,0.28);
+    border-radius:10px; padding:14px 16px; display:flex; gap:12px; align-items:flex-start;
+  }
+  .insight-box .badge{background:var(--lime); color:#0B0D0E; font-size:9px; font-weight:900; padding:2px 7px; border-radius:4px; letter-spacing:.04em; flex-shrink:0;}
+  .insight-box p{font-size:11.5px; color:#DEE0DA; line-height:1.5;}
+  .dash-caption{margin-top:18px; text-align:center; font-size:13px; color:var(--muted-2); font-style:italic;}
+
+  /* ---------- modulos grid ---------- */
+  .mod-grid{margin-top:48px; display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border:1px solid var(--border);}
+  @media(max-width:900px){ .mod-grid{grid-template-columns:repeat(2,1fr);} }
+  @media(max-width:600px){ .mod-grid{grid-template-columns:1fr;} }
+  .mod-card{background:var(--bg-alt); padding:26px 22px; position:relative; color:var(--ink);}
+  .mod-card .mnum{font-size:11px; color:var(--lime); font-weight:800; letter-spacing:.08em;}
+  .mod-card h4{font-size:15.5px; font-weight:800; margin-top:10px; line-height:1.3; color:var(--ink);}
+  .mod-card p{font-size:13px; color:var(--muted); margin-top:10px; line-height:1.55;}
+  .mod-card.featured{background:#171C10;}
+  .mod-card.featured .mnum{color:var(--lime);}
+
+  /* ---------- timeline ---------- */
+  .timeline{margin-top:52px;}
+  .tl-row{display:grid; grid-template-columns:200px 1fr; gap:16px; align-items:center; padding:11px 0; border-bottom:1px solid var(--border);}
+  .tl-row:first-child{border-top:1px solid var(--border);}
+  .tl-label{font-size:13px; font-weight:700; color:var(--ink);}
+  .tl-label small{display:block; font-size:11px; color:var(--muted-2); font-weight:500; margin-top:2px;}
+  .tl-track{position:relative; height:20px; background:transparent;}
+  .tl-bar{position:absolute; top:2px; height:16px; border-radius:4px; background:var(--lime);}
+  .tl-bar.f0{background:#4A5054;}
+  .tl-axis{display:grid; grid-template-columns:200px 1fr; margin-top:10px;}
+  .tl-axis-track{display:flex; justify-content:space-between; font-size:10px; color:var(--muted-2);}
+  .tl-note{margin-top:24px; font-size:13px; color:var(--muted);}
+  .tl-total{font-weight:800; color:var(--ink);}
+
+  /* ---------- inversion ---------- */
+  .price-grid{margin-top:48px; display:grid; grid-template-columns:1.1fr 1fr; gap:20px;}
+  @media(max-width:760px){ .price-grid{grid-template-columns:1fr;} }
+  .price-card{background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:34px;}
+  .price-card.hi{border-color:var(--lime); background:linear-gradient(160deg, #171C10, var(--panel) 60%);}
+  .price-card .plabel{font-size:12px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); font-weight:800;}
+  .price-card .pval{font-size:clamp(28px,4vw,38px); font-weight:900; margin-top:12px; color:var(--lime);}
+  .price-card .pval span{font-size:15px; color:var(--muted); font-weight:700;}
+  .price-card ul{margin-top:20px; display:flex; flex-direction:column; gap:9px;}
+  .price-card li{font-size:13.5px; color:var(--muted); padding-left:18px; position:relative;}
+  .price-card li::before{content:"—"; position:absolute; left:0; color:var(--lime-dim);}
+  .pay-split{margin-top:44px; display:grid; grid-template-columns:repeat(3,1fr); gap:12px;}
+  .pay-cell{background:var(--panel-2); border:1px solid var(--border); border-radius:10px; padding:18px; text-align:center;}
+  .pay-cell .p{font-size:22px; font-weight:900; color:var(--lime);}
+  .pay-cell .l{font-size:11px; color:var(--muted); margin-top:6px; text-transform:uppercase; letter-spacing:.05em;}
+  .pay-cell .amt{font-size:12px; color:var(--muted-2); margin-top:4px;}
+
+  /* ---------- porque ---------- */
+  .why-eq{
+    margin-top:36px; text-align:center; background:var(--panel-2); border:1px solid var(--border); border-radius:10px; padding:18px;
+    font-weight:800; letter-spacing:.03em; font-size:clamp(13px,2vw,16px); color:var(--lime);
+  }
+  .why-cols{margin-top:40px; display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
+  @media(max-width:760px){ .why-cols{grid-template-columns:1fr;} }
+  .why-col h5{font-size:13px; font-weight:800; color:var(--paper-ink); letter-spacing:.03em; text-transform:uppercase;}
+  .why-col p{margin-top:10px; font-size:13.5px; color:var(--muted);}
+
+  /* ---------- closing ---------- */
+  .closing{
+    padding:130px 0 110px; text-align:left; position:relative;
+  }
+  .closing h2{
+    font-size:clamp(28px,5vw,50px); font-weight:900; line-height:1.15; letter-spacing:-0.01em; max-width:780px;
+  }
+  .closing .bar{width:48px; height:3px; background:var(--lime); margin-bottom:28px;}
+  .closing .cta{
+    margin-top:40px; display:inline-flex; align-items:center; gap:10px; background:var(--lime); color:#0B0D0E; font-weight:800;
+    padding:14px 26px; border-radius:8px; font-size:14px; text-decoration:none;
+  }
+
+  footer{border-top:1px solid var(--border); padding:32px 0; font-size:12px; color:var(--muted-2); display:flex; flex-wrap:wrap; gap:10px; justify-content:space-between;}
+
+  /* ---------- generic data table ---------- */
+  .dtable-wrap{margin-top:40px; overflow-x:auto; border-radius:10px;}
+  .dtable{width:100%; border-collapse:collapse; font-size:13.5px; min-width:640px;}
+  .dtable thead th{background:#000; color:var(--lime); text-align:left; font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; font-weight:800; padding:12px 14px;}
+  .dtable tbody td{padding:13px 14px; border-top:1px solid var(--border); color:var(--muted); vertical-align:top; line-height:1.5; background:var(--bg-alt);}
+  .dtable tbody td strong, .dtable tbody td b{color:var(--ink); font-weight:700;}
+  .dtable tbody tr:nth-child(even) td{background:#131619;}
+  section.light .dtable tbody td{color:#5c5f52; background:#fff;}
+  section.light .dtable tbody td strong, section.light .dtable tbody td b{color:var(--paper-ink);}
+  section.light .dtable tbody tr:nth-child(even) td{background:#f7f6ef;}
+  .dtable .cell-lbl{font-weight:700; color:var(--ink);}
+  section.light .dtable .cell-lbl{color:var(--paper-ink);}
+  .table-note{margin-top:16px; font-size:12.5px; color:var(--muted-2); max-width:760px;}
+
+  /* ---------- callout / note ---------- */
+  .callout{margin-top:24px; background:var(--panel-2); border:1px solid var(--border); border-radius:10px; padding:18px 20px; font-size:13.5px; color:var(--muted); max-width:760px;}
+  .callout b{color:var(--ink);}
+  section.light .callout{background:#fff; border-color:#e4e3d8; color:#565948;}
+  section.light .callout b{color:var(--paper-ink);}
+
+  .bullets{margin-top:20px; display:flex; flex-direction:column; gap:11px; max-width:780px;}
+  .bullets li{list-style:none; font-size:14px; color:var(--muted); padding-left:20px; position:relative; line-height:1.6;}
+  .bullets li::before{content:"—"; position:absolute; left:0; color:var(--lime-dim); font-weight:700;}
+  .bullets li strong{color:var(--ink);}
+  section.light .bullets li{color:#565948;}
+  section.light .bullets li strong{color:var(--paper-ink);}
+
+  .subhead{font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.08em; color:var(--lime); margin-top:44px; margin-bottom:4px;}
+  .subhead:first-of-type{margin-top:0;}
+  section.light .subhead{color:#6b6f5c;}
+
+  /* ---------- module detail blocks ---------- */
+  .mod-detail{margin-top:22px; border:1px solid var(--border); border-radius:10px; overflow:hidden; background:var(--bg-alt);}
+  .mod-detail .bar{background:#000; color:#fff; padding:15px 22px; font-weight:800; font-size:14.5px; border-left:4px solid var(--lime); letter-spacing:.01em;}
+  .mod-detail.hi .bar{border-left-color:var(--lime); background:#171C10; color:var(--lime);}
+  .mod-detail .body{padding:26px 26px 28px;}
+  .mod-detail h6{font-size:11.5px; font-weight:800; text-transform:uppercase; letter-spacing:.07em; color:var(--lime); margin-top:22px;}
+  .mod-detail h6:first-child{margin-top:0;}
+  .mod-detail p.intro{font-size:14px; color:var(--muted); margin-top:9px; line-height:1.6;}
+  .mod-detail ul{margin-top:11px; display:flex; flex-direction:column; gap:9px; list-style:none;}
+  .mod-detail li{font-size:13.5px; color:var(--muted); padding-left:17px; position:relative; line-height:1.6; list-style:none;}
+  .mod-detail li::before{content:"•"; color:var(--lime-dim); position:absolute; left:0;}
+  .mod-detail li strong{color:var(--ink);}
+  .mod-detail .entreg{margin-top:20px; padding-top:18px; border-top:1px solid var(--border); font-size:13px; color:var(--muted); line-height:1.6;}
+  .mod-detail .entreg b{color:var(--ink); text-transform:uppercase; font-size:11px; letter-spacing:.05em; display:block; margin-bottom:7px;}
+  .mod-detail .sub{margin-top:24px; padding-top:20px; border-top:1px dashed var(--border);}
+  .mod-detail .sub .subtitle{font-size:12.5px; font-weight:800; color:var(--ink);}
+  .mod-detail .callout{margin-top:18px;}
+
+  @media print{
+    .topnav, .closing .cta{display:none !important;}
+    html, body{background:#fff !important;}
+    section{padding:26px 0 !important;}
+    section.grid-bg, .tesis, .closing, header.hero{background:#fff !important;}
+    body, section, h1, h2, h3, h4, h5, h6, p, li, td, th, div{color:#111 !important; background-image:none !important; text-shadow:none !important;}
+    .hero h1 .accent, .eyebrow, .prio-card .n, .arch-step .idx, .price-card .pval, .mod-card .mnum, .mod-detail .bar .tag{color:#4b6b00 !important;}
+    .problem-card, .mod-card, .prio-card, .arch-step, .price-card, .pay-cell, .stat-hero, .stat-scale .cell, .panel, .kpi, .mod-detail, .dashboard, .callout, .dtable tbody td{background:#fff !important; border-color:#ccc !important; box-shadow:none !important;}
+    .dashboard{border:1px solid #ccc !important;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <div class="brand">
+      <span>ORQUEST<span class="mark">IA</span>LAB</span>
+      <span class="x">×</span>
+      <span class="client">GRUPO CONINTE</span>
+    </div>
+    <div class="navlinks">
+      <a href="#situacion">Situación</a>
+      <a href="#kpis">KPIs</a>
+      <a href="#dashboard">Dashboard</a>
+      <a href="#modulos">Módulos</a>
+      <a href="#plan">Plan</a>
+      <a href="#riesgos">Riesgos</a>
+      <a href="#inversion">Inversión</a>
+      <a href="#equipo">Equipo</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero grid-bg">
+  <span class="plus" style="top:40px; right:60px;"></span>
+  <span class="plus" style="top:120px; right:14%;"></span>
+  <div class="wrap">
+    <div class="tag"><span class="dot"></span> Propuesta ejecutiva · Fase I · Septiembre 2026</div>
+    <h1>AI Transformation <span class="accent">Blueprint</span></h1>
+    <p class="lede">Arquitectura digital para que Grupo Coninte pase de una operación que ejecuta bien pero decide con información vieja, a una operación conectada, automatizada e inteligente.</p>
+    <div class="meta-row">
+      <div>Cliente<strong>Grupo Coninte</strong></div>
+      <div>Alcance<strong>Estructura de acero · 2 constructoras</strong></div>
+      <div>Duración estimada<strong>4 meses</strong></div>
+      <div>Módulos<strong>9 integrados</strong></div>
+    </div>
+  </div>
+</header>
+
+<section id="situacion">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">01</span> Entendimiento de la situación</div>
+    <h2 class="h">El costo de una obra se conoce cuando la obra ya terminó.</h2>
+    <p class="lead">Lo que hemos identificado en la conversación preliminar. <strong style="color:var(--ink)">Se valida y cuantifica formalmente en Fase 0.</strong></p>
+
+    <div class="problem-grid">
+      <div class="problem-card">
+        <span class="k">Bodega e insumos</span>
+        <p>El material sale sin registro de destino ni retorno. <strong>El costo por obra es una estimación, no un dato.</strong></p>
+      </div>
+      <div class="problem-card">
+        <span class="k">Inventario inmovilizado</span>
+        <p>Sobrantes acumulados sin visibilidad ni rotación. <strong>Compras vuelve a adquirir lo que ya está en piso.</strong></p>
+      </div>
+      <div class="problem-card">
+        <span class="k">Ciclo de cierre</span>
+        <p>Cierre contable ~15 días después del mes. <strong>Cierre de obra hasta 5 meses</strong> después de la entrega física.</p>
+      </div>
+      <div class="problem-card">
+        <span class="k">Mano de obra</span>
+        <p>No hay conciliación entre horas pagadas y horas con avance físico. <strong>No se puede cuantificar el tiempo ocioso ni su causa.</strong></p>
+      </div>
+      <div class="problem-card">
+        <span class="k">Tickets e incidencias</span>
+        <p>Seguimiento manual, sin dueño ni SLA. <strong>Mantiene obras abiertas y absorbe trabajo adicional como costo propio.</strong></p>
+      </div>
+      <div class="problem-card">
+        <span class="k">Conocimiento del proyecto</span>
+        <p>Acuerdos y autorizaciones dispersos en correos y memoria de personas. <strong>Costoso en órdenes de cambio y reclamaciones.</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="light" id="resumen">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">02</span> Resumen ejecutivo</div>
+    <h2 class="h">Una empresa que ejecuta bien pero decide con información vieja.</h2>
+    <p class="lead">Grupo Coninte fabrica y monta estructura de acero para infraestructura crítica: puentes y hospitales. Es una operación técnicamente sólida, con capacidad de ejecución probada y volumen relevante en el mercado. El alcance de esta iniciativa contempla también las dos constructoras que complementan las tres ramas operativas del grupo, para que la transformación se diseñe con una lógica común y aplicable a las tres unidades.</p>
+    <p class="lead">Sin embargo, su sistema de información financiera y operativa opera <strong style="color:var(--paper-ink)">por detrás de la obra, no junto a ella.</strong> El costo de una obra se conoce cuando la obra ya terminó. El material se compra sin visibilidad de lo que ya se tiene. La mano de obra se paga sin trazabilidad de a qué frente rindió. El resultado es una empresa que ejecuta bien pero decide con información vieja.</p>
+    <p class="lead">Esta propuesta plantea un cambio estructural: mover el punto de captura del costo, del escritorio de contabilidad al piso de la obra y del taller. La digitalización comienza en el momento en que el material sale de bodega, la cuadrilla ejecuta una tarea o se genera una decisión; la automatización y la IA convierten esos eventos en información operativa útil para Dirección.</p>
+    <p class="lead">El programa se compone de <strong style="color:var(--paper-ink)">nueve módulos integrados</strong> de digitalización, automatización e inteligencia aplicada. La duración de implementación se estima en <strong style="color:var(--paper-ink)">4 meses</strong> y se confirma con el plan detallado de Fase 0. El objetivo es construir impacto económico medible sin fijar porcentajes de mejora antes de contar con una línea base propia de Coninte.</p>
+
+    <p class="subhead" style="margin-top:40px;">Seis resultados que el programa deberá volver medibles desde la Fase 0</p>
+    <div class="dtable-wrap">
+      <table class="dtable">
+        <thead><tr><th>Resultado</th><th>Situación actual preliminar</th><th>Dirección del cambio</th></tr></thead>
+        <tbody>
+          <tr><td class="cell-lbl">Cierre contable mensual</td><td>~15 días después del mes</td><td>Reducir el ciclo con información devengada y trazable</td></tr>
+          <tr><td class="cell-lbl">Cierre financiero de obra</td><td>Hasta 5 meses post-entrega</td><td>Cerrar con costos capturados durante la ejecución</td></tr>
+          <tr><td class="cell-lbl">Costo real de obra</td><td>Reconstruido al final</td><td>Visible y actualizado durante la obra</td></tr>
+          <tr><td class="cell-lbl">Inventario inmovilizado</td><td>A cuantificar en Fase 0</td><td>Identificar, transferir y recuperar inventario sin destino</td></tr>
+          <tr><td class="cell-lbl">Horas pagadas vs horas con avance</td><td>Sin conciliación al instante</td><td>Brecha medible por frente, cuadrilla y causa</td></tr>
+          <tr><td class="cell-lbl">Tickets de incidencias</td><td>Manuales, sin dueño ni fecha</td><td>Responsable, SLA, trazabilidad y escalamiento</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">Las metas cuantitativas se acuerdan después de establecer la línea base en Fase 0. Esta propuesta compromete el sistema de medición y ejecución, no porcentajes de mejora definidos antes del diagnóstico.</p>
+  </div>
+</section>
+
+<section class="tesis grid-bg">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">03</span> Tesis de transformación</div>
+    <blockquote>En Grupo Coninte, <span class="hl">el costo no existe hasta que llega el papel.</span> Ese es el único problema. Todo lo demás es consecuencia.</blockquote>
+    <p class="support">No se trata de instalar software o IA de forma aislada. Se trata de rediseñar el flujo de información: crear el evento de consumo —el momento, el registro y la responsabilidad de que algo se gastó— y colgar de ahí toda la inteligencia financiera y operativa.</p>
+
+    <div class="causeflow">
+      <div class="root">El costo nace con la factura, no con el consumo</div>
+      <div class="arrow">→</div>
+      <div class="effects">
+        <div class="effect">Costo de obra = autopsia</div>
+        <div class="effect">Inventario se acumula sin control</div>
+        <div class="effect">Cierre tarda porque reconstruye historia</div>
+        <div class="effect">Mano de obra no se imputa a nada</div>
+        <div class="effect">Cotizaciones con supuestos, no historia</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="transicion">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">04</span> De información fragmentada a inteligencia operativa</div>
+    <h2 class="h">El cambio no empieza con una herramienta.</h2>
+    <p class="lead">Empieza modificando la forma en que un evento de obra se convierte en información para decidir.</p>
+
+    <div class="dtable-wrap">
+      <table class="dtable">
+        <thead><tr><th>Hoy</th><th>Transición</th><th>Operación digital objetivo</th></tr></thead>
+        <tbody>
+          <tr><td class="cell-lbl">Obra, taller y bodega</td><td>→</td><td>Captura en el punto donde ocurre el evento</td></tr>
+          <tr><td class="cell-lbl">WhatsApp, papel y Excel</td><td>→</td><td>Canales digitales simples: QR, WhatsApp, tablets, CFDI</td></tr>
+          <tr><td class="cell-lbl">Recaptura y conciliación</td><td>→</td><td>Dato estructurado una sola vez</td></tr>
+          <tr><td class="cell-lbl">Información dispersa</td><td>→</td><td>Modelo común de obra, costo, material y responsable</td></tr>
+          <tr><td class="cell-lbl">Revisión manual</td><td>→</td><td>Automatizaciones, reglas y alertas</td></tr>
+          <tr><td class="cell-lbl">Búsqueda y memoria</td><td>→</td><td>IA documental con fuente y contexto</td></tr>
+          <tr><td class="cell-lbl">Decisión tardía</td><td>→</td><td>Tableros y excepciones visibles para Dirección</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="callout"><b>Principio rector:</b> capturar una vez, estructurar desde origen y reutilizar el dato para operación, automatización, analítica e IA.</p>
+  </div>
+</section>
+
+<section class="light">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">05</span> Economía del 1%</div>
+    <h2 class="h">Pequeñas desviaciones producen efectos económicos relevantes.</h2>
+    <p class="lead">El objetivo no es prometer un ahorro antes del diagnóstico, sino dimensionar la sensibilidad económica de mejorar el control.</p>
+
+    <div class="stat-hero">
+      <div class="pct">1% de una obra de $64,000,000 MXN</div>
+      <div class="amount">= $640,000 MXN</div>
+      <div class="note">de sensibilidad económica por punto porcentual</div>
+    </div>
+    <div class="stat-scale">
+      <div class="cell"><div class="p">0.25%</div><div class="v">$160,000</div></div>
+      <div class="cell"><div class="p">0.50%</div><div class="v">$320,000</div></div>
+      <div class="cell"><div class="p">1.00%</div><div class="v">$640,000</div></div>
+      <div class="cell"><div class="p">2.00%</div><div class="v">$1,280,000</div></div>
+    </div>
+    <p class="disclaimer">Ejercicio de sensibilidad para dimensionar escala. No representa una meta, estimación ni garantía de ahorro — cualquier cifra real se calcula con datos propios de Coninte durante la Fase 0.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">06</span> Tres prioridades ejecutivas</div>
+    <h2 class="h">La tecnología es la capa que hace posibles tres resultados de negocio.</h2>
+    <div class="prio-grid">
+      <div class="prio-card">
+        <div class="n">01</div>
+        <h3>Control económico en tiempo real</h3>
+        <p>Digitalizar el evento de costo desde origen: material, horas, compras, incidencias y cierre. La información deja de reconstruirse al final y comienza a existir mientras la obra ocurre.</p>
+      </div>
+      <div class="prio-card">
+        <div class="n">02</div>
+        <h3>Automatización + IA aplicada</h3>
+        <p>Automatizar captura, comparativos y validaciones; aplicar IA donde aporta valor: normalización de cotizaciones, consulta documental con fuente, agentes de alcance y consultas en lenguaje natural.</p>
+      </div>
+      <div class="prio-card">
+        <div class="n">03</div>
+        <h3>Decisión ejecutiva con datos</h3>
+        <p>Consolidar bodega, obra, compras, costos y productividad en una capa de inteligencia operativa con KPIs, alertas y trazabilidad para Dirección.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="arquitectura" class="grid-bg">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">07</span> Arquitectura digital objetivo</div>
+    <h2 class="h">Nueve módulos, una sola arquitectura de datos compartida.</h2>
+    <p class="lead">Los datos capturados en campo y administración se convierten en una capa común sobre la que operan automatizaciones, analítica e IA.</p>
+
+    <div class="arch-flow">
+      <div class="arch-step"><div class="idx">01 · CAPTURA</div><h4>QR, WhatsApp, CFDI/XML</h4><p>El dato nace en el punto de operación.</p></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-step"><div class="idx">02 · OPERACIÓN</div><h4>Bodega · compras · obra</h4><p>Procesos conectados por una estructura común.</p></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-step"><div class="idx">03 · DATOS CONINTE</div><h4>Catálogo maestro · WBS</h4><p>Una sola referencia para materiales, costos y responsables.</p></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-step"><div class="idx">04 · AUTOMATIZACIÓN</div><h4>Validaciones · alertas</h4><p>Las reglas repetitivas dejan de depender de seguimiento manual.</p></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-step"><div class="idx">05 · IA</div><h4>Document AI · agentes</h4><p>Aplicada sólo donde aporta interpretación o decisión asistida.</p></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-step"><div class="idx">06 · EJECUTIVA</div><h4>Costo real · desviaciones</h4><p>Dirección opera sobre excepciones y evidencia.</p></div>
+    </div>
+    <div class="arch-transversal">Capa transversal · Seguridad · Permisos · Auditoría · Trazabilidad · Gobierno de datos e IA</div>
+  </div>
+</section>
+
+<section id="kpis" class="light">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">08</span> KPIs y realización de valor</div>
+    <h2 class="h">El programa se mide contra una línea base acordada con Coninte.</h2>
+    <p class="lead">Los valores actuales son preliminares; los umbrales y metas se aprueban en Fase 0 antes de utilizarlos como criterio de éxito.</p>
+
+    <div class="dtable-wrap">
+      <table class="dtable">
+        <thead><tr><th>#</th><th>Indicador</th><th>Línea base preliminar</th><th>Criterio de éxito / decisión</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td class="cell-lbl">Días de cierre contable mensual</td><td>~15</td><td>Reducción acordada después de Fase 0. Referencia: cierre en 3 días hábiles.</td></tr>
+          <tr><td>2</td><td class="cell-lbl">Días de cierre financiero de obra</td><td>Hasta 150</td><td>Reducción acordada después de Fase 0. Información actualizada diariamente conforme avanza la ejecución.</td></tr>
+          <tr><td>3</td><td class="cell-lbl">Salidas de bodega con vale digital</td><td>~0</td><td>Trazabilidad de material desde salida hasta consumo o retorno</td></tr>
+          <tr><td>4</td><td class="cell-lbl">Desviación costo real vs presupuesto de material</td><td>No medible</td><td>Desviación visible por obra, frente y partida</td></tr>
+          <tr><td>5</td><td class="cell-lbl">Merma de acero sobre material comprado</td><td>No medible</td><td>Merma medida y explicable por obra / frente</td></tr>
+          <tr><td>6</td><td class="cell-lbl">Inventario con antigüedad &gt;180 días</td><td>A cuantificar</td><td>Tendencia y recuperación visibles en tablero</td></tr>
+          <tr><td>7</td><td class="cell-lbl">Compras evitadas por consulta previa de stock</td><td>No medible</td><td>Compra evitada documentada y valorizada</td></tr>
+          <tr><td>8</td><td class="cell-lbl">Horas-hombre imputadas a partida específica</td><td>Bajo</td><td>Trazabilidad por partida y frente</td></tr>
+          <tr><td>8b</td><td class="cell-lbl">Brecha entre horas pagadas y horas con avance</td><td>No medible</td><td>Brecha visible por frente, cuadrilla y causa</td></tr>
+          <tr><td>9</td><td class="cell-lbl">Índice de productividad HH real / HH presupuestada</td><td>No medible</td><td>Índice comparable por frente y cuadrilla</td></tr>
+          <tr><td>10</td><td class="cell-lbl">Impacto económico de comparativos de compra</td><td>No medible</td><td>Ahorro documentado contra baseline aprobado</td></tr>
+          <tr><td>11</td><td class="cell-lbl">Permanencia vs horas pagadas</td><td>No medible</td><td>Indicador visible con reglas acordadas</td></tr>
+          <tr><td>12</td><td class="cell-lbl">Facturas capturadas automáticamente desde CFDI</td><td>0</td><td>Captura automatizada validada y auditable</td></tr>
+          <tr><td>13</td><td class="cell-lbl">Horas de captura manual</td><td>No medible</td><td>Horas liberadas medidas antes/después</td></tr>
+          <tr><td>14</td><td class="cell-lbl">Tickets con antigüedad relevante</td><td>Rezago actual</td><td>Reducción del rezago contra baseline</td></tr>
+          <tr><td>15</td><td class="cell-lbl">Cumplimiento de SLA en tickets</td><td>No medible</td><td>SLA definido, trazable y reportable</td></tr>
+          <tr><td>16</td><td class="cell-lbl">Costo de garantía por obra</td><td>No medible</td><td>Costo visible por obra y causa</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="subhead" style="margin-top:52px;">08.1 · Framework de realización de valor</p>
+    <p class="lead" style="margin-top:8px;">La propuesta no fija porcentajes de mejora antes de medir la operación. Primero se establece el baseline; después se acuerdan metas, responsables y evidencia de validación.</p>
+    <div class="dtable-wrap">
+      <table class="dtable">
+        <thead><tr><th>Prioridad</th><th>Qué medimos</th><th>Fuente</th><th>Responsable</th><th>Cómo se valida valor</th></tr></thead>
+        <tbody>
+          <tr><td class="cell-lbl">Control económico</td><td>Cierre mensual / cierre de obra</td><td>Contabilidad + plataforma</td><td>Finanzas</td><td>Baseline → meta acordada → seguimiento</td></tr>
+          <tr><td class="cell-lbl">Material</td><td>Inventario, consumo, retornos y compras evitadas</td><td>Bodega + compras</td><td>Operaciones</td><td>Valor recuperado / costo evitado documentado</td></tr>
+          <tr><td class="cell-lbl">Productividad</td><td>Horas pagadas, avance y causas de paro</td><td>Campo + nómina</td><td>Operaciones</td><td>Brecha identificada y causas accionables</td></tr>
+          <tr><td class="cell-lbl">Compras</td><td>Comparativos, costo total y desempeño proveedor</td><td>RFQ + recepción</td><td>Compras</td><td>Impacto económico validado por transacción</td></tr>
+          <tr><td class="cell-lbl">Incidencias</td><td>Antigüedad, SLA y costo de garantía</td><td>Tickets + WBS</td><td>Calidad / Servicio</td><td>Rezago y costo visibles por obra</td></tr>
+          <tr><td class="cell-lbl">Adopción</td><td>Uso real de flujos y captura digital</td><td>Telemetría de plataforma</td><td>Sponsor + PM</td><td>Uso sostenido y excepciones visibles</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="callout" style="text-align:center; max-width:none;"><b>Cadena de control:</b> Baseline → Meta acordada → Implementación → Medición → Validación con Coninte → Valor realizado</p>
+  </div>
+</section>
+
+<section id="dashboard">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--lime);">◆ Vista del producto · Módulo 4</div>
+    <h2 class="h">Así se ve la operación controlada: costo real en un solo tablero.</h2>
+    <p class="lead">Vista conceptual del módulo de Costo Real: presupuesto, ejecutado, proyección al cierre y desviaciones — actualizado con la información capturada en campo, no reconstruido al final.</p>
+
+    <div class="dash-wrap">
+      <div class="dash-glow"></div>
+      <div class="dashboard">
+        <div class="dash-side">
+          <div class="dash-brand"><span>ORQUEST<span class="mk">IA</span>LAB</span></div>
+          <div class="dash-nav-item active"><span class="ic"></span> Dashboard</div>
+          <div class="dash-nav-item"><span class="ic"></span> Obras</div>
+          <div class="dash-nav-item"><span class="ic"></span> Costos</div>
+          <div class="dash-nav-item"><span class="ic"></span> Órdenes de cambio</div>
+          <div class="dash-nav-item"><span class="ic"></span> Proveedores</div>
+          <div class="dash-nav-item"><span class="ic"></span> Cierre administrativo</div>
+          <div class="dash-nav-item"><span class="ic"></span> Reportes</div>
+          <div class="dash-side-foot"><b>Grupo Coninte</b>Panel de control · Fase I</div>
+        </div>
+        <div class="dash-main">
+          <div class="dash-topbar">
+            <div class="dash-title">Costo real e inteligencia operativa <span class="live"><span class="d"></span>Live</span></div>
+            <div class="dash-user"><span>Hoy · 13 sep</span><span class="av">HC</span></div>
+          </div>
+
+          <div class="kpi-row">
+            <div class="kpi"><div class="lbl">Presupuesto total</div><div class="val">$482,500,000</div></div>
+            <div class="kpi"><div class="lbl">Ejecutado</div><div class="val">$268,430,000</div><div class="sub up">55.6%</div></div>
+            <div class="kpi"><div class="lbl">Comprometido</div><div class="val">$142,800,000</div><div class="sub up">29.6%</div></div>
+            <div class="kpi"><div class="lbl">Proyección al cierre</div><div class="val">$455,200,000</div><div class="sub up">94.3%</div></div>
+            <div class="kpi warnborder"><div class="lbl">Desviación</div><div class="val">+$27,300,000</div><div class="sub warn">+6.0% vs presupuesto</div></div>
+          </div>
+
+          <div class="chart-row">
+            <div class="panel">
+              <div class="panel-head">
+                <h5>Comprometido vs ejecutado vs proyección</h5>
+                <div class="legend"><span><i style="background:#4fbf85"></i>Ejecutado</span><span><i style="background:#D7FF3D"></i>Proyección</span></div>
+              </div>
+              <div class="bars">
+                <div class="col"><div class="stackbar" style="height:22%"></div><span class="lbl">Ene</span></div>
+                <div class="col"><div class="stackbar" style="height:34%"></div><span class="lbl">Feb</span></div>
+                <div class="col"><div class="stackbar" style="height:44%"></div><span class="lbl">Mar</span></div>
+                <div class="col"><div class="stackbar" style="height:52%"></div><span class="lbl">Abr</span></div>
+                <div class="col"><div class="stackbar" style="height:61%"></div><span class="lbl">May</span></div>
+                <div class="col"><div class="stackbar" style="height:69%"></div><span class="lbl">Jun</span></div>
+                <div class="col"><div class="stackbar" style="height:77%"></div><span class="lbl">Jul</span></div>
+                <div class="col"><div class="stackbar" style="height:84%; background:linear-gradient(180deg,#e9ff8f,#D7FF3D)"></div><span class="lbl">Ago</span></div>
+                <div class="col"><div class="stackbar" style="height:94%; background:linear-gradient(180deg,#e9ff8f,#D7FF3D)"></div><span class="lbl">Sep</span></div>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-head">
+                <h5>Costo teórico vs real</h5>
+                <div class="legend"><span><i style="background:#4A5054"></i>Teórico</span><span><i style="background:#D7FF3D"></i>Real</span></div>
+              </div>
+              <div class="grp-bars">
+                <div class="grp"><div class="bar teo" style="height:70%"></div><div class="bar real" style="height:88%"></div></div>
+                <div class="grp"><div class="bar teo" style="height:54%"></div><div class="bar real" style="height:60%"></div></div>
+                <div class="grp"><div class="bar teo" style="height:38%"></div><div class="bar real" style="height:42%"></div></div>
+                <div class="grp"><div class="bar teo" style="height:28%"></div><div class="bar real" style="height:26%"></div></div>
+              </div>
+              <div class="grp-cats"><span>Montaje</span><span>Obra civil</span><span>Acabados</span><span>Indirectos</span></div>
+            </div>
+          </div>
+
+          <div class="bottom-row">
+            <div class="panel">
+              <div class="panel-head"><h5>Alertas operativas</h5></div>
+              <table class="alerts-table">
+                <tr><th>Obra / Frente</th><th>Tipo</th><th>Impacto</th><th></th></tr>
+                <tr><td>Libramiento Norte</td><td>Costo</td><td>+$4.8M</td><td><span class="pill alta">Alta</span></td></tr>
+                <tr><td>Planta Tratamiento</td><td>Compras</td><td>+$3.2M</td><td><span class="pill media">Media</span></td></tr>
+                <tr><td>Distribuidor Sur</td><td>Estimaciones</td><td>retraso 3 días</td><td><span class="pill media">Media</span></td></tr>
+                <tr><td>Libramiento Norte</td><td>Cierre</td><td>+$2.1M</td><td><span class="pill alta">Alta</span></td></tr>
+              </table>
+              <div class="insight-box">
+                <span class="badge">IA</span>
+                <p>La obra Libramiento Norte presenta desviación de +8.2%, impulsada por combustible y acero. Se recomienda revisar frente de montaje y órdenes de cambio pendientes.</p>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-head"><h5>Cierre administrativo</h5></div>
+              <div class="donut-wrap">
+                <div class="donut"><span class="pct">72%</span></div>
+                <div class="donut-cap">Avance de cierre · objetivo 3 días</div>
+              </div>
+              <div class="donut-sub">
+                ✓ Conciliación de insumos — <b>completado</b><br>
+                ✓ Revisión de órdenes de cambio — <b>completado</b><br>
+                ◔ Cierre de estimación final — <b>en proceso</b><br>
+                ○ Validación de indirectos — <b>pendiente</b>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="dash-caption">Visual conceptual del tablero ejecutivo. Se construye con datos propios de Coninte durante la implementación — no es una captura de un sistema en producción.</p>
+  </div>
+</section>
+
+<section id="modulos" class="light">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">09</span> Módulos integrados de solución</div>
+    <h2 class="h">Nueve módulos que comparten una misma estructura de datos.</h2>
+    <p class="lead">No operan como herramientas aisladas: la información capturada en operación alimenta automatizaciones, analítica e IA con trazabilidad.</p>
+  </div>
+  <div class="wrap" style="padding:0;">
+    <div class="mod-grid" style="margin-top:44px;">
+      <div class="mod-card">
+        <div class="mnum">MÓDULO 1</div>
+        <h4>Fundación de datos y arquitectura digital</h4>
+        <p>Catálogo maestro de materiales, factores de conversión, WBS y padrón de proveedores. La base sin la cual ningún otro módulo funciona.</p>
+      </div>
+      <div class="mod-card">
+        <div class="mnum">MÓDULO 2</div>
+        <h4>Bodega e insumos: trazabilidad digital</h4>
+        <p>Vale de salida y de retorno obligatorio, requisición con validación de existencias, semáforo de antigüedad y clasificación ABC×XYZ.</p>
+      </div>
+      <div class="mod-card">
+        <div class="mnum">MÓDULO 3</div>
+        <h4>Compras, cotizador e IA de matching</h4>
+        <p>RFQ automatizado, normalización de cotizaciones con IA, scoring de costo total de adquisición e historial de desempeño por proveedor.</p>
+      </div>
+      <div class="mod-card featured">
+        <div class="mnum">MÓDULO 4 · CENTRAL</div>
+        <h4>Costo real e inteligencia operativa</h4>
+        <p>Modelo de costeo integrado, devengado automático, tablero de obra vivo y cierre acelerado. Colapsa el cierre mensual de 15 días a 3.</p>
+      </div>
+      <div class="mod-card">
+        <div class="mnum">MÓDULO 5</div>
+        <h4>Mano de obra y productividad</h4>
+        <p>Asignación de cuadrilla a partida, avance físico diario y cruce con horas pagadas para revelar tiempo ocioso y su causa el mismo día.</p>
+      </div>
+      <div class="mod-card">
+        <div class="mnum">MÓDULO 6</div>
+        <h4>Second Brain: IA documental</h4>
+        <p>Consulta en lenguaje natural sobre contratos, minutas y bitácoras con cita obligatoria a la fuente. Agente de control de alcance.</p>
+      </div>
+      <div class="mod-card">
+        <div class="mnum">MÓDULO 7</div>
+        <h4>Marketplace digital de sobrantes</h4>
+        <p>Bolsa interna de transferencia entre obras primero; canal externo B2B automatizado con agentes de IA para el retazo sin destino.</p>
+      </div>
+      <div class="mod-card">
+        <div class="mnum">MÓDULO 8</div>
+        <h4>Canal digital WhatsApp + automatización</h4>
+        <p>Puerta de entrada de datos desde campo: registro de gasto por foto, lectura de CFDI, caja chica y consultas de saldo en lenguaje natural.</p>
+      </div>
+      <div class="mod-card">
+        <div class="mnum">MÓDULO 9</div>
+        <h4>Gestión digital de tickets e incidencias</h4>
+        <p>Flujos separados de garantía y cliente, SLA con reloj visible, escalamiento automático y costo de garantía por obra.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap" style="margin-top:64px;">
+
+    <div class="mod-detail">
+      <div class="bar">MÓDULO 1 — Fundación de datos y arquitectura digital</div>
+      <div class="body">
+        <p class="intro">Sin esta capa ningún módulo posterior funciona. Es la base que convierte información dispersa en datos estructurados para automatizar procesos y aplicar IA con trazabilidad; saltarla es una de las causas más comunes de fracaso en este tipo de implementaciones.</p>
+        <h6>Qué resolvemos</h6>
+        <p class="intro">Hoy no existe un lenguaje común entre bodega, compras, obra y contabilidad. El mismo perfil se nombra distinto en cada área, se compra en toneladas, se almacena en piezas y se consume en kilogramos. Mientras eso sea cierto, cualquier reporte de costo será una traducción manual con error incorporado.</p>
+        <h6>Qué implementamos</h6>
+        <ul>
+          <li>Catálogo maestro único de materiales, normalizado por perfil, grado, dimensión, longitud comercial y recubrimiento, con nomenclatura única y códigos estables.</li>
+          <li>Factores de conversión duros por SKU entre unidad de compra, de almacén y de consumo — la causa técnica número uno de descuadres de inventario en acero.</li>
+          <li>Estructura de desglose de obra (WBS): Obra → Frente/Área → Partida → Elemento. Todo consumo, toda hora y todo costo aterriza obligatoriamente en un nodo.</li>
+          <li>Mapeo espejo con el catálogo contable, para que cada nodo del WBS corresponda a un centro de costo — lo que permite que el cierre sea automático en lugar de una conciliación manual mensual.</li>
+          <li>Padrón único de proveedores, depurado y con criterios de alta.</li>
+          <li>Políticas escritas y firmadas: qué es consumo, qué es sobrante, qué es retazo, qué es chatarra, quién autoriza qué y con qué monto.</li>
+        </ul>
+        <div class="entreg"><b>Entregables</b>Catálogo maestro cargado y validado · Manual de políticas de inventario y consumo · Padrón de proveedores depurado.</div>
+      </div>
+    </div>
+
+    <div class="mod-detail">
+      <div class="bar">MÓDULO 2 — Bodega e insumos: trazabilidad digital</div>
+      <div class="body">
+        <h6>Qué resolvemos</h6>
+        <p class="intro">El material sale de bodega sin registro de destino, sin responsable y sin retorno. No se sabe qué se consumió, qué sobró ni dónde quedó. De ahí nacen tanto la ausencia de costo real como el inventario inmovilizado.</p>
+        <h6>Qué implementamos</h6>
+        <ul>
+          <li>Inventario físico total con etiquetado por ubicación y lote (QR). Es el trabajo más duro del programa y es la línea base sin la cual nada es auditable.</li>
+          <li>Vale de salida digital obligatorio. Ningún material sale sin obra, frente, partida y solicitante. Captura por escaneo, no tecleo. Firma digital del almacenista y del receptor.</li>
+          <li>Vale de retorno obligatorio — la pieza que hoy no existe en ningún lado y la que realmente genera el costo real: lo que no regresa, se consumió; lo que regresa, reingresa al stock conservando la trazabilidad de su obra de origen.</li>
+          <li>Requisición con validación cruzada de existencias. El sistema impide generar orden de compra sin desplegar primero: existencias en bodega central, existencias en bodegas de obra, y sobrantes disponibles de otras obras.</li>
+          <li>Clasificación ABC × XYZ (valor contra rotación) para priorizar control donde está el dinero.</li>
+          <li>Semáforo de antigüedad (0-90 / 90-180 / +180 / +365 días) con política automática asociada: a los 180 días el material entra a bolsa de transferencia interna; a los 365, a marketplace.</li>
+          <li>Política de retazo, con umbral definido por tipo de perfil.</li>
+          <li>Estructura de bodega central y sub-bodegas de obra, cada una con responsable nombrado y corte periódico. Se elimina la figura del material "en tránsito indefinido".</li>
+        </ul>
+        <div class="entreg"><b>Entregables</b>Inventario físico valuado y etiquetado · Módulo de vales de salida y retorno en producción · Requisición con bloqueo por existencias · Tablero de antigüedad y rotación · Manual de operación de bodega · Personal capacitado y certificado en el flujo.</div>
+      </div>
+    </div>
+
+    <div class="mod-detail">
+      <div class="bar">MÓDULO 3 — Compras, cotizador e IA para matching de proveedores</div>
+      <div class="body">
+        <h6>Qué resolvemos</h6>
+        <p class="intro">Hoy la decisión de compra se toma sobre el precio unitario que llega en un correo o un WhatsApp, y el cruce de mejores opciones se realiza manualmente, ocupando una parte importante de las horas del proceso.</p>
+        <h6>Qué implementamos</h6>
+        <ul>
+          <li>Motor de RFQ automatizado. La requisición aprobada dispara solicitud simultánea a los proveedores calificados para ese SKU, con ventana de respuesta y condiciones estándar.</li>
+          <li>Normalización inteligente de cotizaciones asistida por IA. Las respuestas llegan como llegan —PDF, foto, Excel desordenado, mensaje— y el sistema las convierte automáticamente a una tabla comparable: precio por kg, longitud comercial ofrecida, tiempo de entrega, condiciones de pago, flete y mínimos.</li>
+          <li>Scoring de costo total de adquisición, no de precio unitario. El modelo pondera precio, flete, tiempo de entrega contra la fecha que la obra realmente necesita, condiciones de crédito, historial de cumplimiento, rechazos por calidad y certificados, y —específico de acero— el desperdicio implícito por longitud comercial: el proveedor más barato por kilogramo puede ser el más caro por obra si su longitud comercial genera retazo inservible.</li>
+          <li>Historial de desempeño por proveedor, alimentado automáticamente desde la recepción: cumplimiento de fecha, cumplimiento de cantidad, rechazos, calidad de certificados. El proveedor se califica con datos, no con percepción.</li>
+          <li>Índice interno de precios del acero, construido con la historia de compras propia. Alerta automática cuando una cotización se desvía del comportamiento histórico o del mercado.</li>
+        </ul>
+        <div class="entreg"><b>Entregables</b>Motor de RFQ y comparativo automático · Tablero de scoring y desempeño de proveedores · Índice interno de precios · Política de compras y niveles de autorización.</div>
+        <p class="intro" style="margin-top:16px;"><strong style="color:var(--ink)">Impacto a medir.</strong> El módulo permite comparar ofertas bajo una misma estructura, incorporar costo total de adquisición y documentar decisiones de compra. El impacto económico se calcula contra la línea base y transacciones reales validadas durante la Fase 0 y la implementación.</p>
+      </div>
+    </div>
+
+    <div class="mod-detail hi">
+      <div class="bar">MÓDULO 4 — Costo real e inteligencia operativa <span style="opacity:.65; font-weight:600;">· central</span></div>
+      <div class="body">
+        <h6>Qué resolvemos</h6>
+        <p class="intro">El costo de obra se conoce meses después de terminada.</p>
+        <h6>Qué implementamos</h6>
+        <ul>
+          <li>Modelo de costo real integrado: materiales (vía vales) + mano de obra (vía horas imputadas a partida) + subcontratos (vía estimaciones de avance) + equipo y maniobra + indirectos prorrateados con driver definido y documentado.</li>
+          <li>Devengado automático. La recepción física de material genera provisión inmediata sin esperar factura — el mecanismo que colapsa el cierre mensual de 15 días a 5.</li>
+          <li>Tablero de obra vivo, actualizado diariamente: presupuesto vs comprometido vs ejercido vs proyección al cierre, por partida y por frente, con alertas por desviación sobre umbral.</li>
+          <li>Control de órdenes de cambio ligado al alcance contratado, para que el costo adicional se identifique cuando se genera y no cuando se reclama.</li>
+          <li>Proceso de cierre de obra acelerado: checklist, responsables, tiempos y criterios de finiquito, diseñado para que la mayor parte del costo ya esté capturada durante la ejecución.</li>
+          <li>Análisis teórico vs real. La explosión de insumos del despiece de ingeniería define lo que debió consumirse; los vales definen lo que se consumió. El delta se convierte en un KPI operativo por obra, frente y cuadrilla.</li>
+        </ul>
+        <div class="entreg"><b>Entregables</b>Modelo de costeo documentado (taller y campo) · Tablero de obra en producción · Mecanismo de devengado automático · Procedimiento de cierre mensual y de cierre de obra · Reporte teórico vs real por obra.</div>
+        <p class="intro" style="margin-top:16px;">↑ Vista conceptual del tablero de este módulo en la sección <a href="#dashboard" style="color:var(--lime); font-weight:700; text-decoration:none;">"Vista del producto"</a> más arriba.</p>
+      </div>
+    </div>
+
+    <div class="mod-detail">
+      <div class="bar">MÓDULO 5 — Mano de obra y analítica de productividad</div>
+      <div class="body">
+        <p class="intro">Este módulo aborda una oportunidad económica relevante que se cuantificará con datos propios durante la Fase 0. Su implementación requiere especial cuidado de gestión y adopción.</p>
+        <h6>Qué resolvemos</h6>
+        <p class="intro">Se paga tiempo con personal detenido, pero no se puede cuantificar cuánto, dónde ni por qué. El check diario existente contra material solicitado es un excelente punto de partida que hoy no se explota.</p>
+        <h6>Qué implementamos</h6>
+        <ul>
+          <li>Asignación de cuadrilla a partida, no a obra. Saber que hay 50 personas en una obra no informa nada. Saber que hay 6 personas asignadas al montaje del eje 4 sí.</li>
+          <li>Reporte diario de avance físico por partida, capturado en tablet por el supervisor y validado por el residente, en unidades reales del oficio: kilogramos montados, pulgadas-diámetro soldadas, metros cuadrados preparados y pintados, piezas habilitadas.</li>
+          <li>Cruce de tres fuentes —material surtido para la tarea del día, avance físico reportado y horas-hombre pagadas— que produce el índice de productividad real por frente y por cuadrilla. Un frente con material surtido, personal asignado y avance nulo es tiempo ocioso identificado el mismo día, no meses después.</li>
+          <li>Codificación obligatoria de causas de paro: sin material, sin plano o plano en revisión, sin equipo de izaje, frente no liberado, clima, retrabajo, permiso o inspección pendiente. Sin la causa solo se sabe que hubo ociosidad; con la causa se sabe qué corregir.</li>
+          <li>Control de acceso por frente mediante RFID o QR en puntos definidos, para registrar presencia operativa por área.</li>
+          <li>Tablero de productividad con comparativo entre cuadrillas, entre frentes y contra el presupuesto de horas.</li>
+        </ul>
+        <div class="entreg"><b>Entregables</b>Modelo de imputación de horas a partida · App de avance diario en producción · Catálogo de causas de paro y tablero de análisis · Índice de productividad por frente y cuadrilla · Reporte semanal de ociosidad con causa.</div>
+
+        <div class="sub">
+          <div class="subtitle">5.1 · Verificación de presencia operativa: control de acceso</div>
+          <h6 style="margin-top:16px;">Qué resolvemos</h6>
+          <p class="intro">El registro actual confirma que una persona ingresó, pero no aporta suficiente trazabilidad sobre su presencia operativa por área. La propuesta complementa el check actual con registros de acceso vinculados al frente de trabajo.</p>
+          <h6>Qué implementamos</h6>
+          <ul>
+            <li>Código QR o RFID para registro en puntos definidos de las instalaciones.</li>
+            <li>Cruce de registros de acceso con asignación de cuadrilla y avance físico reportado.</li>
+            <li>Reporte por excepción y por área, priorizando indicadores operativos agregados sobre vigilancia individual.</li>
+          </ul>
+          <p class="callout"><b>Recomendación de despliegue.</b> Los primeros 60 días operan en modo diagnóstico y no punitivo: se mide, se revisa el agregado por área, se corrige el proceso y se comunica la política. Cualquier aplicación disciplinaria posterior debe operar con reglas previamente conocidas por todos.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mod-detail">
+      <div class="bar">MÓDULO 6 — Second Brain de proyecto: IA documental</div>
+      <div class="body">
+        <h6>Qué resolvemos</h6>
+        <p class="intro">El conocimiento del proyecto vive en correos, minutas, planos, bitácoras y en la cabeza de personas específicas. Recuperar un acuerdo, una autorización o un cambio de alcance depende de quién se acuerde. En proyectos de este tamaño, eso cuesta dinero real en reclamaciones pérdidas.</p>
+        <h6>Qué implementamos</h6>
+        <ul>
+          <li>Ingesta documental centralizada: contratos y anexos, planos y revisiones, minutas, bitácoras, órdenes de cambio, correspondencia con cliente y supervisión, reportes de calidad y certificados de material.</li>
+          <li>Consulta documental con IA en lenguaje natural y cita obligatoria a la fuente. Toda respuesta indica documento, fecha y autor. Ejemplo real de uso: "¿qué se acordó sobre el cambio de espesor en el eje 4, quién lo autorizó y en qué fecha?" → respuesta con la minuta y el correo específicos.</li>
+          <li>Agente de control de alcance. Detecta y alerta cuando lo que se está fabricando o montando puede no corresponder al alcance contratado, para que el equipo revise la situación antes de ejecutarla y documente oportunamente una posible orden de cambio.</li>
+          <li>Expediente de reclamación asistido. Ante una controversia, el sistema arma la línea de tiempo documentada de instrucciones, cambios, autorizaciones y afectaciones.</li>
+          <li>Base de lecciones aprendidas por tipo de obra, que retroalimenta directamente al cotizador del Módulo 3.</li>
+        </ul>
+        <div class="entreg"><b>Entregables</b>Repositorio documental estructurado · Motor de consulta con citas en producción · Agente de control de alcance con alertas · Base de lecciones aprendidas · Protocolo de gestión documental de proyecto.</div>
+      </div>
+    </div>
+
+    <div class="mod-detail">
+      <div class="bar">MÓDULO 7 — Marketplace digital de sobrantes</div>
+      <div class="body">
+        <p class="intro">Se implementa en dos etapas. La primera captura la mayor parte del valor y no requiere exposición externa.</p>
+        <h6>Etapa A · Bolsa interna de transferencia</h6>
+        <p class="intro">Todas las obras y el taller ven, en tiempo real, los sobrantes disponibles en cualquier ubicación. Solicitud de transferencia con costeo interno y traslado del valor a la obra receptora. La regla del Módulo 2 —no se compra sin consultar la bolsa— es lo que activa el mecanismo. Aquí está el grueso del ahorro.</p>
+        <h6>Etapa B · Canal externo B2B</h6>
+        <p class="intro">Colocación de material sin destino interno con herrerías, talleres de fabricación, constructoras regionales y compradores de chatarra para el retazo.</p>
+        <p class="intro"><strong style="color:var(--ink)">Automatización del canal externo.</strong> El inventario destinado a desplazamiento se publicará y gestionará de forma automatizada mediante bots y agentes de IA. Estos atenderán consultas iniciales, responderán disponibilidad y condiciones configuradas, identificarán interesados y darán seguimiento a la conversación, con el objetivo de que el canal opere sin requerir dedicación operativa continua del personal de Coninte.</p>
+        <div class="entreg"><b>Entregables</b>Bolsa interna en producción con reglas de transferencia · Mecanismo de costeo entre obras · Plataforma de canal externo, página online · Política comercial de sobrantes y de chatarra · Reporte mensual de recuperación.</div>
+      </div>
+    </div>
+
+    <div class="mod-detail">
+      <div class="bar">MÓDULO 8 — Canal digital de captura por WhatsApp + automatización</div>
+      <div class="body">
+        <p class="intro">Módulo transversal: es la puerta de entrada digital de datos para los módulos 2, 4 y 5 y una de las interfaces donde la automatización y la IA reducen fricción de captura en campo.</p>
+        <h6>Qué resolvemos</h6>
+        <p class="intro">La captura de información compite contra la realidad de la obra: gente con guantes, sin computadora a la mano, sin tiempo ni disposición para aprender un sistema nuevo. Cualquier plataforma que exija abrir una aplicación desconocida tiene adopción baja y se abandona en semanas. WhatsApp ya está instalado en todos los teléfonos, ya se usa todos los días para coordinar la obra, y no requiere capacitación de uso.</p>
+        <h6>Qué implementamos</h6>
+        <ul>
+          <li>Registro de egresos en el momento del gasto. Foto del ticket o de la factura, o mensaje de voz. El sistema extrae monto, proveedor, fecha y concepto, y solo pide confirmar obra, frente y partida.</li>
+          <li>Procesamiento directo del XML del CFDI. Cuando se reenvía la factura electrónica, el sistema lee los campos estructurados del XML —emisor, RFC, conceptos, impuestos, retenciones y UUID— evitando depender de OCR y reduciendo captura manual.</li>
+          <li>Registro de ingresos y movimientos: anticipos, estimaciones cobradas, depósitos y reembolsos, con conciliación bancaria asistida.</li>
+          <li>Caja chica y viáticos de obra, con saldo vivo por residente y comprobación obligatoria antes de reposición.</li>
+          <li>Validación contra presupuesto en el momento del registro. Si el gasto excede lo disponible en esa partida, el sistema lo marca y dispara flujo de autorización antes de que el gasto se consuma.</li>
+          <li>Consultas en lenguaje natural para campo: "¿cuánto llevo ejercido en el frente 3?", "¿hay perfil W12x40 en alguna bodega?", "¿cuál es el saldo de mi caja chica?".</li>
+          <li>Captura operativa además de financiera: solicitud de vale, reporte de avance diario, causa de paro y reporte de incidencia — un solo canal para todo lo que hoy simplemente no se registra.</li>
+          <li>Escritura al sistema central, no almacenamiento en el chat. WhatsApp es la interfaz de captura; el registro contable y operativo vive en la plataforma, con trazabilidad de quién registró, cuándo y desde dónde.</li>
+        </ul>
+        <div class="entreg"><b>Entregables</b>Bot en producción sobre WhatsApp Business API · Motor de lectura de CFDI · Flujos de caja chica, viáticos y autorización · Consultas de saldo y existencias · Integración con los módulos de bodega, costo y productividad · Manual de uso de una página.</div>
+        <p class="callout"><b>Por qué pesa más de lo que parece.</b> El obstáculo real de estos programas nunca es la tecnología: es que la gente capture. Este módulo baja la fricción de captura casi a cero y funciona, en la práctica, como el seguro de adopción de todo lo demás.</p>
+      </div>
+    </div>
+
+    <div class="mod-detail">
+      <div class="bar">MÓDULO 9 — Gestión digital de tickets e incidencias</div>
+      <div class="body">
+        <h6>Qué resolvemos</h6>
+        <p class="intro">El seguimiento de incidencias, internas y de cliente, se lleva de forma manual, sin responsable asignado ni reloj corriendo. Hay tickets abiertos desde hace meses. El problema no es solo de servicio: un pendiente de garantía sin resolver mantiene la obra abierta, y es una de las razones por las que el cierre de obra se extiende hasta cinco meses. Además, cada incidencia atendida sin clasificar se absorbe como costo propio por omisión, cuando una parte de ellas era trabajo adicional cobrable.</p>
+        <p class="callout"><b>Dos flujos distintos, deliberadamente separados.</b> Las incidencias internas y los tickets de cliente comparten plataforma pero no proceso: las de cliente tienen consecuencia contractual, afectan fondo de garantía y pueden derivar en penalización o en cobro adicional. Mezclarlas hace que las urgentes se pierdan entre las cotidianas.</p>
+
+        <h6>Captura y clasificación</h6>
+        <ul>
+          <li>Levantamiento desde múltiples canales: portal de cliente, correo, WhatsApp (reutilizando el Módulo 8) y captura interna desde campo con fotografía obligatoria.</li>
+          <li>Tipificación por catálogo: garantía, no conformidad de calidad, pendiente de entrega (punch list), falla de equipo, mantenimiento, seguridad, sistemas, administrativo, solicitud de cliente.</li>
+          <li>Clasificación obligatoria garantía vs. trabajo adicional cobrable, con autorización nombrada para reclasificar. Sin esta regla, todo se atiende gratis por omisión — es la fuga más silenciosa del módulo.</li>
+          <li>Vinculación obligatoria a obra, frente y partida del WBS, para que el costo aterrice donde corresponde.</li>
+        </ul>
+
+        <h6>Asignación y responsabilidad</h6>
+        <ul>
+          <li>Asignación a una persona con nombre, nunca a un área. Un ticket asignado a "mantenimiento" no tiene dueño; uno asignado a una persona sí.</li>
+          <li>Matriz de prioridad por impacto × urgencia: un hallazgo que compromete integridad estructural o seguridad no compite en la misma fila que un detalle de acabado.</li>
+          <li>SLA por tipo y prioridad, con reloj corriendo y visible desde el momento de captura.</li>
+          <li>Escalamiento automático por tiempo: al vencer el SLA escala al superior, y de ahí a dirección.</li>
+          <li>Regla anti-zombi: todo ticket sin movimiento durante días por validar escala solo y aparece en el tablero de dirección.</li>
+          <li>Ningún ticket se cierra sin evidencia de solución y, cuando aplica, sin validación del cliente.</li>
+        </ul>
+
+        <h6>Costo y consecuencia financiera</h6>
+        <ul>
+          <li>Imputación del costo real de cada ticket: horas-hombre, material consumido vía vale, viáticos, fletes y maniobra.</li>
+          <li>Costo de garantía por obra, medido como porcentaje del contrato — un indicador que hoy no existe y que revela qué obras realmente fueron rentables después de la garantía.</li>
+          <li>Los tickets de garantía abiertos bloquean el cierre financiero de obra y aparecen explícitamente en el checklist de cierre del Módulo 4, con su provisión asociada.</li>
+          <li>Reporte mensual de cumplimiento de SLA como evidencia operativa para seguimiento y futuras licitaciones.</li>
+        </ul>
+        <div class="entreg"><b>Entregables</b>Plataforma de tickets con los dos flujos en producción · Catálogos de tipo, prioridad, causa y SLA · Matriz de asignación y escalamiento · Tablero de tickets vencidos y de costo de garantía por obra · Integración con cierre de obra, costo real y Second Brain · Procedimiento de atención y cierre documentado.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="adopcion" class="light">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">10</span> Adopción y gestión del cambio</div>
+    <h2 class="h">Se considera exitosa cuando los nuevos flujos forman parte de la operación.</h2>
+    <p class="lead">El software entregado sin adopción no constituye cierre del programa.</p>
+
+    <div class="dtable-wrap">
+      <table class="dtable">
+        <tbody>
+          <tr><td class="cell-lbl" style="width:220px;">Preparar</td><td>Identificar dueños de proceso, usuarios clave y sponsors. Comunicar qué cambia, por qué y quién decide.</td></tr>
+          <tr><td class="cell-lbl">Diseñar con operación</td><td>Validar flujos con usuarios reales antes de construir; reducir pasos y fricción en campo.</td></tr>
+          <tr><td class="cell-lbl">Capacitar por rol</td><td>Entrenamiento breve y específico para bodega, compras, residentes, costos, administración y Dirección.</td></tr>
+          <tr><td class="cell-lbl">Acompañar el piloto</td><td>Observación en operación real, registro de fricciones, corrección y soporte cercano.</td></tr>
+          <tr><td class="cell-lbl">Medir adopción</td><td>Uso, excepciones, errores, retrabajo y cumplimiento del flujo; umbrales definidos con Coninte.</td></tr>
+          <tr><td class="cell-lbl">Estabilizar</td><td>Seguimiento 30/60/90, documentación, responsables y transferencia operativa.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="callout"><b>Criterio:</b> adopción medida + operación estable + evidencia de uso. No "software entregado".</p>
+  </div>
+</section>
+
+<section id="plan">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">11</span> Plan de ejecución</div>
+    <h2 class="h">Implementación escalonada por frentes, con gates de aprobación.</h2>
+    <p class="lead">La ejecución combina rediseño de procesos, arquitectura de datos, integración tecnológica, automatización y desarrollo de componentes de IA aplicados a casos concretos.</p>
+
+    <ul class="bullets">
+      <li><strong>Implementación escalonada por frentes.</strong> La solución se activa progresivamente por procesos y unidades prioritarias, validando cada componente en operación real antes de extenderlo al resto.</li>
+      <li><strong>Gate de aprobación entre fases.</strong> No se avanza sin aprobación de los criterios de aceptación de la fase anterior.</li>
+      <li><strong>Aceptación por adopción medida, no por entrega de software.</strong> El criterio de cierre de cada fase es operativo y se acuerda con Coninte en Fase 0: uso sostenido del nuevo flujo, calidad de datos y resolución de excepciones.</li>
+    </ul>
+
+    <div class="dtable-wrap">
+      <table class="dtable">
+        <thead><tr><th>Fase</th><th>Contenido</th><th>Duración</th></tr></thead>
+        <tbody>
+          <tr><td class="cell-lbl">0</td><td>Diagnóstico, línea base, cuantificación de la fuga, caso de negocio, plan detallado</td><td>2-3 semanas</td></tr>
+          <tr><td class="cell-lbl">1</td><td>Fundación de datos + inventario físico / base digital</td><td>1 semana</td></tr>
+          <tr><td class="cell-lbl">2</td><td>Bodega, vales y requisición — primera implementación</td><td>2 semanas</td></tr>
+          <tr><td class="cell-lbl">2b</td><td>Canal WhatsApp: captura de egresos y lectura de CFDI (en paralelo)</td><td>1 semana</td></tr>
+          <tr><td class="cell-lbl">3</td><td>Compras, cotizador y matching inteligente de proveedores</td><td>1 semana</td></tr>
+          <tr><td class="cell-lbl">4</td><td>Costo real de obra y cierre financiero</td><td>1 semana</td></tr>
+          <tr><td class="cell-lbl">4b</td><td>Tickets e incidencias (en paralelo)</td><td>1 semana</td></tr>
+          <tr><td class="cell-lbl">5</td><td>Mano de obra y productividad</td><td>2 semanas</td></tr>
+          <tr><td class="cell-lbl">6</td><td>Second Brain / IA documental</td><td>1 semana</td></tr>
+          <tr><td class="cell-lbl">7</td><td>Marketplace (interno, luego externo)</td><td>1 semana</td></tr>
+          <tr><td class="cell-lbl">8</td><td>Despliegue al resto de obras y estabilización</td><td>2 semanas, tras la entrega inicial</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note"><strong style="color:var(--ink)">Duración total estimada: 4 meses.</strong> Varias fases se traslapan; el calendario detallado se entrega al cierre de Fase 0.</p>
+
+    <div class="timeline">
+      <div class="tl-row"><div class="tl-label">Fase 0<small>Diagnóstico y línea base</small></div><div class="tl-track"><div class="tl-bar f0" style="left:0%; width:16%;"></div></div></div>
+      <div class="tl-row"><div class="tl-label">1 · Fundación de datos<small>Base digital</small></div><div class="tl-track"><div class="tl-bar" style="left:16%; width:8%;"></div></div></div>
+      <div class="tl-row"><div class="tl-label">2 · Bodega e insumos<small>Vales y requisición</small></div><div class="tl-track"><div class="tl-bar" style="left:24%; width:16%;"></div></div></div>
+      <div class="tl-row"><div class="tl-label">2b · Canal WhatsApp<small>En paralelo</small></div><div class="tl-track"><div class="tl-bar" style="left:24%; width:8%; opacity:.75;"></div></div></div>
+      <div class="tl-row"><div class="tl-label">3 · Compras y cotizador<small>Matching con IA</small></div><div class="tl-track"><div class="tl-bar" style="left:40%; width:8%;"></div></div></div>
+      <div class="tl-row"><div class="tl-label">4 · Costo real<small>Cierre financiero</small></div><div class="tl-track"><div class="tl-bar" style="left:48%; width:8%;"></div></div></div>
+      <div class="tl-row"><div class="tl-label">4b · Tickets<small>En paralelo</small></div><div class="tl-track"><div class="tl-bar" style="left:48%; width:8%; opacity:.75;"></div></div></div>
+      <div class="tl-row"><div class="tl-label">5 · Mano de obra<small>Productividad</small></div><div class="tl-track"><div class="tl-bar" style="left:56%; width:16%;"></div></div></div>
+      <div class="tl-row"><div class="tl-label">6 · Second Brain<small>IA documental</small></div><div class="tl-track"><div class="tl-bar" style="left:72%; width:8%;"></div></div></div>
+      <div class="tl-row"><div class="tl-label">7 · Marketplace<small>Sobrantes</small></div><div class="tl-track"><div class="tl-bar" style="left:80%; width:8%;"></div></div></div>
+      <div class="tl-row"><div class="tl-label">8 · Despliegue<small>Resto de obras</small></div><div class="tl-track"><div class="tl-bar" style="left:88%; width:12%;"></div></div></div>
+    </div>
+    <div class="tl-axis"><div></div><div class="tl-axis-track"><span>Semana 1</span><span>Semana 8</span><span>Semana 16</span></div></div>
+    <p class="tl-note">Los frentes se traslapan deliberadamente para acelerar la captura de valor sin comprometer validación y adopción. <span class="tl-total">Duración total: 4 meses.</span></p>
+
+    <p class="subhead" style="margin-top:56px;">Qué se ve funcionando y cuándo — los hitos que importan para Dirección</p>
+    <div class="dtable-wrap">
+      <table class="dtable">
+        <thead><tr><th>Momento estimado</th><th>Lo que Coninte ya puede validar</th></tr></thead>
+        <tbody>
+          <tr><td class="cell-lbl">Primeras semanas</td><td>Diagnóstico y línea base económica / operativa</td></tr>
+          <tr><td class="cell-lbl">Primeras activaciones</td><td>Vales digitales, inventario etiquetado y flujos de bodega</td></tr>
+          <tr><td class="cell-lbl">Primeras activaciones</td><td>Captura estructurada de CFDI y comparativos de compra</td></tr>
+          <tr><td class="cell-lbl">Implementación progresiva</td><td>Primer ciclo de costo y cierre con información integrada</td></tr>
+          <tr><td class="cell-lbl">Implementación progresiva</td><td>Productividad y causas de paro visibles</td></tr>
+          <tr><td class="cell-lbl">Implementación progresiva</td><td>Consulta documental con fuente y alertas de alcance</td></tr>
+          <tr><td class="cell-lbl">Implementación progresiva</td><td>Bolsa interna de sobrantes con trazabilidad</td></tr>
+          <tr><td class="cell-lbl">Escalamiento</td><td>Expansión a obras definidas y estabilización</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="riesgos" class="grid-bg">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">12</span> Riesgos críticos y mitigación</div>
+    <h2 class="h">Se gestionan desde el inicio, no cuando se convierten en retrasos.</h2>
+    <p class="lead">Una transformación de este alcance tiene dependencias operativas y tecnológicas.</p>
+    <div class="dtable-wrap">
+      <table class="dtable">
+        <thead><tr><th>Riesgo</th><th>Por qué importa</th><th>Mitigación</th></tr></thead>
+        <tbody>
+          <tr><td class="cell-lbl">Calidad de datos históricos</td><td>Costos, inventario o catálogos incompletos</td><td>Saneamiento, muestreo y reglas de calidad en Fase 0</td></tr>
+          <tr><td class="cell-lbl">Adopción en campo</td><td>El nuevo flujo agrega fricción o se evita</td><td>Piloto, diseño con usuarios, capacitación y medición de uso</td></tr>
+          <tr><td class="cell-lbl">Integraciones existentes</td><td>APIs o exportaciones limitan automatización</td><td>Assessment técnico y rutas alternativas antes de construir</td></tr>
+          <tr><td class="cell-lbl">Disponibilidad de personal Coninte</td><td>Retrasos en levantamiento, validación o pruebas</td><td>Responsables nombrados, calendario y gates de decisión</td></tr>
+          <tr><td class="cell-lbl">Expansión de alcance</td><td>Nuevos requerimientos desbordan el plan</td><td>Backlog, control de cambios y cotización separada cuando aplique</td></tr>
+          <tr><td class="cell-lbl">IA y datos sensibles</td><td>Uso inadecuado de información o respuestas sin evidencia</td><td>Permisos, fuente obligatoria, validación humana y reglas por caso</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="callout"><b>Los riesgos, supuestos, issues y dependencias se revisan semanalmente dentro del gobierno del proyecto.</b></p>
+  </div>
+</section>
+
+<section id="gobierno" class="light">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">13</span> Gobierno del proyecto</div>
+    <div class="dtable-wrap">
+      <table class="dtable">
+        <thead><tr><th>Rol</th><th>Responsabilidad</th><th>Frecuencia</th></tr></thead>
+        <tbody>
+          <tr><td class="cell-lbl">Comité directivo</td><td>Aprobación de gates, resolución de bloqueos, decisiones de política</td><td>Mensual</td></tr>
+          <tr><td class="cell-lbl">Responsable ejecutivo Coninte</td><td>Autoridad de decisión, respaldo del cambio ante la organización</td><td>Semanal</td></tr>
+          <tr><td class="cell-lbl">Líder de proyecto (cliente)</td><td>Coordinación interna, disponibilidad de personal y datos</td><td>Diaria</td></tr>
+          <tr><td class="cell-lbl">Líder de proyecto (nuestro)</td><td>Ejecución, entregables, reporte de avance y riesgos</td><td>Diaria</td></tr>
+          <tr><td class="cell-lbl">Dueños de proceso</td><td>Bodega, Compras, Costos, Obra, Contabilidad</td><td>Semanal</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">Reporte de avance semanal por escrito con tablero de KPIs.</p>
+  </div>
+</section>
+
+<section id="seguridad">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">14</span> Seguridad, datos e IA responsable</div>
+    <p class="lead">La arquitectura se diseña bajo principios de mínimo privilegio, trazabilidad y control del dato. La confidencialidad contractual se complementa con reglas específicas para automatización e inteligencia artificial.</p>
+    <ul class="bullets">
+      <li><strong>Confidencialidad indefinida</strong> sobre información comercial, financiera y técnica del cliente, incluida la posterior a la terminación del contrato.</li>
+      <li><strong>Acceso mínimo necesario:</strong> solo el personal del equipo asignado accede a información sensible, bajo acuerdo de confidencialidad.</li>
+      <li><strong>Datos personales de la plantilla</strong> (nómina, ubicación, asistencia) tratados conforme a la LFPDPPP, con acceso restringido, cifrado en reposo y en tránsito, y bitácora de accesos.</li>
+      <li><strong>Propiedad de los datos:</strong> todos los datos generados son y permanecen propiedad exclusiva del cliente.</li>
+    </ul>
+    <p class="subhead" style="margin-top:44px;">Principios de gobierno de datos e IA</p>
+    <div class="dtable-wrap">
+      <table class="dtable">
+        <tbody>
+          <tr><td class="cell-lbl" style="width:200px;">Propiedad</td><td>Los datos generados y las fuentes operativas permanecen bajo control de Coninte.</td></tr>
+          <tr><td class="cell-lbl">Acceso</td><td>Permisos por rol y principio de mínimo privilegio; bitácora de accesos cuando aplique.</td></tr>
+          <tr><td class="cell-lbl">Trazabilidad</td><td>La IA documental cita la fuente; las automatizaciones registran evento, usuario y acción.</td></tr>
+          <tr><td class="cell-lbl">Validación humana</td><td>Decisiones sensibles, contractuales o financieras requieren revisión y autorización definidas.</td></tr>
+          <tr><td class="cell-lbl">Modelos externos</td><td>Cada caso define qué información puede procesarse en servicios externos y bajo qué controles.</td></tr>
+          <tr><td class="cell-lbl">Seguridad por diseño</td><td>Ningún flujo con información sensible se despliega sin revisión de permisos, almacenamiento y transferencia.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="responsabilidades" class="light">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">15</span> Responsabilidades del cliente y supuestos</div>
+    <p class="lead">El cumplimiento de calendario y resultados está condicionado a lo siguiente. Cualquier incumplimiento se documenta y ajusta calendario y alcance.</p>
+    <ul class="bullets">
+      <li>Disponibilidad de personal operativo para levantamiento, capacitación y pruebas, en los tiempos acordados.</li>
+      <li><strong>Acceso a datos históricos:</strong> compras, inventarios, nómina, contabilidad, presupuestos y cierres de obras anteriores.</li>
+      <li>Acceso a los sistemas actuales y, cuando aplique, a sus APIs o exportaciones.</li>
+      <li>Disponibilidad física para el <strong>inventario general.</strong></li>
+      <li><strong>Decisión ejecutiva sobre las políticas</strong> que el programa requiere (umbral de retazo, criterio de castigo de inventario, niveles de autorización). Nosotros las diseñamos y recomendamos; la aprobación es del cliente.</li>
+      <li>Para el Módulo 5.1, validación legal-laboral por parte del cliente previa a cualquier despliegue.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="caso-economico" class="grid-bg">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">16</span> Caso económico y retorno</div>
+    <p class="subhead" style="margin-top:0;">Carga administrativa que el sistema absorbe</p>
+    <p class="lead" style="margin-top:8px;">La Fase 0 cuantifica la carga operativa real antes de proyectar ahorro. Las filas siguientes definen qué se medirá, cómo cambiará el proceso y qué evidencia permitirá validar el valor. No se presenta una cifra de horas liberadas hasta contar con datos propios de Coninte.</p>
+    <div class="dtable-wrap">
+      <table class="dtable">
+        <thead><tr><th>Función</th><th>Cómo se ejecuta hoy</th><th>Qué medimos en Fase 0</th><th>Cómo queda</th><th>Métrica de valor</th></tr></thead>
+        <tbody>
+          <tr><td class="cell-lbl">Salidas de material</td><td>Papel / libreta / recaptura</td><td>Tiempo, registros y errores</td><td>Vale digital por escaneo</td><td>Tiempo liberado + trazabilidad</td></tr>
+          <tr><td class="cell-lbl">Facturas y pólizas</td><td>Captura manual desde documentos</td><td>Volumen y tiempo de captura</td><td>Lectura de XML + integración</td><td>Tiempo liberado + calidad de dato</td></tr>
+          <tr><td class="cell-lbl">Conciliación de inventario</td><td>Conteos y ajustes manuales</td><td>Horas y diferencias detectadas</td><td>Inventario alimentado por movimientos</td><td>Diferencias y tiempo de conciliación</td></tr>
+          <tr><td class="cell-lbl">Comparativo de cotizaciones</td><td>Correo + armado manual</td><td>Compras, tiempo y criterios usados</td><td>Normalización y scoring estructurado</td><td>Tiempo + impacto económico validado</td></tr>
+          <tr><td class="cell-lbl">Reportes de costo</td><td>Reconstrucción desde varias fuentes</td><td>Horas y retraso de información</td><td>Tablero integrado</td><td>Tiempo + oportunidad de decisión</td></tr>
+          <tr><td class="cell-lbl">Cierre contable</td><td>Conciliaciones al final del mes</td><td>Duración de actividades manuales</td><td>Devengado y trazabilidad</td><td>Días de cierre + retrabajo</td></tr>
+          <tr><td class="cell-lbl">Cierre de obra</td><td>Reconstrucción post-entrega</td><td>Duración y pendientes recurrentes</td><td>Costo capturado durante ejecución</td><td>Días de cierre + pendientes</td></tr>
+          <tr><td class="cell-lbl">Búsqueda contractual</td><td>Correo, memoria y archivo</td><td>Tiempo de búsqueda y casos</td><td>Consulta documental con fuente</td><td>Tiempo + evidencia recuperada</td></tr>
+          <tr><td class="cell-lbl">Cotización de obra nueva</td><td>Plantillas y supuestos históricos</td><td>Horas y fuentes utilizadas</td><td>Historia real por tipo de obra</td><td>Tiempo + precisión del costeo</td></tr>
+          <tr><td class="cell-lbl">Asistencia y prenómina</td><td>Validación y captura manual</td><td>Horas y excepciones</td><td>Permanencia + imputación integrada</td><td>Tiempo + brecha identificada</td></tr>
+          <tr><td class="cell-lbl"><strong>Total</strong></td><td>—</td><td>A cuantificar en Fase 0</td><td>—</td><td>A validar contra baseline</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="subhead" style="margin-top:52px;">Costos evitados y recuperados</p>
+    <p class="lead" style="margin-top:8px;">Independientes del ahorro de horas y, en general, de mayor magnitud:</p>
+    <div class="dtable-wrap">
+      <table class="dtable">
+        <thead><tr><th>Concepto</th><th>Base de cálculo a construir</th><th>Impacto</th></tr></thead>
+        <tbody>
+          <tr><td class="cell-lbl">Recuperación de inventario inmovilizado</td><td>Valor, antigüedad y posibilidad real de reutilización / venta</td><td>A cuantificar en Fase 0</td></tr>
+          <tr><td class="cell-lbl">Compras duplicadas evitadas</td><td>Compras realizadas existiendo stock utilizable</td><td>A cuantificar en Fase 0</td></tr>
+          <tr><td class="cell-lbl">Merma de acero</td><td>Consumo teórico vs real por obra y frente</td><td>A cuantificar en Fase 0</td></tr>
+          <tr><td class="cell-lbl">Impacto de comparativos de compra</td><td>Diferencia documentada entre alternativas bajo costo total</td><td>A cuantificar en Fase 0</td></tr>
+          <tr><td class="cell-lbl">Tiempo ocioso de mano de obra</td><td>Horas pagadas vs avance + causa de paro</td><td>A cuantificar en Fase 0</td></tr>
+          <tr><td class="cell-lbl">Órdenes de cambio identificadas</td><td>Alcance no contratado detectado y documentado a tiempo</td><td>A cuantificar en Fase 0</td></tr>
+          <tr><td class="cell-lbl">Costo financiero de inventario</td><td>Costo de capital sobre stock efectivamente liberado</td><td>A cuantificar en Fase 0</td></tr>
+          <tr><td class="cell-lbl"><strong>Total estimado</strong></td><td>Consolidado después de baseline y validación</td><td>A cuantificar en Fase 0</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="roadmap" class="light">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">17</span> Ruta de evolución tecnológica 2027-2028</div>
+    <p class="lead">El programa propuesto ya incorpora digitalización, automatización e IA desde la Fase I. La evolución futura no parte de cero: parte de una operación conectada, datos propios de Coninte y casos de uso funcionando. Los siguientes horizontes profundizan el valor sin sustituir lo ya implementado.</p>
+    <div class="dtable-wrap">
+      <table class="dtable">
+        <thead><tr><th>Horizonte</th><th>Contenido</th><th>Ventana</th></tr></thead>
+        <tbody>
+          <tr><td class="cell-lbl">1 · Estabilizar y adoptar</td><td>Afinar flujos, adopción, calidad de datos y operación de los módulos ya implementados.</td><td>0-6 meses</td></tr>
+          <tr><td class="cell-lbl">2 · Optimizar con datos propios</td><td>Recalibrar reglas, alertas, scoring y KPIs con historia real de Coninte.</td><td>6-12 meses</td></tr>
+          <tr><td class="cell-lbl">3 · Planear con mayor anticipación</td><td>Incorporar modelos de proyección para costos, compras, productividad e inventario.</td><td>12-18 meses</td></tr>
+          <tr><td class="cell-lbl">4 · Automatización avanzada</td><td>Ampliar agentes y workflows para vigilar excepciones y ejecutar acciones bajo autorización.</td><td>18-24 meses</td></tr>
+          <tr><td class="cell-lbl">5 · Nuevos casos de uso</td><td>Integrar nuevas áreas, fuentes y capacidades según retorno, prioridad y madurez de datos.</td><td>Continuo</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="callout"><b>Criterio de evolución:</b> automatización e inteligencia artificial ya forman parte de la Fase I. Los horizontes futuros se priorizan por valor, disponibilidad de datos y oportunidad operativa, no por una secuencia rígida de tecnología.</p>
+  </div>
+</section>
+
+<section id="inversion" class="grid-bg">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">18</span> Inversión</div>
+    <h2 class="h">Estructura económica propuesta.</h2>
+
+    <div class="price-grid">
+      <div class="price-card hi">
+        <div class="plabel">Programa de transformación operativa · Fase I</div>
+        <div class="pval">$450,000 <span>MXN + IVA</span></div>
+        <ul>
+          <li>Diagnóstico, diseño de procesos y arquitectura de datos</li>
+          <li>Configuración, desarrollo e integración de los 9 módulos</li>
+          <li>Piloto controlado, capacitación, despliegue y estabilización</li>
+        </ul>
+      </div>
+      <div class="price-card">
+        <div class="plabel">Continuidad operativa + Account Manager tecnológico</div>
+        <div class="pval">$10,000 <span>MXN / mes + IVA</span></div>
+        <ul>
+          <li>Punto único de contacto post-producción</li>
+          <li>Soporte técnico y acompañamiento de adopción</li>
+          <li>Roadmap de evolución visible</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="lead" style="margin-top:32px;">La inversión de implementación incluye diagnóstico, diseño de procesos, arquitectura de datos, configuración, desarrollo e integración de los módulos definidos, piloto controlado, capacitación, despliegue y estabilización inicial.</p>
+    <p class="lead" style="margin-top:16px;">Continuidad operativa y acompañamiento tecnológico. A partir de la puesta en producción, Coninte contará con un Account Manager asignado como punto único de contacto con OrquestiaLab. Será responsable de dar seguimiento a la operación de las tecnologías implementadas, coordinar soporte técnico, acompañar la adopción y mantener visible el roadmap de evolución.</p>
+
+    <div class="callout" style="max-width:none; margin-top:28px;">
+      <b>Condición estratégica de colaboración</b><br><br>
+      Las condiciones económicas de esta propuesta consideran el carácter estratégico de esta primera colaboración y la autorización de Coninte para documentar el proceso de transformación como case study de OrquestiaLab. La documentación podrá incluir bitácoras y anotaciones de campo, entrevistas, fotografías, video, evidencia del proceso de implementación y resultados antes/después.<br><br>
+      <em>Cualquier material que identifique públicamente a Coninte, utilice su marca o revele información operativa, financiera, contractual o técnica sensible será presentado para revisión y autorización previa antes de su publicación.</em>
+    </div>
+
+    <p class="subhead" style="margin-top:44px;">Forma de pago de implementación</p>
+    <div class="pay-split">
+      <div class="pay-cell"><div class="p">60%</div><div class="l">Al inicio</div><div class="amt">$270,000 MXN</div></div>
+      <div class="pay-cell"><div class="p">20%</div><div class="l">Cierre de piloto operativo</div><div class="amt">$90,000 MXN</div></div>
+      <div class="pay-cell"><div class="p">20%</div><div class="l">Despliegue y cierre</div><div class="amt">$90,000 MXN</div></div>
+    </div>
+    <p class="table-note">Nivel de servicio. Los horarios de soporte, clasificación de severidades, tiempos de atención, disponibilidad objetivo y escalamiento se formalizan en el anexo de servicio antes del inicio de la operación continua.</p>
+  </div>
+</section>
+
+<section class="light">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">19</span> Por qué OrquestiaLab</div>
+    <h2 class="h">Integramos, no solo recomendamos.</h2>
+    <p class="lead">Combinamos diagnóstico, arquitectura de datos, automatización, desarrollo e IA aplicada para llevar los casos de uso desde el proceso hasta producción — con criterio operativo: no usamos IA donde una regla determinística funciona mejor.</p>
+    <div class="why-eq">ORQUESTIALAB = PROCESO + DATOS + AUTOMATIZACIÓN + IA + ADOPCIÓN</div>
+    <p class="lead" style="margin-top:28px;">La solución se construye alrededor de la operación de Coninte y se integra con las herramientas y fuentes de información que ya existen. El objetivo es una capa tecnológica útil, medible y sostenible, no una colección de herramientas aisladas.</p>
+    <div class="why-cols">
+      <div class="why-col"><h5>Tecnología con criterio</h5><p>La aplicamos donde aporta una ventaja concreta: entender documentos no estructurados, normalizar información, consultar conocimiento y acelerar decisiones.</p></div>
+      <div class="why-col"><h5>+10 años de implementación</h5><p>El equipo involucrado en este proyecto acumula más de 10 años implementando y acompañando la adopción de plataformas tecnológicas líderes en empresas de distintos sectores de Latinoamérica.</p></div>
+      <div class="why-col"><h5>Éxito medido por adopción</h5><p>El criterio de cierre es operativo, no la entrega de software: uso sostenido del nuevo flujo, calidad de datos y resolución de excepciones.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="equipo" class="grid-bg">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">20</span> Equipo de ejecución</div>
+    <h2 class="h">Equipo compacto y directamente involucrado.</h2>
+    <p class="lead">La estructura evita capas innecesarias entre diagnóstico, diseño, construcción e implementación. La asignación nominal se confirma antes del arranque y cualquier sustitución de personal clave se comunica y documenta.</p>
+    <div class="dtable-wrap">
+      <table class="dtable">
+        <thead><tr><th>Rol</th><th>Perfil</th><th>Responsabilidad</th><th>Presencia</th></tr></thead>
+        <tbody>
+          <tr><td class="cell-lbl">Dirección de proyecto</td><td>Dirección OrquestiaLab</td><td>Gobierno ejecutivo, decisiones de alcance y relación con sponsor</td><td>Seguimiento ejecutivo</td></tr>
+          <tr><td class="cell-lbl">Líder de procesos y costos</td><td>Consultoría / operación</td><td>Levantamiento, proceso futuro, KPIs y validación de valor</td><td>En sitio según fase</td></tr>
+          <tr><td class="cell-lbl">Arquitectura e integraciones</td><td>Tecnología / IA</td><td>Datos, integraciones, automatización, seguridad y componentes de IA</td><td>Remoto + validaciones</td></tr>
+          <tr><td class="cell-lbl">Implementación operativa</td><td>Campo / adopción</td><td>Configuración, pruebas, capacitación, documentación y estabilización</td><td>En sitio durante piloto</td></tr>
+          <tr><td class="cell-lbl">Account Manager</td><td>Continuidad</td><td>Punto único de contacto post-producción, soporte y roadmap</td><td>Operación continua</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="callout"><b>Antes de firma se anexa la matriz nominal de responsables, disponibilidad y canales de escalamiento.</b></p>
+  </div>
+</section>
+
+<section class="closing grid-bg">
+  <div class="wrap">
+    <div class="bar"></div>
+    <h2>Lo que hoy tarda meses en saberse,<br>debe poder decidirse durante la obra.</h2>
+    <a class="cta" href="mailto:vamos@orquestialab.com">Agendar Fase 0 → vamos@orquestialab.com</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" style="display:flex; flex-wrap:wrap; gap:10px; justify-content:space-between; width:100%;">
+    <span>ORQUESTIALAB × GRUPO CONINTE — CONFIDENCIAL</span>
+    <span>Propuesta ejecutiva · Septiembre 2026</span>
+  </div>
+</footer>
+
+</body>
+</html>
