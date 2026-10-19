@@ -2,19 +2,19 @@
   "rewrites": [
     { "source": "/coninte", "destination": "/coninte/page.html" },
     { "source": "/tec", "destination": "/tec/page.html" },
-    { "source": "/", "destination": "https://orquestialab.marblism.me/" },
-    { "source": "/nosotros", "destination": "https://orquestialab.marblism.me/nosotros" },
-    { "source": "/soluciones", "destination": "https://orquestialab.marblism.me/soluciones" },
-    { "source": "/proceso", "destination": "https://orquestialab.marblism.me/proceso" },
-    { "source": "/proyectos", "destination": "https://orquestialab.marblism.me/proyectos" },
-    { "source": "/contacto", "destination": "https://orquestialab.marblism.me/contacto" },
-    { "source": "/blog", "destination": "https://orquestialab.marblism.me/blog" },
-    { "source": "/blog/:path*", "destination": "https://orquestialab.marblism.me/blog/:path*" },
-    { "source": "/sitemap.xml", "destination": "https://orquestialab.marblism.me/sitemap.xml" },
-    { "source": "/favicon.svg", "destination": "https://orquestialab.marblism.me/favicon.svg" },
-    { "source": "/orquestialab-logo.png", "destination": "https://orquestialab.marblism.me/orquestialab-logo.png" },
-    { "source": "/_astro/:path*", "destination": "https://orquestialab.marblism.me/_astro/:path*" },
-    { "source": "/images/:path*", "destination": "https://orquestialab.marblism.me/images/:path*" }
+    { "source": "/", "destination": "https://orquestialab-2.marblism.me/" },
+    { "source": "/nosotros", "destination": "https://orquestialab-2.marblism.me/nosotros" },
+    { "source": "/soluciones", "destination": "https://orquestialab-2.marblism.me/soluciones" },
+    { "source": "/proceso", "destination": "https://orquestialab-2.marblism.me/proceso" },
+    { "source": "/proyectos", "destination": "https://orquestialab-2.marblism.me/proyectos" },
+    { "source": "/contacto", "destination": "https://orquestialab-2.marblism.me/contacto" },
+    { "source": "/blog", "destination": "https://orquestialab-2.marblism.me/blog" },
+    { "source": "/blog/:path*", "destination": "https://orquestialab-2.marblism.me/blog/:path*" },
+    { "source": "/sitemap.xml", "destination": "https://orquestialab-2.marblism.me/sitemap.xml" },
+    { "source": "/favicon.svg", "destination": "https://orquestialab-2.marblism.me/favicon.svg" },
+    { "source": "/orquestialab-logo.png", "destination": "https://orquestialab-2.marblism.me/orquestialab-logo.png" },
+    { "source": "/_astro/:path*", "destination": "https://orquestialab-2.marblism.me/_astro/:path*" },
+    { "source": "/images/:path*", "destination": "https://orquestialab-2.marblism.me/images/:path*" }
   ],
   "headers": [
     {
