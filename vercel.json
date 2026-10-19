@@ -8,6 +8,8 @@
     { "source": "/proceso", "destination": "https://orquestialab.marblism.me/proceso" },
     { "source": "/proyectos", "destination": "https://orquestialab.marblism.me/proyectos" },
     { "source": "/contacto", "destination": "https://orquestialab.marblism.me/contacto" },
+    { "source": "/blog", "destination": "https://orquestialab.marblism.me/blog" },
+    { "source": "/blog/:path*", "destination": "https://orquestialab.marblism.me/blog/:path*" },
     { "source": "/sitemap.xml", "destination": "https://orquestialab.marblism.me/sitemap.xml" },
     { "source": "/favicon.svg", "destination": "https://orquestialab.marblism.me/favicon.svg" },
     { "source": "/orquestialab-logo.png", "destination": "https://orquestialab.marblism.me/orquestialab-logo.png" },
