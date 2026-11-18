@@ -1,0 +1,43 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+<Layout
+  title="Blog | OrquestiaLab"
+  description="Ideas sobre inteligencia operativa, automatización, software a medida y mejores procesos para tu negocio."
+  path="/blog"
+>
+  <section class="seccion-papel">
+    <div class="contenedor">
+      <p class="marca-etiqueta" style="color:var(--oliva-700);">Ideas para operar mejor</p>
+      <h1 class="display" style="margin-top:20px; max-width:760px;">Pensar mejor.<br />Operar con <span class="caja">claridad</span>.</h1>
+      <p class="cuerpo-grande texto-suave" style="margin-top:24px; max-width:560px;">Perspectivas sobre procesos, automatización y sistemas inteligentes para que la información de tu negocio trabaje en conjunto.</p>
+    </div>
+  </section>
+
+  <section class="seccion-blanca">
+    <div class="contenedor">
+      <div style="display:grid; gap:20px; grid-template-columns:repeat(auto-fit,minmax(280px,1fr));">
+        {posts.map((post) => (
+          <a href={`/blog/${post.slug}`} class="tarjeta-post">
+            <div style="padding:28px;">
+              <p class="cuerpo texto-suave" style="font-size:13px;">{post.data.pubDate.toISOString().slice(0, 10)}</p>
+              <h2 class="titulo-3" style="margin-top:12px;">{post.data.title}</h2>
+              <p class="cuerpo texto-suave" style="margin-top:16px; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;">{post.data.description.replace(/^Lee en el blog de OrquestiaLab: /, '')}</p>
+              <span class="enlace enlace-flecha" style="margin-top:24px; display:inline-flex;">Leer artículo <span aria-hidden="true">→</span></span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion-lima sobre-lima">
+    <div class="contenedor" style="text-align:center;">
+      <h2 class="titulo-1">¿Hay un proceso que quieras mejorar?</h2>
+      <a href="/contacto" class="btn-secundario enlace-flecha" style="margin-top:24px; display:inline-flex; background:var(--tinta-900); color:var(--lima-500); border:0;">Hablemos de tu negocio <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,51 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const soluciones = [
+  { num: '01', titulo: 'Diagnóstico de procesos', intro: 'Antes de construir, entendemos. Observamos cómo se mueve la información, cómo trabaja tu equipo y dónde se está perdiendo tiempo.', items: ['Mapa de procesos actuales', 'Entrevistas con las personas clave', 'Identificación de cuellos de botella', 'Plan priorizado de oportunidades'] },
+  { num: '02', titulo: 'Software a medida', intro: 'Creamos sistemas que se sienten propios porque nacen de tu operación. Solo lo que necesitas, conectado y listo para crecer contigo.', items: ['Diseño de experiencia para tu equipo', 'Desarrollo de módulos por etapas', 'Integración con tus herramientas actuales', 'Acompañamiento para adopción'] },
+  { num: '03', titulo: 'Dashboards y automatización', intro: 'Deja de perseguir reportes. Conectamos tus fuentes de información y automatizamos tareas para que puedas ver y actuar en el momento.', items: ['Indicadores clave del negocio', 'Dashboards claros y en tiempo real', 'Alertas y flujos automáticos', 'Mantenimiento y evolución continua'] },
+];
+---
+<Layout
+  title="Soluciones | OrquestiaLab"
+  description="Diagnóstico de procesos, software a medida, dashboards y automatización para que tu negocio opere con claridad."
+  path="/soluciones"
+>
+  <section class="seccion-papel">
+    <div class="contenedor">
+      <p class="cuerpo texto-suave">Soluciones</p>
+      <h1 class="titulo-1" style="margin-top:8px; max-width:640px;">La tecnología debe <span class="caja">trabajar</span> para ti.</h1>
+      <p class="cuerpo-grande texto-suave" style="margin-top:16px; max-width:600px;">Diseñamos la claridad que tu operación necesita: procesos entendibles, herramientas que tu equipo adopta y datos que te ayudan a decidir.</p>
+
+      <div style="display:grid; gap:24px; margin-top:48px;">
+        {soluciones.map((s) => (
+          <article class="tarjeta" style="display:grid; gap:20px; grid-template-columns:repeat(auto-fit,minmax(200px,1fr));">
+            <div>
+              <p class="marca-etiqueta texto-suave">{s.num}</p>
+              <p class="cuerpo texto-suave" style="margin-top:4px;">Solución OrquestiaLab</p>
+            </div>
+            <div>
+              <h2 class="titulo-2">{s.titulo}</h2>
+              <p class="cuerpo texto-suave" style="margin-top:8px;">{s.intro}</p>
+            </div>
+            <div>
+              <p class="cuerpo" style="font-weight:600;">Incluye</p>
+              <ul class="lista-marcada" style="margin-top:8px;">
+                {s.items.map((it) => <li><span class="marcador">+</span><span class="cuerpo">{it}</span></li>)}
+              </ul>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion-lima sobre-lima">
+    <div class="contenedor" style="text-align:center;">
+      <h2 class="titulo-1">¿No sabes cuál es el primer <span class="caja">paso</span>?</h2>
+      <p class="cuerpo-grande" style="margin-top:16px; max-width:480px; margin-inline:auto;">En el diagnóstico encontramos el punto de partida correcto para tu negocio.</p>
+      <a href="/contacto" class="btn-secundario enlace-flecha" style="margin-top:24px; display:inline-flex; background:var(--tinta-900); color:var(--lima-500); border:0;">Agendar diagnóstico <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+</Layout>

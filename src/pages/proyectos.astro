@@ -1,0 +1,46 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const proyectos = [
+  { num: '01', titulo: 'Orquestia Dashboards', texto: 'Plataforma donde varias empresas conectan sus datos para visualizarlos mejor. Dashboards para clínica médica, restaurantes, despachos de arquitectura e investigación de mercados.' },
+  { num: '02', titulo: 'Orquestia Golf', texto: 'App a la medida para apuestas de golf.' },
+  { num: '03', titulo: 'Cimiento', texto: 'SaaS de gestión de obra arquitectónica.', href: 'https://cimiento.build' },
+  { num: '04', titulo: 'Orquestia CX', texto: 'Enfocada en la recopilación de información de negocios de diferentes ámbitos.' },
+];
+---
+<Layout
+  title="Proyectos | OrquestiaLab"
+  description="Conoce las plataformas que OrquestiaLab ha construido para conectar operaciones, datos y equipos."
+  path="/proyectos"
+>
+  <section class="seccion-papel">
+    <div class="contenedor">
+      <p class="cuerpo texto-suave">Proyectos</p>
+      <h1 class="titulo-1" style="margin-top:8px; max-width:640px;">Sistemas que hacen que el trabajo <span class="caja">avance</span>.</h1>
+      <p class="cuerpo-grande texto-suave" style="margin-top:16px; max-width:600px;">Cada plataforma nace de una operación específica. El objetivo siempre es el mismo: quitar ruido y devolver claridad.</p>
+
+      <div style="display:grid; gap:20px; margin-top:48px; grid-template-columns:repeat(auto-fit,minmax(240px,1fr));">
+        {proyectos.map((p) => {
+          const Tag = p.href ? 'a' : 'article';
+          return (
+            <Tag class="tarjeta" href={p.href} target={p.href ? '_blank' : undefined} rel={p.href ? 'noopener noreferrer' : undefined}>
+              <div style="display:flex; justify-content:space-between;">
+                <span class="marca-etiqueta texto-suave">{p.num}</span>
+                <span aria-hidden="true">↗</span>
+              </div>
+              <h2 class="titulo-3" style="margin-top:12px;">{p.titulo}</h2>
+              <p class="cuerpo texto-suave" style="margin-top:8px;">{p.texto}</p>
+            </Tag>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion-lima sobre-lima">
+    <div class="contenedor" style="text-align:center;">
+      <h2 class="titulo-1">El siguiente <span class="caja">proyecto</span><br />puede ser el tuyo.</h2>
+      <a href="/contacto" class="btn-secundario enlace-flecha" style="margin-top:24px; display:inline-flex; background:var(--tinta-900); color:var(--lima-500); border:0;">Cuéntanos tu idea <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+</Layout>
