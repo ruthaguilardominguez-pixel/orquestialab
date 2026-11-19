@@ -1,4 +1,8 @@
 {
+  "rewrites": [
+    { "source": "/coninte", "destination": "/coninte/page.html" },
+    { "source": "/tec", "destination": "/tec/page.html" }
+  ],
   "headers": [
     {
       "source": "/(coninte|tec)",
