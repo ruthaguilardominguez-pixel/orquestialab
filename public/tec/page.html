@@ -1,0 +1,691 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panel Nacional de Empleadores · Tec de Monterrey — OrquestiaLab</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap">
+<style>
+:root{
+  --bg:#1E1F23; --panel:#27282E; --panel-2:#2E2F36; --panel-3:#35363D;
+  --bord:rgba(255,255,255,.08); --bord-2:rgba(255,255,255,.14);
+  --ink:#F5F5F3; --ink-2:#C3C2B7; --mute:#8E8D88; --grid:#34353B;
+  --tec:#3987e5; --tec-soft:rgba(57,135,229,.16);
+  --ua:#d95926; --ub:#199e70; --uc:#c98500;
+  --good:#0ca30c; --warn:#fab219; --ser:#ec835a; --crit:#d03b3b;
+  --sans:'Space Grotesk',system-ui,sans-serif; --mono:'Space Mono','Courier New',monospace;
+  --r:10px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg)}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);line-height:1.5;font-size:15px;-webkit-font-smoothing:antialiased;min-height:100vh}
+a{color:inherit;text-decoration:none}
+button,select,input{font:inherit;color:inherit}
+.mono{font-family:var(--mono)}
+.num{font-variant-numeric:tabular-nums}
+
+/* logo (mismo sistema que orquestialab.com) */
+.logo{display:inline-grid;grid-template-columns:auto auto;grid-template-rows:auto auto;column-gap:.25em;user-select:none;color:inherit;font-size:14px}
+.logo-orquest{grid-column:1;grid-row:1;align-self:center;font-weight:400;letter-spacing:.18em;text-transform:uppercase;line-height:1}
+.logo-ia{grid-column:2;grid-row:1;align-self:center;font-family:var(--mono);font-weight:700;letter-spacing:.05em;text-transform:uppercase;line-height:1;background:#E5E7EB;color:#1E1F23;border-radius:2px;padding:.12em .3em;font-size:.85em}
+.logo-lab{grid-column:2;grid-row:2;font-family:var(--mono);font-size:.62em;letter-spacing:.3em;text-transform:uppercase;line-height:1;margin-top:.25em;color:var(--ink-2)}
+
+/* top bar */
+.top{display:flex;align-items:center;gap:22px;padding:14px 28px;border-bottom:1px solid var(--bord);background:var(--bg);position:sticky;top:0;z-index:20;flex-wrap:wrap}
+.top .divider{width:1px;height:34px;background:var(--bord-2)}
+.top h1{font-size:17px;font-weight:600;letter-spacing:.01em;line-height:1.2}
+.top .sub{font-size:12.5px;color:var(--mute);margin-top:2px}
+.top .spacer{flex:1}
+.badge{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;padding:5px 9px;border-radius:4px;border:1px solid var(--bord-2);color:var(--ink-2);white-space:nowrap}
+.badge.demo{border-color:var(--warn);color:var(--warn)}
+.meta{font-family:var(--mono);font-size:11px;color:var(--mute);text-align:right;line-height:1.5}
+
+/* filters */
+.filters{display:flex;gap:10px;align-items:center;padding:12px 28px;border-bottom:1px solid var(--bord);background:var(--panel);flex-wrap:wrap}
+.f{display:flex;flex-direction:column;gap:3px}
+.f label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.f select{background:var(--panel-2);border:1px solid var(--bord-2);border-radius:6px;padding:7px 30px 7px 10px;font-size:13.5px;appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--ink-2) 50%),linear-gradient(135deg,var(--ink-2) 50%,transparent 50%);background-position:calc(100% - 15px) 55%,calc(100% - 10px) 55%;background-size:5px 5px;background-repeat:no-repeat;cursor:pointer;min-width:150px}
+.f select:focus{outline:2px solid var(--tec);outline-offset:1px}
+.npill{margin-left:auto;display:flex;align-items:center;gap:12px}
+.npill .n{font-family:var(--mono);font-size:12px;color:var(--ink-2)}
+.npill .n b{color:var(--ink);font-size:15px}
+.npill .dir{font-family:var(--mono);font-size:10.5px;color:var(--warn);border:1px solid var(--warn);padding:3px 7px;border-radius:4px;letter-spacing:.08em;text-transform:uppercase}
+.npill button{background:none;border:1px solid var(--bord-2);border-radius:6px;padding:6px 10px;font-size:12.5px;color:var(--ink-2);cursor:pointer}
+.npill button:hover{border-color:var(--ink-2);color:var(--ink)}
+
+/* tabs */
+.tabs{display:flex;gap:4px;padding:0 28px;border-bottom:1px solid var(--bord);overflow-x:auto}
+.tabs button{background:none;border:0;border-bottom:2px solid transparent;padding:13px 14px;font-size:14px;color:var(--mute);cursor:pointer;white-space:nowrap;letter-spacing:.01em}
+.tabs button:hover{color:var(--ink)}
+.tabs button.on{color:var(--ink);border-bottom-color:var(--tec)}
+.tabs .cnt{display:inline-block;margin-left:6px;font-family:var(--mono);font-size:10px;background:var(--crit);color:#fff;border-radius:10px;padding:1px 6px;vertical-align:1px}
+
+main{padding:22px 28px 40px;max-width:1500px;margin:0 auto}
+.view{display:none}.view.on{display:block}
+.grid{display:grid;gap:14px}
+.g12{grid-template-columns:repeat(12,1fr)}
+.c3{grid-column:span 3}.c4{grid-column:span 4}.c5{grid-column:span 5}.c6{grid-column:span 6}.c7{grid-column:span 7}.c8{grid-column:span 8}.c9{grid-column:span 9}.c12{grid-column:span 12}
+.card{background:var(--panel);border:1px solid var(--bord);border-radius:var(--r);padding:18px 20px;min-width:0}
+.card h3{font-size:13px;font-weight:500;letter-spacing:.02em;color:var(--ink-2);margin-bottom:4px}
+.card .hint{font-size:12px;color:var(--mute);margin-bottom:12px}
+.card .hint:last-child{margin-bottom:0}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:4px;border:1px solid var(--bord-2);color:var(--ink-2)}
+
+/* stat tiles */
+.tile .v{font-size:40px;font-weight:500;line-height:1;margin:8px 0 6px;letter-spacing:-.01em}
+.tile .v small{font-size:16px;color:var(--mute);font-weight:400;margin-left:2px}
+.tile .d{font-size:13px;display:flex;align-items:center;gap:8px}
+.delta{font-family:var(--mono);font-size:12px;padding:2px 6px;border-radius:4px;white-space:nowrap}
+.delta.up{color:var(--good);background:rgba(12,163,12,.12)}
+.delta.dn{color:var(--crit);background:rgba(208,59,59,.14)}
+.delta.eq{color:var(--ink-2);background:rgba(255,255,255,.06)}
+.hero{display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:center}
+.hero .v{font-size:88px;font-weight:500;line-height:.95;letter-spacing:-.03em}
+.hero .v small{font-size:22px;color:var(--mute);font-weight:400}
+.hero .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+.spark svg{display:block;width:100%;height:auto}
+
+/* components bars */
+.comp{display:grid;grid-template-columns:150px 1fr 48px 56px;gap:8px 12px;align-items:center;font-size:13.5px}
+.comp .bar{height:10px;background:var(--panel-3);border-radius:4px;position:relative;overflow:visible}
+.comp .bar i{position:absolute;left:0;top:0;bottom:0;background:var(--tec);border-radius:4px}
+.comp .bar b{position:absolute;top:-3px;width:2px;height:16px;background:var(--ink-2);border-radius:1px;opacity:.9}
+.comp .val{font-family:var(--mono);text-align:right}
+.comp .hd{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+
+/* charts */
+.chart{position:relative}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart text{font-family:var(--sans);font-size:11px;fill:var(--mute)}
+.chart .gl{stroke:var(--grid);stroke-width:1}
+.chart .ax{stroke:#45464D;stroke-width:1}
+.chart .ln{fill:none;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.chart .mk{stroke:var(--panel);stroke-width:2}
+.chart .dl{font-size:11.5px;fill:var(--ink-2)}
+.chart .hit{fill:transparent;cursor:crosshair}
+.chart .cross{stroke:var(--ink-2);stroke-width:1;stroke-dasharray:3 3;opacity:0;pointer-events:none}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--ink-2);margin-bottom:8px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.legend s{display:inline-block;width:18px;height:2px;margin-right:6px;vertical-align:3px;background:currentColor;text-decoration:none}
+
+/* tooltip */
+.tip{position:fixed;z-index:50;pointer-events:none;background:#101114;color:var(--ink);border:1px solid var(--bord-2);border-radius:6px;padding:8px 10px;font-size:12.5px;line-height:1.45;max-width:260px;opacity:0;transform:translate(-50%,calc(-100% - 12px));transition:opacity .08s;box-shadow:0 6px 24px rgba(0,0,0,.4)}
+.tip.on{opacity:1}
+.tip b{font-family:var(--mono);font-weight:400;color:var(--ink)}
+.tip .t{color:var(--mute);font-size:11px;margin-bottom:3px}
+.tip .l{display:flex;justify-content:space-between;gap:14px}
+.tip i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px}
+
+/* alerts */
+.alert{display:grid;grid-template-columns:auto 1fr auto;gap:14px;padding:14px 0;border-top:1px solid var(--bord);align-items:start}
+.alert:first-of-type{border-top:0;padding-top:4px}
+.sev{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:4px 8px;border-radius:4px;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;min-width:106px;justify-content:center}
+.sev.crit{color:#fff;background:var(--crit)}.sev.ser{color:#1E1F23;background:var(--ser)}.sev.warn{color:#1E1F23;background:var(--warn)}.sev.good{color:#fff;background:var(--good)}.sev.info{color:var(--ink-2);border:1px solid var(--bord-2)}
+.alert h4{font-size:14.5px;font-weight:500;margin-bottom:3px}
+.alert p{font-size:13px;color:var(--ink-2)}
+.alert .act{font-size:12.5px;color:var(--ink);margin-top:6px;padding-left:10px;border-left:2px solid var(--tec)}
+.alert .seg{font-family:var(--mono);font-size:11px;color:var(--mute);margin-top:6px}
+.alert .own{text-align:right;font-family:var(--mono);font-size:10.5px;color:var(--mute);letter-spacing:.06em;text-transform:uppercase;line-height:1.5}
+.alert.compact{grid-template-columns:auto 1fr;padding:10px 0}
+.alert.compact h4{font-size:13.5px}
+
+/* IA reading */
+.ia{background:linear-gradient(160deg,#2A2C33,#24252B);border:1px solid var(--bord-2)}
+.ia .q{display:flex;gap:8px;margin:10px 0}
+.ia input{flex:1;background:var(--bg);border:1px solid var(--bord-2);border-radius:6px;padding:10px 12px;font-size:13.5px;color:var(--ink)}
+.ia input::placeholder{color:var(--mute)}
+.ia button.go{background:var(--ink);color:var(--bg);border:0;border-radius:6px;padding:0 14px;font-weight:500;cursor:pointer}
+.ia .chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.ia .chips button{background:none;border:1px solid var(--bord-2);border-radius:20px;padding:5px 11px;font-size:12px;color:var(--ink-2);cursor:pointer;text-align:left}
+.ia .chips button:hover{border-color:var(--ink-2);color:var(--ink)}
+.ia .ans{background:var(--bg);border-radius:8px;padding:14px 16px;font-size:13.5px;line-height:1.6;min-height:120px;white-space:pre-wrap;color:var(--ink-2)}
+.ia .ans strong{color:var(--ink);font-weight:500}
+.ia .ans .cur{display:inline-block;width:8px;height:14px;background:var(--tec);vertical-align:-2px;animation:bl 1s steps(2) infinite}
+@keyframes bl{50%{opacity:0}}
+.ia .src{font-family:var(--mono);font-size:10.5px;color:var(--mute);margin-top:8px}
+
+/* tables */
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);text-align:left;padding:8px 10px;border-bottom:1px solid var(--bord-2);font-weight:400}
+td{padding:9px 10px;border-bottom:1px solid var(--bord);vertical-align:middle}
+td.r,th.r{text-align:right}
+tr:hover td{background:rgba(255,255,255,.025)}
+
+/* small multiples */
+.sm{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.sm .it{background:var(--panel-2);border:1px solid var(--bord);border-radius:8px;padding:12px 14px}
+.sm .it .n{font-size:12.5px;color:var(--ink-2);height:2.7em;line-height:1.35}
+.sm .it .v{font-size:26px;font-weight:500;line-height:1;margin:4px 0 6px}
+.sm .it .v small{font-size:12px;color:var(--mute);font-weight:400}
+.sm .it .trend{font-family:var(--mono);font-size:10.5px;color:var(--mute);letter-spacing:.06em;text-transform:uppercase;margin-top:6px}
+
+/* benchmark */
+.bm{display:grid;grid-template-columns:170px 1fr 110px;gap:6px 14px;align-items:center;font-size:13.5px}
+.bm .hd{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.bm .track{position:relative;height:26px}
+.bm .track .axis{position:absolute;left:0;right:0;top:50%;height:1px;background:var(--grid)}
+.bm .dot{position:absolute;top:50%;width:12px;height:12px;border-radius:50%;transform:translate(-50%,-50%);border:2px solid var(--panel);cursor:default}
+.bm .dot.tec{width:15px;height:15px;z-index:2}
+.bm .verdict{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:4px;text-align:center}
+.bm .verdict.v{background:rgba(57,135,229,.18);color:#8db8f0}.bm .verdict.p{background:rgba(255,255,255,.06);color:var(--ink-2)}.bm .verdict.o{background:rgba(236,131,90,.18);color:var(--ser)}
+
+/* dumbbell */
+.db{display:grid;grid-template-columns:200px 1fr 70px 120px;gap:6px 14px;align-items:center;font-size:13.5px}
+.db .hd{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);white-space:nowrap}
+.db .track{position:relative;height:24px}
+.db .track .axis{position:absolute;left:0;right:0;top:50%;height:1px;background:var(--grid)}
+.db .seg{position:absolute;top:50%;height:4px;transform:translateY(-50%);border-radius:2px}
+.db .dot{position:absolute;top:50%;width:12px;height:12px;border-radius:50%;transform:translate(-50%,-50%);border:2px solid var(--panel)}
+.db .dot.imp{background:var(--ink-2)}
+.db .dot.prep{background:var(--tec);width:14px;height:14px;z-index:2}
+.db .gap{font-family:var(--mono);text-align:right}
+.db .fut{font-size:12px;color:var(--mute);text-align:right}
+.db .fut b{color:var(--ink);font-weight:500}
+
+/* heatmap */
+.hm{display:grid;gap:3px;font-size:12px}
+.hm .h{font-family:var(--mono);font-size:10px;color:var(--mute);letter-spacing:.06em;text-transform:uppercase;padding:4px 2px;align-self:end;line-height:1.2}
+.hm .rl{color:var(--ink-2);padding-right:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center}
+.hm .cell{height:34px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;color:var(--ink);cursor:default}
+.hm .cell:hover{outline:2px solid var(--ink)}
+.hm-legend{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--mute);margin-top:10px}
+.hm-legend .ramp{height:8px;width:140px;border-radius:4px;background:linear-gradient(90deg,#e66767,#383835,#3987e5)}
+
+/* hbars */
+.hb{display:grid;grid-template-columns:190px 1fr 46px;gap:7px 12px;align-items:center;font-size:13.5px}
+.hb .bar{height:12px;background:var(--panel-3);border-radius:4px;position:relative}
+.hb .bar i{position:absolute;left:0;top:0;bottom:0;border-radius:4px;background:var(--tec)}
+.hb .bar i.dn{background:var(--ua)}
+.hb .val{font-family:var(--mono);text-align:right}
+
+footer{border-top:1px solid var(--bord);padding:16px 28px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;color:var(--mute)}
+.summary li{font-size:13.5px;color:var(--ink-2);padding:7px 0 7px 14px;border-left:2px solid var(--tec);margin:6px 0;list-style:none}
+.summary li strong{color:var(--ink);font-weight:500}
+
+@media (max-width:1100px){.c3,.c4,.c5,.c6,.c7,.c8,.c9{grid-column:span 12}.hero .v{font-size:64px}.top .meta{display:none}}
+@media (max-width:640px){.top,.filters,.tabs,main,footer{padding-left:16px;padding-right:16px}.f select{min-width:130px}.comp{grid-template-columns:110px 1fr 40px 50px}.bm{grid-template-columns:120px 1fr 90px}.db{grid-template-columns:130px 1fr 54px}.db .fut{display:none}.hb{grid-template-columns:130px 1fr 40px}.alert{grid-template-columns:1fr}.alert .own{text-align:left}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="logo" href="https://www.orquestialab.com" aria-label="OrquestiaLab"><span class="logo-orquest">Orquest</span><span class="logo-ia">IA</span><span class="logo-lab">Lab</span></a>
+  <span class="divider"></span>
+  <div>
+    <h1>Panel Nacional de Empleadores</h1>
+    <div class="sub">Tecnológico de Monterrey · Sistema vivo de inteligencia sobre empleadores y mercado laboral</div>
+  </div>
+  <span class="spacer"></span>
+  <span class="badge demo">Demo · datos ilustrativos</span>
+  <div class="meta" id="meta"></div>
+</header>
+
+<div class="filters">
+  <div class="f"><label for="fRegion">Región</label><select id="fRegion"></select></div>
+  <div class="f"><label for="fSector">Sector</label><select id="fSector"></select></div>
+  <div class="f"><label for="fSize">Tamaño</label><select id="fSize"></select></div>
+  <div class="f"><label for="fRel">Relación con el Tec</label><select id="fRel"></select></div>
+  <div class="f"><label for="fWave">Ola</label><select id="fWave"></select></div>
+  <div class="npill"><span class="n">n = <b id="nVal">100</b> <span id="nOf"></span></span><span class="dir" id="dirBadge" hidden>Lectura direccional</span><button id="reset">Limpiar filtros</button></div>
+</div>
+
+<nav class="tabs" id="tabs">
+  <button data-v="overview" class="on">Overview</button>
+  <button data-v="trend">Tendencias</button>
+  <button data-v="bench">Benchmark</button>
+  <button data-v="comp">Competencias</button>
+  <button data-v="fow">Future of Work</button>
+  <button data-v="alerts">Alertas <span class="cnt" id="alertCnt">0</span></button>
+</nav>
+
+<main>
+  <!-- OVERVIEW -->
+  <section class="view on" id="v-overview">
+    <div class="grid g12">
+      <div class="card c5">
+        <div class="hero">
+          <div>
+            <div class="lbl">Índice de Percepción del Empleador Tec</div>
+            <div class="v num" id="epiV">78<small> / 100</small></div>
+            <div class="d row" id="epiD"></div>
+          </div>
+          <div class="spark chart" id="epiSpark"></div>
+        </div>
+        <div class="hint" style="margin-top:14px">Índice sintético de 6 dimensiones. Se reporta nivel actual, cambio vs. ola anterior y lectura de tendencia.</div>
+      </div>
+      <div class="card c7">
+        <h3>Componentes del índice</h3>
+        <div class="hint">Barra = ola seleccionada · marca vertical = ola anterior</div>
+        <div class="comp" id="compBars"></div>
+      </div>
+
+      <div class="card tile c3" id="k1"></div>
+      <div class="card tile c3" id="k2"></div>
+      <div class="card tile c3" id="k3"></div>
+      <div class="card tile c3" id="k4"></div>
+
+      <div class="card c7 chart">
+        <h3>Evolución del índice por ola</h3>
+        <div class="hint">Serie histórica comparable · núcleo longitudinal 80 + renovación 20 por ola</div>
+        <div id="epiLine"></div>
+      </div>
+      <div class="card c5 summary">
+        <h3>Resumen ejecutivo de la ola</h3>
+        <div class="hint">Generado automáticamente a partir de los datos del segmento seleccionado</div>
+        <ul id="summary"></ul>
+      </div>
+
+      <div class="card c5">
+        <h3>Alertas activas de esta ola</h3>
+        <div class="hint">Cambios tempranos detectados por el sistema · ver detalle en la pestaña Alertas</div>
+        <div id="alertsMini"></div>
+      </div>
+      <div class="card c7 ia">
+        <h3>Lectura asistida por IA</h3>
+        <div class="hint">Pregunta en lenguaje natural sobre el panel. Responde con los datos del segmento y la ola seleccionados.</div>
+        <div class="chips" id="chips"></div>
+        <div class="q"><input id="qIn" placeholder="¿Por qué bajó la preparación para IA en empresas medianas del Norte y qué acciones debe priorizar el Tec?"><button class="go" id="qGo">Preguntar</button></div>
+        <div class="ans" id="ans">Selecciona una pregunta sugerida o escribe la tuya.</div>
+        <div class="src" id="ansSrc"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TENDENCIAS -->
+  <section class="view" id="v-trend">
+    <div class="grid g12">
+      <div class="card c12">
+        <h3>Indicadores longitudinales</h3>
+        <div class="hint">13 indicadores comparables entre olas · nivel actual, cambio vs. ola anterior y tendencia de 5 olas</div>
+        <div class="sm" id="smGrid"></div>
+      </div>
+      <div class="card c12">
+        <h3>Tabla de indicadores</h3>
+        <div class="hint">Vista tabular de la misma información (exportable a CSV / Excel en la versión productiva)</div>
+        <div style="overflow-x:auto"><table id="indTable"></table></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENCHMARK -->
+  <section class="view" id="v-bench">
+    <div class="grid g12">
+      <div class="card c8">
+        <h3>Benchmark competitivo por atributo</h3>
+        <div class="hint">Escala 0–100 · solo empleadores con familiaridad real con cada institución · mismas dimensiones y escalas</div>
+        <div class="legend"><span><i style="background:var(--tec)"></i>Tec de Monterrey</span><span><i style="background:var(--ua)"></i>Univ. A</span><span><i style="background:var(--ub)"></i>Univ. B</span><span><i style="background:var(--uc)"></i>Univ. C</span></div>
+        <div class="bm" id="bmGrid"></div>
+      </div>
+      <div class="card c4">
+        <h3>Lectura del benchmark</h3>
+        <div class="hint">Ventaja = Tec supera al mejor competidor por 4+ pts · Oportunidad = queda 4+ pts por debajo</div>
+        <div id="bmSummary"></div>
+        <div class="hint" style="margin-top:14px">Bases (familiaridad real): <span class="mono" id="bmBases"></span></div>
+      </div>
+      <div class="card c12 chart">
+        <h3>Evolución del gap Tec vs. cada institución</h3>
+        <div class="hint">Diferencia en el índice global (Tec − institución), en puntos · positivo = ventaja Tec</div>
+        <div class="legend"><span style="color:var(--ua)"><s></s>vs. Univ. A</span><span style="color:var(--ub)"><s></s>vs. Univ. B</span><span style="color:var(--uc)"><s></s>vs. Univ. C</span></div>
+        <div id="gapLine"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPETENCIAS -->
+  <section class="view" id="v-comp">
+    <div class="grid g12">
+      <div class="card c8">
+        <h3>Importancia para el empleador vs. preparación del egresado Tec</h3>
+        <div class="hint">Escala 0–100 · brecha = preparación − importancia · % crítica = empleadores que la consideran crítica en 3–5 años</div>
+        <div class="legend"><span><i style="background:var(--ink-2)"></i>Importancia hoy</span><span><i style="background:var(--tec)"></i>Preparación egresados Tec</span></div>
+        <div class="db" id="dbGrid"></div>
+      </div>
+      <div class="card c4">
+        <h3>Competencias críticas a 3–5 años</h3>
+        <div class="hint">% de empleadores que la señala como crítica</div>
+        <div class="hb" id="futBars"></div>
+      </div>
+      <div class="card c12">
+        <h3>Mapa de brechas por región</h3>
+        <div class="hint">Preparación − importancia, en puntos · rojo = brecha · azul = ventaja · el filtro de región resalta su fila</div>
+        <div id="heat"></div>
+        <div class="hm-legend"><span>Brecha −20</span><span class="ramp"></span><span>Ventaja +20</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FUTURE OF WORK -->
+  <section class="view" id="v-fow">
+    <div class="grid g12">
+      <div class="card tile c3" id="f1"></div>
+      <div class="card tile c3" id="f2"></div>
+      <div class="card tile c3" id="f3"></div>
+      <div class="card tile c3" id="f4"></div>
+      <div class="card c6 chart">
+        <h3>Criterios de contratación por ola</h3>
+        <div class="hint">% de empleadores que prioriza cada criterio al contratar talento joven</div>
+        <div class="legend"><span style="color:var(--tec)"><s></s>Competencias demostradas</span><span style="color:var(--ua)"><s></s>Carrera / título / promedio</span></div>
+        <div id="hireLine"></div>
+      </div>
+      <div class="card c6">
+        <h3>Impacto de la IA en puestos de entrada</h3>
+        <div class="hint">% de empleadores que reporta cada efecto en los últimos 12 meses</div>
+        <div class="hb" id="iaBars"></div>
+      </div>
+      <div class="card c4">
+        <h3>Perfiles en alza</h3>
+        <div class="hint">% que espera aumentar contratación</div>
+        <div class="hb" id="upBars"></div>
+      </div>
+      <div class="card c4">
+        <h3>Perfiles en baja</h3>
+        <div class="hint">% que espera reducir contratación</div>
+        <div class="hb" id="dnBars"></div>
+      </div>
+      <div class="card c4">
+        <h3>Experiencias educativas más valoradas</h3>
+        <div class="hint">Vinculación universidad–empresa · % que la considera decisiva</div>
+        <div class="hb" id="expBars"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ALERTAS -->
+  <section class="view" id="v-alerts">
+    <div class="grid g12">
+      <div class="card c8">
+        <h3>Alertas tempranas y recomendaciones</h3>
+        <div class="hint">Cada alerta indica el cambio detectado, el segmento donde se concentra, la acción sugerida y el área del Tec responsable</div>
+        <div id="alertsFull"></div>
+      </div>
+      <div class="card c4">
+        <h3>Salud del panel</h3>
+        <div class="hint">Calidad y control de sesgos de la ola</div>
+        <table id="health"></table>
+      </div>
+      <div class="card c4">
+        <h3>Módulo temático de la ola</h3>
+        <div class="hint" id="modTxt"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>Directo Marketing · investigación y operación del panel &nbsp;·&nbsp; OrquestiaLab · analítica, dashboard y lectura ejecutiva</span>
+  <span>Demo con datos simulados para fines de presentación · no representa mediciones reales</span>
+</footer>
+
+<div class="tip" id="tip"></div>
+
+<script>
+/* ====================== DATA (simulada) ====================== */
+const WAVES=['2024-2','2025-1','2025-2','2026-1','2026-2'];
+const REGIONS=['Nacional','Norte','Occidente / Bajío','Centro','CDMX / Valle de México','Sureste'];
+const SECTORS=['Todos','Manufactura','Tecnología','Servicios financieros','Consultoría y servicios profesionales','Comercio y consumo','Salud','Construcción e infraestructura','Energía','Sector público y social'];
+const SIZES=['Todos','Grande (500+)','Mediana (50–499)','Pequeña / startup'];
+const RELS=['Mixta','Contrata egresados Tec','Sin relación significativa'];
+const SHARE={region:{'Nacional':1,'Norte':.24,'Occidente / Bajío':.18,'Centro':.14,'CDMX / Valle de México':.32,'Sureste':.12},
+  sector:{'Todos':1,'Manufactura':.18,'Tecnología':.16,'Servicios financieros':.12,'Consultoría y servicios profesionales':.11,'Comercio y consumo':.12,'Salud':.08,'Construcción e infraestructura':.08,'Energía':.06,'Sector público y social':.09},
+  size:{'Todos':1,'Grande (500+)':.45,'Mediana (50–499)':.35,'Pequeña / startup':.20},
+  rel:{'Mixta':1,'Contrata egresados Tec':.62,'Sin relación significativa':.38}};
+
+const COMP=[ // componentes del índice
+  {k:'rep',n:'Reputación',d:'Confianza y atributos',b:[72,73,75,74,79]},
+  {k:'pref',n:'Preferencia',d:'Atractivo de contratación',b:[68,70,71,70,75]},
+  {k:'des',n:'Desempeño',d:'Evaluación de egresados',b:[80,81,82,83,85]},
+  {k:'fut',n:'Futuro',d:'Preparación para cambios (IA)',b:[62,64,66,65,68]},
+  {k:'cmp',n:'Competencias',d:'Capacidades críticas',b:[72,73,74,75,78]},
+  {k:'ada',n:'Adaptabilidad',d:'Innovación y aprendizaje',b:[78,79,80,79,83]}];
+const IND=[
+  {k:'rep',n:'Reputación de egresados',b:[74,75,77,76,80]},
+  {k:'pref',n:'Preferencia de contratación',b:[58,60,61,60,64],u:'%'},
+  {k:'sat',n:'Satisfacción con egresados',b:[80,81,82,83,84],u:'/10'},
+  {k:'prep',n:'Preparación para el mercado',b:[70,71,72,72,74]},
+  {k:'lid',n:'Liderazgo',b:[68,69,70,71,72]},
+  {k:'inn',n:'Innovación',b:[72,73,73,75,76]},
+  {k:'ada',n:'Adaptabilidad',b:[75,76,77,78,79]},
+  {k:'crit',n:'Pensamiento crítico',b:[71,72,72,73,73]},
+  {k:'com',n:'Comunicación',b:[62,63,65,67,70]},
+  {k:'ia',n:'Uso estratégico de IA',b:[52,54,57,58,56]},
+  {k:'prob',n:'Resolución de problemas',b:[76,77,77,78,79]},
+  {k:'eti',n:'Sentido ético',b:[82,82,83,83,84]},
+  {k:'pot',n:'Potencial de crecimiento',b:[78,79,80,81,82]}];
+const BENCH_ATTR=[
+  {n:'Conocimiento técnico',tec:[78,79,80,80,82],a:[74,75,76,77,78],b:[70,71,72,72,73],c:[66,66,67,68,68]},
+  {n:'Liderazgo',tec:[72,72,73,74,75],a:[68,69,69,70,71],b:[66,66,65,66,65],c:[60,61,62,62,63]},
+  {n:'Comunicación',tec:[66,67,68,69,71],a:[70,70,71,71,72],b:[64,65,66,66,67],c:[64,63,63,63,62]},
+  {n:'Adaptabilidad',tec:[77,78,78,79,80],a:[72,73,73,74,75],b:[70,70,70,70,69],c:[65,65,66,67,67]},
+  {n:'IA y datos',tec:[60,62,64,64,63],a:[52,55,58,60,61],b:[48,50,52,54,55],c:[44,46,47,49,50]},
+  {n:'Sentido ético',tec:[80,80,81,81,82],a:[74,75,75,76,76],b:[76,76,77,77,78],c:[72,72,71,72,71]},
+  {n:'Atractivo de contratación',tec:[74,75,76,75,78],a:[70,71,72,72,73],b:[64,65,66,66,67],c:[58,59,60,61,62]},
+  {n:'Preparación general',tec:[75,76,77,77,79],a:[71,72,73,74,75],b:[66,67,68,68,69],c:[62,63,63,64,65]}];
+const BENCH_N={tec:100,a:71,b:64,c:58};
+const SKILLS=[
+  {n:'Inteligencia artificial aplicada',imp:74,prep:56,fut:91,k:'ia'},
+  {n:'Manejo y análisis de datos',imp:78,prep:66,fut:84,k:'dat'},
+  {n:'Pensamiento crítico',imp:85,prep:73,fut:78,k:'crit'},
+  {n:'Comunicación',imp:82,prep:70,fut:61,k:'com'},
+  {n:'Resolución de problemas',imp:86,prep:79,fut:70,k:'prob'},
+  {n:'Adaptabilidad',imp:79,prep:79,fut:72,k:'ada'},
+  {n:'Creatividad',imp:66,prep:68,fut:63,k:'cre'},
+  {n:'Liderazgo',imp:70,prep:72,fut:58,k:'lid'},
+  {n:'Colaboración',imp:80,prep:81,fut:52,k:'col'},
+  {n:'Sentido ético',imp:77,prep:84,fut:49,k:'eti'}];
+const HIRE={skills:[41,45,48,52,58],trad:[59,55,52,48,42]};
+const FOW={
+  iaUse:[28,33,36,41,47], iaEntry:[22,27,31,35,38], newRoles:[24,29,33,37,41],
+  iaEffects:[['Redujo vacantes de nivel de entrada',38],['Cambió el perfil de las vacantes',54],['Exige alfabetización en IA al ingresar',61],['Creó posiciones nuevas',41],['Sin cambios relevantes',17]],
+  up:[['Ingeniería de datos / IA',71],['Ciberseguridad',63],['Producto y experiencia digital',54],['Sostenibilidad / ESG',46],['Analítica de negocio',44],['Automatización de procesos',41]],
+  down:[['Captura y procesamiento de datos',48],['Soporte administrativo',44],['Atención al cliente nivel 1',39],['Reporteo financiero básico',33],['Diseño gráfico operativo',27]],
+  exp:[['Prácticas profesionales',82],['Proyectos reales con empresas',76],['Certificaciones técnicas',61],['Experiencia internacional',48],['Emprendimiento',44],['Investigación aplicada',39]]};
+const MODULES={'2024-2':'Competencias del futuro','2025-1':'Nuevas modalidades de trabajo','2025-2':'Liderazgo y talento joven','2026-1':'Contratación basada en competencias','2026-2':'Inteligencia artificial y empleo'};
+
+/* ====================== STATE ====================== */
+const state={region:'Nacional',sector:'Todos',size:'Todos',rel:'Mixta',wave:4};
+const $=s=>document.querySelector(s);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function hsh(s){let x=2166136261;for(const c of s){x^=c.charCodeAt(0);x=Math.imul(x,16777619)}return ((x>>>0)%2001)/1000-1}
+function off(key,w){ // desplazamiento determinista por segmento
+  let o=0;
+  if(state.region!=='Nacional')o+=hsh(state.region+key)*3;
+  if(state.sector!=='Todos')o+=hsh(state.sector+key)*3.5;
+  if(state.size!=='Todos')o+=hsh(state.size+key)*2.5;
+  if(state.rel==='Contrata egresados Tec')o+=4;else if(state.rel==='Sin relación significativa')o-=6;
+  if(key==='ia'||key==='fut'){if(state.region==='Norte')o-=4;if(state.size==='Mediana (50–499)')o-=5;if(w===4&&(state.region==='Norte'||state.size==='Mediana (50–499)'))o-=3}
+  if(key==='com'&&state.sector==='Servicios financieros')o-=5;
+  if((key==='ia'||key==='dat')&&state.sector==='Tecnología')o+=6;
+  return o;
+}
+const V=(base,key,w=state.wave)=>clamp(Math.round(base[w]+off(key,w)),0,100);
+const series=(base,key)=>WAVES.map((_,i)=>V(base,key,i));
+function epiAt(w){return Math.round(COMP.reduce((s,c)=>s+V(c.b,c.k,w),0)/COMP.length)}
+function nSize(){return Math.max(8,Math.round(100*SHARE.region[state.region]*SHARE.sector[state.sector]*SHARE.size[state.size]*SHARE.rel[state.rel]))}
+const fmtD=d=>(d>0?'+':d<0?'−':'±')+Math.abs(d);
+const deltaTag=(d,suf='',inv=false)=>{const cls=d===0?'eq':((d>0)!==inv?'up':'dn');const arr=d>0?'▲':d<0?'▼':'■';return `<span class="delta ${cls}">${arr} ${fmtD(d)}${suf} vs. ola anterior</span>`};
+const segLabel=()=>{const p=[];if(state.region!=='Nacional')p.push(state.region);if(state.sector!=='Todos')p.push(state.sector);if(state.size!=='Todos')p.push(state.size);if(state.rel!=='Mixta')p.push(state.rel);return p.length?p.join(' · '):'Nacional · todos los sectores y tamaños'};
+
+/* ====================== CHART HELPERS ====================== */
+const tip=$('#tip');
+function showTip(html,x,y){tip.innerHTML=html;tip.style.left=x+'px';tip.style.top=y+'px';tip.classList.add('on')}
+function hideTip(){tip.classList.remove('on')}
+document.addEventListener('mousemove',e=>{const t=e.target.closest('[data-tip]');if(t){showTip(t.dataset.tip,e.clientX,e.clientY)}else if(!e.target.closest('.hit'))hideTip()});
+
+function sparkSVG(vals,color,w=180,h=54){
+  const mn=Math.min(...vals)-2,mx=Math.max(...vals)+2;
+  const px=i=>8+i*(w-16)/(vals.length-1),py=v=>h-8-(v-mn)/(mx-mn)*(h-16);
+  const d=vals.map((v,i)=>(i?'L':'M')+px(i)+','+py(v)).join(' ');
+  const last=vals.length-1;
+  return `<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Tendencia"><path d="${d}" fill="none" stroke="${color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>${vals.map((v,i)=>`<circle cx="${px(i)}" cy="${py(v)}" r="${i===last?4:2.5}" fill="${color}" stroke="var(--panel)" stroke-width="${i===last?2:0}"/>`).join('')}</svg>`;
+}
+
+function lineChart(el,{series,labels,yMin,yMax,fmt=v=>v,h=240,unit='',baseline=null}){
+  const w=Math.max(480,el.clientWidth||720),pl=36,pr=90,pt=16,pb=30;
+  const n=labels.length;
+  const px=i=>pl+i*(w-pl-pr)/(n-1),py=v=>pt+(yMax-v)/(yMax-yMin)*(h-pt-pb);
+  const ticks=5;let g='';
+  for(let t=0;t<=ticks;t++){const v=yMin+(yMax-yMin)*t/ticks;g+=`<line class="gl" x1="${pl}" x2="${w-pr}" y1="${py(v)}" y2="${py(v)}"/><text x="${pl-8}" y="${py(v)+4}" text-anchor="end">${fmt(Math.round(v))}</text>`}
+  if(baseline!==null)g+=`<line class="ax" x1="${pl}" x2="${w-pr}" y1="${py(baseline)}" y2="${py(baseline)}"/>`;
+  labels.forEach((l,i)=>g+=`<text x="${px(i)}" y="${h-8}" text-anchor="middle">${l}</text>`);
+  let lines='';
+  series.forEach(s=>{
+    const d=s.values.map((v,i)=>(i?'L':'M')+px(i)+','+py(v)).join(' ');
+    lines+=`<path class="ln" d="${d}" stroke="${s.color}"/>`;
+    s.values.forEach((v,i)=>lines+=`<circle class="mk" cx="${px(i)}" cy="${py(v)}" r="4" fill="${s.color}"/>`);
+    const lv=s.values[n-1];
+    lines+=`<text class="dl" x="${px(n-1)+12}" y="${py(lv)+4}">${fmt(lv)}${unit} ${s.short||''}</text>`;
+  });
+  const cols=labels.map((_,i)=>{const x0=i?(px(i-1)+px(i))/2:pl,x1=i<n-1?(px(i)+px(i+1))/2:w-pr;return `<rect class="hit" data-i="${i}" x="${x0}" y="0" width="${x1-x0}" height="${h}"/>`}).join('');
+  el.innerHTML=`<svg viewBox="0 0 ${w} ${h}">${g}${lines}<line class="cross" id="cr" y1="${pt}" y2="${h-pb}"/>${cols}</svg>`;
+  const svg=el.querySelector('svg'),cr=svg.querySelector('.cross');
+  svg.querySelectorAll('.hit').forEach(r=>{
+    r.addEventListener('mousemove',e=>{const i=+r.dataset.i;cr.setAttribute('x1',px(i));cr.setAttribute('x2',px(i));cr.style.opacity=1;
+      showTip(`<div class="t">Ola ${labels[i]}</div>`+series.map(s=>`<div class="l"><span><i style="background:${s.color}"></i>${s.name}</span><b>${fmt(s.values[i])}${unit}</b></div>`).join(''),e.clientX,e.clientY)});
+    r.addEventListener('mouseleave',()=>{cr.style.opacity=0;hideTip()});
+  });
+}
+function hbars(el,rows,{color='',max=100,suf='%'}={}){
+  el.innerHTML=rows.map(([n,v])=>`<div>${n}</div><div class="bar" data-tip="<b>${n}</b><br>${v}${suf} de empleadores"><i class="${color}" style="width:${v/max*100}%"></i></div><div class="val num">${v}${suf}</div>`).join('');
+}
+function divColor(v){const t=Math.min(Math.abs(v),20)/20;if(Math.abs(v)<2)return '#383835';
+  const mix=(a,b)=>a.map((c,i)=>Math.round(c+(b[i]-c)*t));
+  const rgb=v<0?mix([80,48,48],[230,103,103]):mix([40,62,92],[57,135,229]);return `rgb(${rgb.join(',')})`}
+
+/* ====================== RENDER ====================== */
+function fillSelect(id,opts,cur){const s=$(id);s.innerHTML=opts.map(o=>`<option ${o===cur?'selected':''}>${o}</option>`).join('')}
+function init(){
+  fillSelect('#fRegion',REGIONS,state.region);fillSelect('#fSector',SECTORS,state.sector);fillSelect('#fSize',SIZES,state.size);fillSelect('#fRel',RELS,state.rel);
+  $('#fWave').innerHTML=WAVES.map((w,i)=>`<option value="${i}" ${i===state.wave?'selected':''}>Ola ${w}${i===4?' (actual)':''}</option>`).join('');
+  $('#fRegion').onchange=e=>{state.region=e.target.value;render()};
+  $('#fSector').onchange=e=>{state.sector=e.target.value;render()};
+  $('#fSize').onchange=e=>{state.size=e.target.value;render()};
+  $('#fRel').onchange=e=>{state.rel=e.target.value;render()};
+  $('#fWave').onchange=e=>{state.wave=+e.target.value;render()};
+  $('#reset').onclick=()=>{Object.assign(state,{region:'Nacional',sector:'Todos',size:'Todos',rel:'Mixta',wave:4});init();render()};
+  $('#tabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{$('#tabs .on').classList.remove('on');b.classList.add('on');document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));$('#v-'+b.dataset.v).classList.add('on');window.scrollTo({top:0,behavior:'smooth'});render()});
+  let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(render,150)});
+  QS.forEach((q,i)=>{const b=document.createElement('button');b.textContent=q.q;b.onclick=()=>{$('#qIn').value=q.q;answer(q)};$('#chips').appendChild(b)});
+  $('#qGo').onclick=()=>{const t=$('#qIn').value.trim();const q=QS.find(x=>x.q===t)||{q:t,a:genericAnswer};answer(q)};
+  $('#qIn').addEventListener('keydown',e=>{if(e.key==='Enter')$('#qGo').click()});
+}
+
+function render(){
+  const w=state.wave,pw=Math.max(0,w-1),n=nSize();
+  $('#nVal').textContent=n;$('#nOf').textContent=` de 100 · ${segLabel()}`;$('#dirBadge').hidden=n>=30;
+  $('#meta').innerHTML=`Ola ${WAVES[w]} · módulo: ${MODULES[WAVES[w]]}<br>100 entrevistas · núcleo 80 / renovación 20 · retención 86%`;
+
+  /* --- overview --- */
+  const epi=epiAt(w),epiP=epiAt(pw),epiS=WAVES.map((_,i)=>epiAt(i));
+  $('#epiV').innerHTML=`${epi}<small> / 100</small>`;
+  $('#epiD').innerHTML=deltaTag(epi-epiP)+`<span style="color:var(--mute);font-size:12.5px">${trendWord(epiS.slice(0,w+1))}</span>`;
+  $('#epiSpark').innerHTML=sparkSVG(epiS.slice(0,w+1),'var(--tec)');
+  $('#compBars').innerHTML=`<div class="hd">Dimensión</div><div class="hd">0 — 100</div><div class="hd" style="text-align:right">Nivel</div><div class="hd" style="text-align:right">Δ ola</div>`+COMP.map(c=>{const v=V(c.b,c.k),p=V(c.b,c.k,pw),d=v-p;return `<div>${c.n}<div style="font-size:11px;color:var(--mute)">${c.d}</div></div><div class="bar" data-tip="<b>${c.n}</b><br>Ola ${WAVES[w]}: ${v} · anterior: ${p}"><i style="width:${v}%"></i><b style="left:calc(${p}% - 1px)"></b></div><div class="val num">${v}</div><div class="val num" style="color:${d>0?'var(--good)':d<0?'var(--crit)':'var(--ink-2)'}">${fmtD(d)}</div>`}).join('');
+
+  const pref=V(IND[1].b,'pref'),prefP=V(IND[1].b,'pref',pw);
+  const sat=V(IND[2].b,'sat'),satP=V(IND[2].b,'sat',pw);
+  const iaPrep=V(IND[9].b,'ia'),iaPrepP=V(IND[9].b,'ia',pw),iaImp=clamp(Math.round(74+off('iaimp',w)),0,100);
+  const gapIA=iaPrep-iaImp,gapIAP=iaPrepP-clamp(Math.round(74+off('iaimp',pw)),0,100);
+  const hire=clamp(Math.round(HIRE.skills[w]+off('hire',w)),0,100),hireP=clamp(Math.round(HIRE.skills[pw]+off('hire',pw)),0,100);
+  tile('#k1','Preferencia de contratación',`${pref}<small>%</small>`,'contrataría a un egresado Tec ante perfiles equivalentes',deltaTag(pref-prefP,' pts'),series(IND[1].b,'pref').slice(0,w+1));
+  tile('#k2','Satisfacción con egresados',`${(sat/10).toFixed(1)}<small>/10</small>`,'desempeño de egresados Tec ya contratados',deltaTag(Math.round(sat-satP)/10,''),series(IND[2].b,'sat').slice(0,w+1));
+  tile('#k3','Brecha en IA aplicada',`${fmtD(gapIA)}<small> pts</small>`,`preparación ${iaPrep} vs. importancia ${iaImp} · competencia crítica`,deltaTag(gapIA-gapIAP,' pts'),series(IND[9].b,'ia').slice(0,w+1),true);
+  tile('#k4','Skills-based hiring',`${hire}<small>%</small>`,'prioriza competencias demostradas sobre carrera / título / promedio',deltaTag(hire-hireP,' pts'),WAVES.map((_,i)=>clamp(Math.round(HIRE.skills[i]+off('hire',i)),0,100)).slice(0,w+1));
+
+  lineChart($('#epiLine'),{series:[{name:'Índice de Percepción del Empleador Tec',color:'var(--tec)',values:epiS.slice(0,w+1),short:''}],labels:WAVES.slice(0,w+1),yMin:60,yMax:90,h:280});
+
+  const bo=k=>(state.region==='Nacional'&&state.sector==='Todos'&&state.size==='Todos')?0:hsh(state.region+state.sector+state.size+k)*2;
+  const bmRows=BENCH_ATTR.map(a=>{const t=V(a.tec,'bm'+a.n),ua=clamp(Math.round(a.a[w]+bo('a'+a.n)),0,100),ub=clamp(Math.round(a.b[w]+bo('b'+a.n)),0,100),uc=clamp(Math.round(a.c[w]+bo('c'+a.n)),0,100);const best=Math.max(ua,ub,uc);const g=t-best;return {a,t,ua,ub,uc,g,v:g>=4?'v':g<=-4?'o':'p'}});
+  const gapA=bmRows[4].t-bmRows[4].ua;
+  const alerts=buildAlerts(w,pw,{iaPrep,iaPrepP,gapIA,pref,prefP,hire,hireP,epi,epiP,gapA});
+  $('#alertCnt').textContent=alerts.filter(a=>a.sev!=='good'&&a.sev!=='info').length;
+  $('#alertsMini').innerHTML=alerts.slice(0,4).map(a=>`<div class="alert compact"><span class="sev ${a.sev}">${SEV[a.sev]}</span><div><h4>${a.t}</h4><p>${a.p}</p></div></div>`).join('');
+  $('#alertsFull').innerHTML=alerts.map(a=>`<div class="alert"><span class="sev ${a.sev}">${SEV[a.sev]}</span><div><h4>${a.t}</h4><p>${a.p}</p><div class="act">${a.act}</div><div class="seg">Segmento: ${a.seg}</div></div><div class="own">${a.own}</div></div>`).join('');
+
+  const comSorted=COMP.map(c=>({c,d:V(c.b,c.k)-V(c.b,c.k,pw)})).sort((a,b)=>b.d-a.d);
+  $('#summary').innerHTML=[
+    `El índice se ubica en <strong>${epi}</strong> (${fmtD(epi-epiP)} vs. ola anterior) para ${segLabel().toLowerCase()}; ${epi-epiP>=2?'la mejora la explican':'el movimiento lo explican'} <strong>${comSorted[0].c.n}</strong> (${fmtD(comSorted[0].d)}) y <strong>${comSorted[1].c.n}</strong> (${fmtD(comSorted[1].d)}).`,
+    `<strong>${pref}%</strong> de los empleadores contrataría a un egresado Tec ante perfiles equivalentes y califican su desempeño con <strong>${(sat/10).toFixed(1)}/10</strong>; sentido ético y resolución de problemas siguen siendo los atributos mejor evaluados.`,
+    `La brecha más relevante está en <strong>IA aplicada</strong> (${fmtD(gapIA)} pts entre importancia y preparación)${iaPrep<iaPrepP?', y esta ola la preparación percibida retrocede por primera vez en la serie':''}. Es la competencia que más empleadores señalan como crítica a 3–5 años (91%).`,
+    `<strong>${hire}%</strong> ya prioriza competencias demostradas sobre título y promedio (${fmtD(hire-hireP)} pts): las credenciales del Tec deben traducirse en evidencia de competencias verificables.`
+  ].map(t=>`<li>${t}</li>`).join('');
+
+  /* --- tendencias --- */
+  $('#smGrid').innerHTML=IND.map(ind=>{const s=series(ind.b,ind.k).slice(0,w+1),v=s[s.length-1],p=s.length>1?s[s.length-2]:v,d=v-p;const disp=ind.u==='/10'?(v/10).toFixed(1):v;const dd=ind.u==='/10'?(d/10).toFixed(1).replace('.0',''):d;
+    return `<div class="it"><div class="n">${ind.n}</div><div class="v num">${disp}<small>${ind.u||''}</small> <span class="delta ${d>0?'up':d<0?'dn':'eq'}">${d>0?'▲':d<0?'▼':'■'} ${fmtD(+dd)}</span></div><div class="spark">${sparkSVG(s,'var(--tec)',180,40)}</div><div class="trend">${trendWord(s)}</div></div>`}).join('');
+  $('#indTable').innerHTML=`<tr><th>Indicador</th>${WAVES.slice(0,w+1).map(x=>`<th class="r">${x}</th>`).join('')}<th class="r">Δ ola</th><th>Tendencia</th></tr>`+IND.map(ind=>{const s=series(ind.b,ind.k).slice(0,w+1),d=s[s.length-1]-(s[s.length-2]??s[s.length-1]);return `<tr><td>${ind.n}</td>${s.map((v,i)=>`<td class="r num" ${i===s.length-1?'style="color:var(--ink);font-weight:500"':''}>${ind.u==='/10'?(v/10).toFixed(1):v}</td>`).join('')}<td class="r num" style="color:${d>0?'var(--good)':d<0?'var(--crit)':'var(--ink-2)'}">${ind.u==='/10'?(d>0?'+':d<0?'−':'±')+Math.abs(d/10).toFixed(1):fmtD(d)}</td><td style="color:var(--mute);font-size:12px">${trendWord(s)}</td></tr>`}).join('');
+
+  /* --- benchmark --- */
+  const pos=v=>((v-40)/60*100)+'%';
+  $('#bmGrid').innerHTML=`<div class="hd">Atributo</div><div class="hd" style="display:flex;justify-content:space-between"><span>40</span><span>70</span><span>100</span></div><div class="hd">Lectura</div>`+bmRows.map(r=>`<div>${r.a.n}</div><div class="track"><div class="axis"></div><span class="dot" style="left:${pos(r.ua)};background:var(--ua)" data-tip="<b>Univ. A</b> · ${r.a.n}: ${r.ua}"></span><span class="dot" style="left:${pos(r.ub)};background:var(--ub)" data-tip="<b>Univ. B</b> · ${r.a.n}: ${r.ub}"></span><span class="dot" style="left:${pos(r.uc)};background:var(--uc)" data-tip="<b>Univ. C</b> · ${r.a.n}: ${r.uc}"></span><span class="dot tec" style="left:${pos(r.t)};background:var(--tec)" data-tip="<b>Tec de Monterrey</b> · ${r.a.n}: ${r.t}<br>Gap vs. mejor competidor: ${fmtD(r.g)}"></span></div><div class="verdict ${r.v}">${r.v==='v'?'Ventaja '+fmtD(r.g):r.v==='o'?'Oportunidad '+fmtD(r.g):'Paridad '+fmtD(r.g)}</div>`).join('');
+  const vent=bmRows.filter(r=>r.v==='v'),opp=bmRows.filter(r=>r.v==='o'),par=bmRows.filter(r=>r.v==='p');
+  $('#bmSummary').innerHTML=`<div class="tile" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px"><div><div class="v num" style="font-size:32px">${vent.length}</div><div class="hint">ventajas</div></div><div><div class="v num" style="font-size:32px">${par.length}</div><div class="hint">paridad</div></div><div><div class="v num" style="font-size:32px;color:var(--ser)">${opp.length}</div><div class="hint">oportunidades</div></div></div>`+
+    `<p style="font-size:13.5px;color:var(--ink-2);margin-bottom:8px"><strong style="color:var(--ink);font-weight:500">Ventaja Tec:</strong> ${vent.map(r=>r.a.n.toLowerCase()).join(', ')||'ninguna con margen ≥4'}.</p>`+
+    `<p style="font-size:13.5px;color:var(--ink-2);margin-bottom:8px"><strong style="color:var(--ink);font-weight:500">Oportunidad:</strong> ${opp.map(r=>`${r.a.n.toLowerCase()} (${fmtD(r.g)} vs. ${['Univ. A','Univ. B','Univ. C'][[r.ua,r.ub,r.uc].indexOf(Math.max(r.ua,r.ub,r.uc))]})`).join(', ')||'ninguna esta ola'}.</p>`+
+    `<p style="font-size:13.5px;color:var(--ink-2)"><strong style="color:var(--ink);font-weight:500">Señal:</strong> Univ. A acorta el gap en IA y datos de 9 a ${gapA} pts en cuatro olas; es el atributo donde la ventaja del Tec se erosiona más rápido.</p>`;
+  $('#bmBases').textContent=`Tec n=${Math.round(BENCH_N.tec*n/100)} · A n=${Math.round(BENCH_N.a*n/100)} · B n=${Math.round(BENCH_N.b*n/100)} · C n=${Math.round(BENCH_N.c*n/100)}`;
+  const gidx=(arrK)=>WAVES.map((_,i)=>Math.round(BENCH_ATTR.reduce((s,a)=>s+(V(a.tec,'bm'+a.n,i)-clamp(Math.round(a[arrK][i]+bo(arrK+a.n)),0,100)),0)/BENCH_ATTR.length));
+  lineChart($('#gapLine'),{series:[{name:'Gap vs. Univ. A',color:'var(--ua)',values:gidx('a').slice(0,w+1),short:'A'},{name:'Gap vs. Univ. B',color:'var(--ub)',values:gidx('b').slice(0,w+1),short:'B'},{name:'Gap vs. Univ. C',color:'var(--uc)',values:gidx('c').slice(0,w+1),short:'C'}],labels:WAVES.slice(0,w+1),yMin:0,yMax:20,h:220,unit:' pts',fmt:v=>(v>0?'+':'')+v});
+
+  /* --- competencias --- */
+  const sk=SKILLS.map(s=>{const imp=clamp(Math.round(s.imp+hsh(state.sector+'imp'+s.k)*(state.sector==='Todos'?0:4)),0,100);const prep=clamp(Math.round(s.prep+off(s.k,w)),0,100);return {...s,imp,prep,gap:prep-imp}}).sort((a,b)=>a.gap-b.gap);
+  const spos=v=>((v-40)/60*100)+'%';
+  $('#dbGrid').innerHTML=`<div class="hd">Competencia</div><div class="hd" style="display:flex;justify-content:space-between"><span>40</span><span>70</span><span>100</span></div><div class="hd" style="text-align:right">Brecha</div><div class="hd" style="text-align:right">Crítica 3–5 años</div>`+sk.map(s=>{const col=s.gap<=-12?'var(--crit)':s.gap<=-6?'var(--ser)':s.gap>=3?'var(--good)':'var(--ink-2)';return `<div>${s.n}</div><div class="track" data-tip="<b>${s.n}</b><br>Importancia: ${s.imp} · Preparación Tec: ${s.prep}<br>Brecha: ${fmtD(s.gap)} pts"><div class="axis"></div><span class="seg" style="left:${spos(Math.min(s.imp,s.prep))};width:calc(${spos(Math.max(s.imp,s.prep))} - ${spos(Math.min(s.imp,s.prep))});background:${s.gap<0?col:'var(--tec)'};opacity:.5"></span><span class="dot imp" style="left:${spos(s.imp)}"></span><span class="dot prep" style="left:${spos(s.prep)}"></span></div><div class="gap num" style="color:${col}">${fmtD(s.gap)}</div><div class="fut num"><b>${s.fut}%</b></div>`}).join('');
+  hbars($('#futBars'),[...SKILLS].sort((a,b)=>b.fut-a.fut).map(s=>[s.n,s.fut]));
+  const regs=REGIONS.slice(1);const cols=SKILLS.slice(0,7);
+  let hm=`<div class="hm" style="grid-template-columns:150px repeat(${cols.length},1fr)"><div></div>${cols.map(c=>`<div class="h">${c.n.replace('Inteligencia artificial','IA').replace('Manejo y análisis de','')}</div>`).join('')}`;
+  regs.forEach(r=>{const hl=state.region===r;hm+=`<div class="rl" style="${hl?'color:var(--ink);font-weight:500':''}">${r}</div>`+cols.map(c=>{const g=clamp(Math.round((c.prep-c.imp)+hsh(r+c.k)*7+(c.k==='ia'&&r==='Norte'?-5:0)+(c.k==='ia'&&r==='CDMX / Valle de México'?4:0)),-30,30);return `<div class="cell" style="background:${divColor(g)};${hl?'outline:1px solid var(--ink-2)':''}" data-tip="<b>${r}</b> · ${c.n}<br>Brecha: ${fmtD(g)} pts">${fmtD(g)}</div>`}).join('')});
+  $('#heat').innerHTML=hm+'</div>';
+
+  /* --- future of work --- */
+  const iaUse=clamp(Math.round(FOW.iaUse[w]+off('iause',w)),0,100),iaUseP=clamp(Math.round(FOW.iaUse[pw]+off('iause',pw)),0,100);
+  const iaE=clamp(Math.round(FOW.iaEntry[w]+off('iaent',w)),0,100),iaEP=clamp(Math.round(FOW.iaEntry[pw]+off('iaent',pw)),0,100);
+  const nr=clamp(Math.round(FOW.newRoles[w]+off('newr',w)),0,100),nrP=clamp(Math.round(FOW.newRoles[pw]+off('newr',pw)),0,100);
+  tile('#f1','Usa IA en procesos de talento',`${iaUse}<small>%</small>`,'reclutamiento, evaluación o desarrollo',deltaTag(iaUse-iaUseP,' pts'),WAVES.map((_,i)=>clamp(Math.round(FOW.iaUse[i]+off('iause',i)),0,100)).slice(0,w+1));
+  tile('#f2','IA redujo puestos de entrada',`${iaE}<small>%</small>`,'reporta menos vacantes junior por automatización',deltaTag(iaE-iaEP,' pts'),WAVES.map((_,i)=>clamp(Math.round(FOW.iaEntry[i]+off('iaent',i)),0,100)).slice(0,w+1),true);
+  tile('#f3','Creó posiciones nuevas por IA',`${nr}<small>%</small>`,'roles o combinaciones de competencias que no existían',deltaTag(nr-nrP,' pts'),WAVES.map((_,i)=>clamp(Math.round(FOW.newRoles[i]+off('newr',i)),0,100)).slice(0,w+1));
+  tile('#f4','Skills-based hiring',`${hire}<small>%</small>`,'prioriza competencias sobre título / promedio',deltaTag(hire-hireP,' pts'),WAVES.map((_,i)=>clamp(Math.round(HIRE.skills[i]+off('hire',i)),0,100)).slice(0,w+1));
+  const hs=WAVES.map((_,i)=>clamp(Math.round(HIRE.skills[i]+off('hire',i)),0,100));
+  lineChart($('#hireLine'),{series:[{name:'Competencias demostradas',color:'var(--tec)',values:hs.slice(0,w+1)},{name:'Carrera / título / promedio',color:'var(--ua)',values:hs.map(v=>100-v).slice(0,w+1)}],labels:WAVES.slice(0,w+1),yMin:30,yMax:70,h:220,unit:'%'});
+  const so=(rows,k,amp=5)=>rows.map(([n,v])=>[n,clamp(Math.round(v+(state.sector==='Todos'&&state.region==='Nacional'?0:hsh(state.sector+state.region+k+n)*amp)),0,100)]).sort((a,b)=>b[1]-a[1]);
+  hbars($('#iaBars'),so(FOW.iaEffects,'iae'));hbars($('#upBars'),so(FOW.up,'up'));hbars($('#dnBars'),so(FOW.down,'dn'),{color:'dn'});hbars($('#expBars'),so(FOW.exp,'exp'));
+
+  /* --- alertas: salud del panel --- */
+  $('#health').innerHTML=[['Entrevistas completas',`${n===100?100:n} / ${n===100?100:n}`],['Retención del núcleo longitudinal','86% (meta ≥ 80%)'],['Renovación esta ola','20 participantes (20%)'],['Perfiles validados (cargo comprobable)','100%'],['Duplicados detectados','0'],['Respuestas descartadas por calidad','3 (repuestas)'],['Duración media del cuestionario','13.4 min'],['Cuotas vs. estructura objetivo','Dentro de ±3 pts'],['Ponderación aplicada','No requerida']].map(r=>`<tr><td style="color:var(--ink-2)">${r[0]}</td><td class="r num">${r[1]}</td></tr>`).join('');
+  $('#modTxt').innerHTML=`<strong style="color:var(--ink);font-weight:500">${MODULES[WAVES[w]]}</strong><br><br>30% del cuestionario de la ola ${WAVES[w]} se dedicó a este módulo temático. Los hallazgos alimentan las pestañas Competencias y Future of Work; el 70% restante es el cuestionario núcleo comparable entre olas.<br><br>Próximo módulo propuesto: <em>Expectativas salariales y credenciales alternativas</em>.`;
+
+}
+function tile(sel,lbl,val,desc,delta,spark,inv){$(sel).innerHTML=`<h3>${lbl}</h3><div class="v num">${val}</div><div class="hint" style="margin-bottom:8px">${desc}</div><div class="d">${delta}</div><div class="spark" style="margin-top:10px;max-width:200px">${sparkSVG(spark,'var(--tec)',180,36)}</div>`}
+function trendWord(s){if(s.length<3)return 'Línea base';const d1=s[s.length-1]-s[s.length-2],d2=s[s.length-1]-s[0];if(d1<0&&d2>0)return 'Retroceso tras tendencia al alza';if(d1<0)return 'Tendencia a la baja';if(d2>=6)return 'Alza sostenida';if(d2>=2)return 'Mejora gradual';if(Math.abs(d2)<2)return 'Estable';return 'Tendencia a la baja'}
+const SEV={crit:'● Crítica',ser:'● Seria',warn:'● Atención',good:'● Positiva',info:'○ Info'};
+function buildAlerts(w,pw,c){const seg=segLabel();return [
+  {sev:c.gapIA<=-12?'crit':'ser',t:`Preparación en IA aplicada ${c.iaPrep<c.iaPrepP?'retrocede':'estancada'} (${c.iaPrep}, ${fmtD(c.iaPrep-c.iaPrepP)}) con brecha de ${fmtD(c.gapIA)} pts frente a su importancia`,p:`Es la competencia que más empleadores consideran crítica a 3–5 años (91%). ${c.iaPrep<c.iaPrepP?'Primera caída de la serie tras tres olas al alza. ':''}Univ. A acorta el gap en este atributo.`,act:'Priorizar IA aplicada por disciplina en el plan de estudios y en Semana Tec; abrir proyectos con empresas medianas del Norte como piloto de vinculación.',seg:c.gapIA<=-14?seg:'Empresas medianas · Norte (brecha −24) · Manufactura',own:'Oferta educativa<br>Empleabilidad'},
+  {sev:'ser',t:'Comunicación mejora pero sigue como brecha en servicios financieros y consultoría',p:'Sube por tercera ola consecutiva (70, +3), aunque en servicios financieros permanece 12 pts por debajo de su importancia y Univ. A lidera el atributo.',act:'Reforzar comunicación ejecutiva y escrita en proyectos con empresas; incluir evidencia en el portafolio de competencias.',seg:'Servicios financieros · Consultoría · Grandes empresas',own:'Oferta educativa<br>Reputación'},
+  {sev:'warn',t:'Univ. A acorta la ventaja del Tec en IA y datos',p:`El gap pasó de 9 a ${c.gapA} pts en cuatro olas${c.gapA<=0?' y ya se invirtió':''}; en CDMX ya está en paridad. El resto de atributos mantiene ventaja Tec.`,act:'Comunicar casos y resultados de egresados en proyectos de IA con empleadores del Valle de México.',seg:'CDMX / Valle de México · Tecnología',own:'Reputación<br>Vinculación'},
+  {sev:'good',t:`Skills-based hiring alcanza ${c.hire}% (${fmtD(c.hire-c.hireP)} pts)`,p:'Por primera vez la mayoría prioriza competencias demostradas sobre carrera, título o promedio, sobre todo en tecnología y startups.',act:'Traducir el modelo educativo en credenciales verificables por competencia (micro-credenciales, portafolios, evaluaciones).',seg:'Tecnología · Pequeñas / startups',own:'Estrategia institucional<br>Empleabilidad'},
+  {sev:'good',t:`Preferencia de contratación sube a ${c.pref}% (${fmtD(c.pref-c.prefP)} pts)`,p:'Impulsada por reputación y desempeño; el atractivo de contratación se mantiene como ventaja frente a las tres instituciones comparadas.',act:'Usar como evidencia en atracción de estudiantes y en la conversación con empleadores estratégicos.',seg:seg,own:'Atracción<br>Reputación'},
+  {sev:'info',t:'Perfiles operativos pierden relevancia en la demanda de talento joven',p:'48% espera reducir captura y procesamiento de datos y 44% soporte administrativo; en contraste, 71% prevé más contratación en ingeniería de datos / IA.',act:'Revisar la oferta de programas y salidas profesionales asociadas a funciones en descenso.',seg:'Nacional · todos los sectores',own:'Oferta educativa<br>Estrategia'}
+]}
+
+/* ====================== LECTURA IA ====================== */
+const QS=[
+  {q:'¿Por qué bajó la preparación para IA en empresas medianas del Norte y qué acciones debe priorizar el Tec?',a:()=>`<strong>Qué pasó.</strong> En empresas medianas del Norte la preparación percibida en IA aplicada cae a 44 (−8 vs. 2026-1), mientras la importancia que le asignan sube a 78. La brecha llega a −34 pts, la más amplia del panel.\n\n<strong>Por qué.</strong> Tres señales lo explican: (1) el 61% de estos empleadores ya exige alfabetización en IA al ingresar, frente a 47% nacional; (2) manufactura del Norte adoptó herramientas de IA en operaciones en los últimos 12 meses y compara a los egresados con ese nuevo estándar; (3) el módulo temático muestra que valoran IA aplicada a procesos, no IA como materia teórica.\n\n<strong>Qué priorizar.</strong>\n1. Proyectos con empresas medianas manufactureras del Norte con entregables de IA aplicada (piloto en 2 campus).\n2. Micro-credencial verificable de IA por disciplina, visible en el portafolio del egresado.\n3. Recontactar a los 11 empleadores de este segmento en el módulo cualitativo (8–10 entrevistas) antes de la ola 2027-1.\n\n<strong>Confianza.</strong> Corte direccional (n=8); la tendencia coincide con la lectura nacional (−2) y con la señal de Univ. A acortando el gap.`},
+  {q:'¿En qué atributos el Tec pierde ventaja frente a Univ. A esta ola?',a:()=>`<strong>Lectura.</strong> El Tec mantiene ventaja en 6 de 8 atributos frente a Univ. A. Pierde terreno en dos:\n\n1. <strong>Comunicación</strong>: Univ. A lidera 72 vs. 71. Es el único atributo donde el Tec está por debajo, aunque la brecha se cierra (era −4 en 2024-2).\n2. <strong>IA y datos</strong>: el Tec sigue arriba (63 vs. 61), pero el gap pasó de 9 a 2 pts en cuatro olas. Univ. A crece +9 en el periodo; el Tec retrocede −1 esta ola.\n\n<strong>Dónde no hay riesgo.</strong> Conocimiento técnico (+4), adaptabilidad (+5), sentido ético (+6) y atractivo de contratación (+5) se mantienen estables o mejoran.\n\n<strong>Acción sugerida.</strong> Concentrar comunicación con empleadores de CDMX y tecnología en evidencias de proyectos de IA; ahí es donde Univ. A ya alcanza paridad.`},
+  {q:'¿Qué experiencias educativas valoran más los empleadores del sector tecnología?',a:()=>`<strong>Ranking en tecnología (n=16).</strong>\n1. Proyectos reales con empresas — 84% (vs. 76% nacional)\n2. Prácticas profesionales — 79%\n3. Certificaciones técnicas — 71% (vs. 61% nacional)\n4. Emprendimiento — 52%\n5. Experiencia internacional — 41%\n6. Investigación aplicada — 38%\n\n<strong>Lectura.</strong> El sector tecnología es el que más valora evidencia práctica y verificable: proyectos y certificaciones superan al promedio nacional por 8–10 pts, mientras la experiencia internacional pesa menos. Coincide con que el 74% de estos empleadores ya prioriza competencias demostradas sobre título.\n\n<strong>Implicación para vinculación.</strong> Priorizar convenios de proyectos con entregables técnicos y alinear certificaciones del Tec con las que reconocen estos empleadores.`}];
+function genericAnswer(){const w=state.wave,pw=Math.max(0,w-1);return `<strong>Con los filtros actuales</strong> (${segLabel()}, ola ${WAVES[w]}, n=${nSize()}):\n\n• Índice de Percepción del Empleador Tec: <strong>${epiAt(w)}</strong> (${fmtD(epiAt(w)-epiAt(pw))} vs. ola anterior).\n• Preferencia de contratación: ${V(IND[1].b,'pref')}% · Satisfacción: ${(V(IND[2].b,'sat')/10).toFixed(1)}/10.\n• Mayor brecha: IA aplicada (preparación ${V(IND[9].b,'ia')} vs. importancia 74).\n• Mayor fortaleza: sentido ético (${V(IND[11].b,'eti')}) y resolución de problemas (${V(IND[10].b,'prob')}).\n\nEn la versión productiva esta respuesta la genera el modelo sobre la base histórica completa, con citas a las preguntas del cuestionario y a los segmentos utilizados.`}
+let typing=null;
+function answer(q){const el=$('#ans');const full=typeof q.a==='function'?q.a():q.a;clearInterval(typing);$('#ansSrc').textContent='Analizando la base histórica del panel…';
+  const tokens=full.split(/(<[^>]+>)/g).filter(Boolean);const total=tokens.filter(t=>!t.startsWith('<')).reduce((a,t)=>a+t.length,0);const t0=performance.now(),rate=0.22; // chars por ms
+  const draw=()=>{const budget=Math.floor((performance.now()-t0)*rate);let used=0,out='';let done=true;
+    for(const t of tokens){if(t.startsWith('<')){out+=t;continue}const rem=budget-used;if(rem<=0){done=false;break}if(rem>=t.length){out+=t;used+=t.length}else{out+=t.slice(0,rem);used+=rem;done=false;break}}
+    if(done&&used>=total){clearInterval(typing);el.innerHTML=full;$('#ansSrc').textContent=`Fuente: base histórica del panel · ola ${WAVES[state.wave]} · filtros: ${segLabel()} · generado ${new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'})}`;return}
+    el.innerHTML=out+'<span class="cur"></span>'};
+  draw();typing=setInterval(draw,30)}
+
+init();render();
+</script>
+</body>
+</html>
