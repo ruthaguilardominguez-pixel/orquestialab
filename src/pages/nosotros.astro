@@ -1,0 +1,64 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const equipo = [
+  { foto: '/images/equipo/equipo-ruth.webp', nombre: 'Ruth Aguilar', rol: 'Co-founder', bio: 'Ayuda a traducir la operación diaria en procesos más claros y experiencias más simples.' },
+  { foto: '/images/equipo/equipo-hector.webp', nombre: 'Hector Cepeda', rol: 'Co-founder', bio: 'Conecta la visión de negocio con productos digitales que pueden crecer con cada empresa.' },
+  { foto: '/images/equipo/equipo-gandalf.webp', nombre: 'Gandalf', rol: 'CMO', bio: 'Marketing, marca, crecimiento y posicionamiento.' },
+];
+---
+<Layout
+  title="Nosotros | OrquestiaLab"
+  description="Conoce a OrquestiaLab y al equipo que convierte operaciones dispersas en sistemas claros para negocios tradicionales."
+  path="/nosotros"
+>
+  <section class="seccion-papel">
+    <div class="contenedor">
+      <p class="cuerpo texto-suave">Nosotros</p>
+      <h1 class="titulo-1" style="margin-top:8px; max-width:640px;">Hacemos que los negocios <span class="caja" style="white-space:nowrap;">se entiendan mejor</span>.</h1>
+      <div style="display:grid; gap:12px; margin-top:24px; max-width:640px;">
+        <p class="cuerpo texto-suave">Con más de 10 años de experiencia en el mundo SaaS, comenzamos a desarrollar nuestros primeros productos y automatizaciones dentro de nuestros propios negocios tradicionales.</p>
+        <p class="cuerpo texto-suave">Fue ahí donde entendimos que la verdadera innovación no consiste simplemente en crear tecnología, sino en resolver problemas reales.</p>
+        <p class="cuerpo texto-suave">Así nació OrquestiaLab: de la experiencia de operar negocios y la convicción de que la tecnología puede transformar cualquier industria.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion-blanca">
+    <div class="contenedor" style="display:grid; gap:24px; grid-template-columns:repeat(auto-fit,minmax(280px,1fr));">
+      <div>
+        <p class="cuerpo texto-suave">Nuestra misión</p>
+        <h2 class="titulo-2" style="margin-top:8px;">Que la tecnología deje de sentirse <span class="caja">lejana</span>.</h2>
+      </div>
+      <div>
+        <p class="cuerpo texto-suave">Creemos que un negocio no debería necesitar un equipo técnico enorme para tener procesos ordenados, información confiable y decisiones a tiempo.</p>
+        <p class="cuerpo texto-suave" style="margin-top:12px;">Trabajamos cerca de las personas que hacen que una empresa funcione. Escuchamos, hacemos las preguntas difíciles y construimos sistemas que se adaptan a la realidad, no a una presentación.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion-papel">
+    <div class="contenedor">
+      <p class="cuerpo texto-suave">El equipo</p>
+      <h2 class="titulo-1" style="margin-top:8px;">Negocio, diseño y <span class="caja">tecnología</span>.</h2>
+      <p class="cuerpo-grande texto-suave" style="margin-top:12px;">Tres perspectivas que trabajan juntas para que la solución final sea útil de verdad.</p>
+      <div style="display:grid; gap:20px; margin-top:40px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr));">
+        {equipo.map((p) => (
+          <article class="tarjeta">
+            <img src={p.foto} alt={p.nombre} width="48" height="48" loading="lazy" decoding="async" style="width:48px; height:48px; border-radius:999px; object-fit:cover; background:var(--lima-100);" />
+            <h3 class="titulo-3" style="margin-top:16px;">{p.nombre}</h3>
+            <p class="cuerpo" style="font-weight:600;">{p.rol}</p>
+            <p class="cuerpo texto-suave" style="margin-top:4px;">{p.bio}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion-lima sobre-lima">
+    <div class="contenedor" style="text-align:center;">
+      <h2 class="titulo-1">Tu negocio conoce el camino.<br />Nosotros te ayudamos <span class="caja" style="white-space:nowrap;">a verlo</span>.</h2>
+      <a href="/contacto" class="btn-secundario enlace-flecha" style="margin-top:24px; display:inline-flex; background:var(--tinta-900); color:var(--lima-500); border:0;">Conócenos <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+</Layout>
