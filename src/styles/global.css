@@ -1,0 +1,90 @@
+@import '@fontsource/inter-tight/400.css';
+@import '@fontsource/inter-tight/500.css';
+@import '@fontsource/inter-tight/600.css';
+@import '@fontsource/inter-tight/700.css';
+@import '@fontsource/michroma/400.css';
+@import './marca.css';
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--fondo);
+  color: var(--texto);
+  font: 400 16px/1.55 var(--font-sans);
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+ul, ol { margin: 0; padding: 0; }
+
+.contenedor { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+/* Secciones por proporción 60/28/12 */
+.seccion-lima { background: var(--lima-500); color: var(--tinta-900); }
+.seccion-lima.sobre-lima { /* alias explícito para que .caja use las reglas correctas */ }
+.seccion-papel { background: var(--papel); color: var(--tinta-900); }
+.seccion-blanca { background: var(--papel-puro); color: var(--tinta-900); }
+.seccion-tinta { background: var(--tinta-900); color: #F3F8DF; }
+.seccion-tinta .texto-suave { color: #B7C29A; }
+.seccion-papel .texto-suave, .seccion-blanca .texto-suave { color: var(--texto-suave); }
+.seccion-lima .texto-suave { color: var(--oliva-700); }
+
+section { padding: var(--esp-6) 0; }
+@media (max-width: 640px) { section { padding: var(--esp-5) 0; } }
+
+/* Header */
+.sitio-header {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--esp-3);
+  padding: var(--esp-3) 0; flex-wrap: wrap;
+}
+.sitio-header .logo img { height: 34px; width: auto; display: block; }
+.sitio-nav { display: flex; align-items: center; gap: var(--esp-4); flex-wrap: wrap; }
+.sitio-nav a { font-weight: 500; color: var(--oliva-700); }
+.sitio-nav a:hover, .sitio-nav a.activo { color: var(--tinta-900); text-decoration: underline; text-underline-offset: 4px; }
+.sitio-header .cta { display: inline-flex; align-items: center; gap: var(--esp-2); }
+
+/* Footer */
+.sitio-footer { background: var(--tinta-900); color: #F3F8DF; padding: var(--esp-6) 0 var(--esp-4); }
+.sitio-footer .logo img { height: 28px; width: auto; display: block; }
+.sitio-footer-filas { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: var(--esp-4); }
+.sitio-footer-enlaces { display: flex; flex-wrap: wrap; gap: var(--esp-4); }
+.sitio-footer-enlaces a { color: #B7C29A; }
+.sitio-footer-enlaces a:hover { color: var(--lima-500); }
+.sitio-footer-copy { margin-top: var(--esp-5); color: #8A9470; font-size: 13px; }
+.sitio-footer p.descripcion { color: #B7C29A; max-width: 320px; margin-top: var(--esp-2); }
+
+/* Tarjetas */
+.tarjeta { background: var(--fondo-tarjeta); border: 1px solid var(--linea); border-radius: var(--radio-medio); padding: var(--esp-4); }
+.panel { border-radius: var(--radio-grande); }
+
+/* Chips / etiquetas de píldora */
+.chip { display: inline-flex; align-items: center; border-radius: var(--radio-pildora); padding: 6px 14px; font-size: 13px; font-weight: 500; background: var(--lima-100); color: var(--oliva-700); }
+
+/* Listas con marcador + / — */
+.lista-marcada { display: grid; gap: var(--esp-2); list-style: none; }
+.lista-marcada li { display: flex; gap: var(--esp-2); align-items: flex-start; }
+.lista-marcada .marcador { color: var(--oliva-700); font-weight: 700; flex-shrink: 0; }
+
+.enlace-flecha { display: inline-flex; align-items: center; gap: var(--esp-2); }
+.enlace { text-decoration: underline; }
+
+/* Tarjetas de empresas: 2x2 en desktop (tarjetas largas), 1 columna en móvil */
+@media (max-width: 760px) {
+  .rejilla-empresas { grid-template-columns: 1fr !important; }
+}
+
+/* Formulario de contacto */
+.campo { display: grid; gap: var(--esp-1); font-size: 14px; color: var(--texto-suave); }
+.campo input, .campo select, .campo textarea {
+  font: 400 16px/1.4 var(--font-sans); color: var(--texto); background: var(--papel-puro);
+  border: 1px solid var(--linea); border-radius: var(--radio-chico); padding: 12px 14px; outline: none;
+}
+.campo input:focus, .campo select:focus, .campo textarea:focus { border-color: var(--lima-500); }
+.grupo-radio { display: grid; gap: var(--esp-2); }
+.grupo-radio .opcion { display: flex; align-items: center; gap: 10px; border: 1px solid var(--linea); border-radius: var(--radio-chico); padding: 12px 14px; font-size: 14px; }
+
+/* Blog */
+.tarjeta-post { border: 1px solid var(--linea); border-radius: var(--radio-medio); background: var(--fondo-tarjeta); overflow: hidden; transition: border-color .15s; }
+.tarjeta-post:hover { border-color: var(--oliva-500); }
+.articulo img { border-radius: var(--radio-medio); margin: var(--esp-4) 0; }
+.articulo h2 { margin-top: var(--esp-6); }
+.articulo h3 { margin-top: var(--esp-5); }
