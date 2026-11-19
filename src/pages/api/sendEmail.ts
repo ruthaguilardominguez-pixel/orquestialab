@@ -26,13 +26,16 @@ export const POST: APIRoute = async ({ request }) => {
     }
   }
 
-  const { SMTP_USER, SMTP_PASS, CONTACT_EMAIL_TO } = process.env;
+  const { SMTP_USER, SMTP_PASS } = process.env;
   if (!SMTP_USER || !SMTP_PASS) {
     console.error('[api/sendEmail] Falta SMTP_USER/SMTP_PASS en el entorno.');
     return new Response(JSON.stringify({ error: 'El formulario no está disponible en este momento. Escríbenos directo a vamos@orquestialab.com.' }), { status: 500 });
   }
 
-  const destinatario = CONTACT_EMAIL_TO || 'vamos@orquestialab.com';
+  // Destino fijo, no configurable por variable de entorno: todo mensaje del formulario
+  // de /contacto debe llegar siempre a este buzón, sin depender de que alguien
+  // configure (o configure mal) una variable en Vercel.
+  const destinatario = 'vamos@orquestialab.com';
 
   try {
     const transporter = nodemailer.createTransport({

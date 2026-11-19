@@ -62,9 +62,9 @@ const proyectos = [
 ];
 
 const equipo = [
-  { inicial: 'R', nombre: 'Ruth Aguilar', rol: 'Co-founder', bio: 'Operación, procesos y experiencia de cliente.' },
-  { inicial: 'H', nombre: 'Hector Cepeda', rol: 'Co-founder', bio: 'Estrategia, producto y crecimiento sostenible.' },
-  { inicial: 'G', nombre: 'Gandalf', rol: 'CMO', bio: 'Marketing, marca, crecimiento y posicionamiento.' },
+  { foto: '/images/equipo/equipo-ruth.webp', nombre: 'Ruth Aguilar', rol: 'Co-founder', bio: 'Operación, procesos y experiencia de cliente.' },
+  { foto: '/images/equipo/equipo-hector.webp', nombre: 'Hector Cepeda', rol: 'Co-founder', bio: 'Estrategia, producto y crecimiento sostenible.' },
+  { foto: '/images/equipo/equipo-gandalf.webp', nombre: 'Gandalf', rol: 'CMO', bio: 'Marketing, marca, crecimiento y posicionamiento.' },
 ];
 
 const faqs = [
@@ -230,7 +230,7 @@ const faqs = [
       <div style="display:grid; gap:20px; margin-top:40px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr));">
         {equipo.map((p) => (
           <article class="tarjeta">
-            <div class="chip" style="width:48px; height:48px; justify-content:center; font-weight:700; font-size:18px; background:var(--lima-500); color:var(--tinta-900); border-radius:999px;">{p.inicial}</div>
+            <img src={p.foto} alt={p.nombre} width="48" height="48" loading="lazy" decoding="async" style="width:48px; height:48px; border-radius:999px; object-fit:cover; background:var(--lima-100);" />
             <h3 class="titulo-3" style="margin-top:16px;">{p.nombre}</h3>
             <p class="cuerpo" style="font-weight:600;">{p.rol}</p>
             <p class="cuerpo texto-suave" style="margin-top:4px;">{p.bio}</p>
