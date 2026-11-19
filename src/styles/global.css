@@ -65,6 +65,12 @@ section { padding: var(--esp-6) 0; }
 .lista-marcada .marcador { color: var(--oliva-700); font-weight: 700; flex-shrink: 0; }
 
 .enlace-flecha { display: inline-flex; align-items: center; gap: var(--esp-2); }
+.enlace { text-decoration: underline; }
+
+/* Tarjetas de empresas: 2x2 en desktop (tarjetas largas), 1 columna en móvil */
+@media (max-width: 760px) {
+  .rejilla-empresas { grid-template-columns: 1fr !important; }
+}
 
 /* Formulario de contacto */
 .campo { display: grid; gap: var(--esp-1); font-size: 14px; color: var(--texto-suave); }
